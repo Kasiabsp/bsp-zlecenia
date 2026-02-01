@@ -2,10 +2,102 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>BSP Zlecenia</title>
+  <title>Zlecenia BSP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Podstawowe bezpieczeństwo -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e293b;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      max-width: 700px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>✅ BSP Zlecenia – strona działa</h1>
-  <p>Cloudflare Pages działa poprawnie.</p>
+
+<header>
+  <h1>Zgłoszenie zlecenia BSP</h1>
+  <p>Bezpieczny formularz zgłoszeń dla operatora drona</p>
+</header>
+
+<main>
+  <form>
+    <label for="contact">E-mail lub telefon</label>
+    <input type="text" id="contact" name="contact" required>
+
+    <label for="location">Lokalizacja zlecenia</label>
+    <input type="text" id="location" name="location" required>
+
+    <label for="description">Opis zlecenia</label>
+    <textarea id="description" name="description" rows="5" required></textarea>
+
+    <label for="date">Preferowany termin</label>
+    <input type="date" id="date" name="date">
+
+    <label for="budget">Budżet (opcjonalnie)</label>
+    <input type="text" id="budget" name="budget">
+
+    <button type="submit" disabled>
+      Wysyłanie będzie aktywne wkrótce
+    </button>
+  </form>
+</main>
+
+<footer>
+  © 2026 BSP Zlecenia — wersja testowa
+</footer>
+
 </body>
 </html>
