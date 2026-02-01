@@ -104,7 +104,8 @@
       <aside class="form-card" id="form" aria-labelledby="form-title">
         <h3 id="form-title">Zgłoś zlecenie</h3>
 
-        <form id="bspForm" method="POST" novalidate>
+        <!-- Formularz podłączony do Formspree -->
+        <form id="bspForm" action="https://formspree.io/f/xqebvvow" method="POST" novalidate>
           <input type="hidden" name="_subject" value="Nowe zgłoszenie BSP">
           <input type="hidden" name="_replyto" value="">
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
@@ -217,6 +218,7 @@
 
   </div>
 
+  <!-- Jeśli używasz JS do wysyłki przez fetch, upewnij się, że form.js wysyła POST na Formspree -->
   <script src="functions/api/form.js"></script>
 </body>
 </html>
