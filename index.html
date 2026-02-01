@@ -4,8 +4,9 @@
   <meta charset="utf-8" />
   <title>Zlecenia BSP — inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- CSP: dopuszczamy style inline i proste skrypty inline (tymczasowo) -->
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://formspree.io">
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://formspree.io">
 
   <style>
     :root{
@@ -18,132 +19,55 @@
       --radius:12px;
       --max-width:1100px;
       --header-height:80px;
-      --shadow-1: 0 6px 20px rgba(16,24,40,0.06);
-      --shadow-2: 0 10px 30px rgba(16,24,40,0.08);
     }
-
     html,body{height:100%;}
-    body{
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:var(--bg);
-      color:#0b1220;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.5;
-    }
+    body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);color:#0b1220;line-height:1.5;}
+    header{position:fixed;top:0;left:0;right:0;z-index:999;background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.95));backdrop-filter:blur(6px);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;height:var(--header-height);}
+    .wrap{max-width:var(--max-width);margin:0 auto;padding:0 20px;padding-top:calc(var(--header-height) + 28px);}
+    .brand{display:flex;align-items:center;gap:12px;}
+    .logo{width:52px;height:52px;background:var(--nav);border-radius:10px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+    nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0;align-items:center;}
+    nav a{color:var(--nav);text-decoration:none;font-weight:600;}
+    .contact-cta{background:var(--accent);color:#fff;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:800;}
 
-    /* Header */
-    header{
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 9999;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
-      backdrop-filter: blur(6px);
-      box-shadow: 0 2px 8px rgba(2,6,23,0.06);
-      padding: 14px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px;
-      height:var(--header-height);
-    }
-    header.scrolled{ box-shadow: 0 8px 30px rgba(2,6,23,0.12); }
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:32px;margin-bottom:48px;}
+    .hero-left{position:relative;border-radius:12px;overflow:hidden;min-height:420px;}
+    .hero-left img{width:100%;height:100%;object-fit:cover;display:block;}
+    .hero-left::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,6,23,0.45),rgba(37,99,235,0.06));pointer-events:none;}
+    .hero-overlay{position:absolute;inset:0;display:flex;align-items:flex-end;padding:28px;color:#fff;}
+    .hero-text h1{margin:0 0 8px 0;font-size:32px;line-height:1.05;font-weight:700;}
+    .hero-text p{margin:0;font-weight:600;color:rgba(255,255,255,0.95);}
 
-    .wrap{max-width:var(--max-width); margin:0 auto; padding:0 20px; padding-top: calc(var(--header-height) + 28px);}
-    [id] { scroll-margin-top: calc(var(--header-height) + 12px); }
-
-    .brand{display:flex; align-items:center; gap:12px;}
-    .logo{width:52px; height:52px; background:var(--nav); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:18px; box-shadow:var(--shadow-1);}
-    nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center;}
-    nav a{color:var(--nav); text-decoration:none; font-weight:600; font-size:15px;}
-    .contact-cta{background:var(--accent); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:800; box-shadow:0 8px 20px rgba(37,99,235,0.12);}
-
-    /* Hero */
-    .hero{display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:stretch; margin-bottom:48px;}
-    .hero-left{position:relative; border-radius:var(--radius); overflow:hidden; min-height:460px; box-shadow:var(--shadow-2);}
-    .hero-left img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease;}
-    .hero-left:hover img{transform:scale(1.03);}
-    .hero-left::after{ content:""; position:absolute; inset:0; background: linear-gradient(90deg, rgba(2,6,23,0.45) 0%, rgba(37,99,235,0.06) 60%); pointer-events:none; }
-    .hero-overlay{position:absolute; inset:0; display:flex; align-items:flex-end; padding:36px; color:white;}
-    .hero-text h1{margin:0 0 10px 0; font-size:40px; line-height:1.02; font-weight:800;}
-    .hero-text p{margin:0; color:rgba(255,255,255,0.95); font-weight:600; font-size:16px;}
-
-    /* Form card */
-    .form-card{background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow-1); display:flex; flex-direction:column; gap:12px; align-self:start;}
-    .form-card h3{margin:0 0 6px 0; font-size:18px; color:var(--nav);}
-    label{display:block; font-weight:700; margin-bottom:6px; color:var(--nav); font-size:13px;}
+    .form-card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(16,24,40,0.06);display:flex;flex-direction:column;gap:10px;}
+    label{display:block;font-weight:700;margin-bottom:6px;color:var(--nav);font-size:13px;}
     .field{position:relative;}
-    .field .icon{ position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; pointer-events:none; }
-    input[type="text"], input[type="email"], input[type="date"], textarea, select{
-      width:100%; padding:12px 12px 12px 36px; border-radius:10px; border:1px solid #e6e9ee; background:white; font-size:14px; color:#111827; box-sizing:border-box;
-    }
-    textarea{min-height:120px; resize:vertical;}
-    .btn{display:inline-block; background:var(--accent-2); color:#111827; padding:12px 16px; border-radius:10px; font-weight:800; border:none; cursor:pointer;}
-    .status{margin-top:8px; font-weight:700; color:var(--muted); text-align:center; font-size:14px;}
+    .field .icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);}
+    input,textarea,select{width:100%;padding:12px 12px 12px 36px;border-radius:10px;border:1px solid #e6e9ee;background:#fff;box-sizing:border-box;}
+    textarea{min-height:110px;resize:vertical;}
+    .btn{background:var(--accent-2);color:#111;padding:12px 16px;border-radius:10px;border:none;font-weight:800;cursor:pointer;}
 
-    /* Services */
-    section h2{margin:0 0 14px 0; font-size:20px; color:var(--nav);}
-    .services{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:48px;}
-    .card{background:var(--card); padding:18px; border-radius:14px; box-shadow:var(--shadow-1); transition:transform .18s ease;}
-    .card:hover{transform:translateY(-6px);}
-    .card h4{margin:0 0 8px 0; font-size:16px; color:var(--nav); font-weight:800;}
-    .card p{margin:0; color:var(--muted); font-size:14px;}
+    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:48px;}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.04);}
 
-    /* How it works */
-    .how{display:flex; gap:18px; margin-bottom:48px;}
-    .step{background:var(--card); padding:18px; border-radius:12px; flex:1; text-align:center; box-shadow:var(--shadow-1);}
-    .step-number{ width:48px; height:48px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-weight:800; color:white; margin-bottom:10px; background:linear-gradient(180deg,var(--accent), #1e40af); box-shadow:0 8px 20px rgba(37,99,235,0.12); font-size:18px; }
-    .step h5{margin:6px 0 8px 0; font-size:15px; color:var(--nav);}
-    .step p{margin:0; color:var(--muted); font-size:14px;}
+    .how{display:flex;gap:18px;margin-bottom:48px;}
+    .step{background:var(--card);padding:16px;border-radius:12px;flex:1;text-align:center;}
 
-    /* Slider (karuzela) */
-    #gallery-slider { margin-top:12px; margin-bottom:48px; }
-    .slider { position:relative; display:flex; align-items:center; gap:12px; }
-    .slides { overflow:hidden; width:100%; border-radius:12px; }
-    .slides { display:flex; transition:transform .45s ease; will-change:transform; }
-    .slide { min-width:100%; position:relative; box-sizing:border-box; }
-    .slide img { width:100%; height:360px; object-fit:cover; display:block; border-radius:12px; }
-    .slide-caption {
-      position:absolute; left:20px; bottom:18px;
-      background:linear-gradient(90deg, rgba(2,6,23,0.72), rgba(2,6,23,0.36));
-      color:#fff; padding:10px 14px; border-radius:8px; font-weight:700; max-width:calc(100% - 40px);
-      box-shadow:0 8px 20px rgba(2,6,23,0.18);
-    }
-    .slider-btn { background:rgba(255,255,255,0.95); border:none; width:44px; height:44px; border-radius:999px; font-size:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 6px 18px rgba(2,6,23,0.08); }
-    .slider-dots { display:flex; gap:8px; justify-content:center; margin-top:12px; }
-    .slider-dots button { width:10px; height:10px; border-radius:999px; border:none; background:#d1d5db; cursor:pointer; }
-    .slider-dots button.active { background:var(--accent); }
+    /* Slider */
+    #gallery-slider{margin-bottom:48px;}
+    .slider{position:relative;display:flex;align-items:center;gap:12px;}
+    .slides{overflow:hidden;width:100%;border-radius:12px;display:flex;transition:transform .45s ease;}
+    .slide{min-width:100%;position:relative;}
+    .slide img{width:100%;height:360px;object-fit:cover;border-radius:12px;display:block;}
+    .slide-caption{position:absolute;left:20px;bottom:18px;background:linear-gradient(90deg,rgba(2,6,23,0.72),rgba(2,6,23,0.36));color:#fff;padding:10px 14px;border-radius:8px;font-weight:700;}
+    .slider-btn{background:rgba(255,255,255,0.95);border:none;width:44px;height:44px;border-radius:999px;cursor:pointer;}
+    .slider-dots{display:flex;gap:8px;justify-content:center;margin-top:12px;}
+    .slider-dots button{width:10px;height:10px;border-radius:999px;border:none;background:#d1d5db;}
+    .slider-dots button.active{background:var(--accent);}
 
-    /* Footer */
-    footer{margin-top:12px; padding:28px; text-align:center; color:var(--muted); font-size:14px; background:#0b1220; color:#cbd5e1; border-radius:12px; margin-bottom:36px;}
-    footer a{color:#fff; text-decoration:none; font-weight:700;}
+    footer{margin-top:12px;padding:28px;text-align:center;background:#0b1220;color:#cbd5e1;border-radius:12px;margin-bottom:36px;}
 
-    /* Responsive */
-    @media (max-width:1100px){ .hero{grid-template-columns:1fr 380px;} }
-    @media (max-width:900px){
-      .hero{grid-template-columns:1fr;}
-      .hero-left{min-height:360px;}
-      .services{grid-template-columns:repeat(2,1fr);}
-      .how{flex-direction:column;}
-    }
-    @media (max-width:520px){
-      nav ul{display:none;}
-      .contact-cta{display:none;}
-      .hero-text h1{font-size:26px;}
-      .form-card{padding:14px;}
-      .slide img{height:200px;}
-      .slider-btn{display:none;}
-      :root { --header-height:72px; }
-      .wrap{ padding-top: calc(var(--header-height) + 12px); }
-      [id] { scroll-margin-top: calc(var(--header-height) + 6px); }
-    }
-
-    /* Simple reveal */
-    .fade-in{opacity:0; transform:translateY(8px); transition:opacity .6s ease, transform .6s ease;}
-    .fade-in.visible{opacity:1; transform:none;}
+    @media (max-width:900px){ .hero{grid-template-columns:1fr;} .slide img{height:260px;} }
+    @media (max-width:520px){ nav ul{display:none;} .contact-cta{display:none;} .slide img{height:200px;} .slider-btn{display:none;} }
   </style>
 </head>
 <body>
@@ -170,11 +94,10 @@
   </header>
 
   <div class="wrap">
-
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-left fade-in" role="img" aria-label="Zdjęcie z drona">
-        <img src="assets/hero.jpg" alt="Zdjęcie z drona - inspekcja" loading="lazy" />
+      <div class="hero-left" role="img" aria-label="Zdjęcie z drona">
+        <img src="assets/hero.jpg" alt="Zdjęcie z drona - inspekcja" loading="lazy">
         <div class="hero-overlay">
           <div class="hero-text">
             <h1 id="hero-heading">Dokładna dokumentacja z lotu drona</h1>
@@ -184,7 +107,7 @@
       </div>
 
       <!-- Formularz -->
-      <aside class="form-card fade-in" id="form" aria-labelledby="form-title">
+      <aside class="form-card" id="form" aria-labelledby="form-title">
         <h3 id="form-title">Zgłoś zlecenie</h3>
 
         <form id="bspForm" action="https://formspree.io/f/xqebvvow" method="POST" novalidate>
@@ -194,176 +117,88 @@
 
           <div>
             <label for="contact">E-mail lub telefon <span style="color:#d00">*</span></label>
-            <div class="field">
-              <span class="icon">📞</span>
-              <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon">
-            </div>
+            <div class="field"><span class="icon">📞</span><input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon"></div>
           </div>
 
           <div style="margin-top:10px;">
             <label for="location">Lokalizacja zlecenia <span style="color:#d00">*</span></label>
-            <div class="field">
-              <span class="icon">📍</span>
-              <input id="location" name="location" type="text" required placeholder="np. Pobiedziska">
-            </div>
+            <div class="field"><span class="icon">📍</span><input id="location" name="location" type="text" required placeholder="np. Pobiedziska"></div>
           </div>
 
           <div style="margin-top:10px;">
             <label for="description">Opis zlecenia <span style="color:#d00">*</span></label>
-            <div class="field">
-              <span class="icon">📝</span>
-              <textarea id="description" name="description" required placeholder="Opisz, co ma zrobić operator (np. inspekcja dachu, zdjęcia elewacji)"></textarea>
-            </div>
+            <div class="field"><span class="icon">📝</span><textarea id="description" name="description" required placeholder="Opisz, co ma zrobić operator"></textarea></div>
           </div>
 
-          <div class="form-row" style="margin-top:10px; display:flex; gap:10px; align-items:flex-end;">
-            <div style="flex:1;">
-              <label for="date">Preferowany termin</label>
-              <div class="field">
-                <span class="icon">📅</span>
-                <input id="date" name="date" type="date">
-              </div>
-            </div>
-            <div style="width:140px;">
-              <label for="budget">Budżet</label>
-              <div class="field">
-                <span class="icon">💶</span>
-                <input id="budget" name="budget" type="text" placeholder="PLN">
-              </div>
-            </div>
+          <div style="margin-top:10px;display:flex;gap:10px;align-items:flex-end;">
+            <div style="flex:1;"><label for="date">Preferowany termin</label><div class="field"><span class="icon">📅</span><input id="date" name="date" type="date"></div></div>
+            <div style="width:140px;"><label for="budget">Budżet</label><div class="field"><span class="icon">💶</span><input id="budget" name="budget" type="text" placeholder="PLN"></div></div>
           </div>
 
-          <div style="margin-top:14px;">
-            <button class="btn" type="submit">Wyślij zgłoszenie</button>
-          </div>
-
+          <div style="margin-top:14px;"><button class="btn" type="submit">Wyślij zgłoszenie</button></div>
           <div class="status" id="status" role="status" aria-live="polite"></div>
         </form>
       </aside>
     </section>
 
-    <!-- Usługi -->
-    <section id="services" class="fade-in">
-      <h2>Usługi</h2>
-      <div class="services">
-        <div class="card">
-          <h4>Inspekcja dachu</h4>
-          <p>Wykonujemy zdjęcia i wideo, wskazujemy miejsca z uszkodzeniami i dostarczamy materiały z raportem.</p>
-        </div>
-        <div class="card">
-          <h4>Fotografia nieruchomości</h4>
-          <p>Zdjęcia i ujęcia z lotu, idealne do ogłoszeń sprzedaży i prezentacji inwestycji.</p>
-        </div>
-        <div class="card">
-          <h4>Mapowanie i inspekcje techniczne</h4>
-          <p>Dokumentacja obiektów i terenów, analiza wizualna i dostarczenie materiałów klientowi.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Jak to działa -->
-    <section class="fade-in">
+    <!-- How it works -->
+    <section>
       <h2>Jak to działa</h2>
       <div class="how">
-        <div class="step">
-          <div class="step-number">1</div>
-          <h5>Zgłoszenie</h5>
-          <p>Wypełnij formularz — podaj kontakt, lokalizację i opis.</p>
-        </div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <h5>Realizacja</h5>
-          <p>Przyjeżdżamy w umówionym terminie i wykonujemy zlecenie.</p>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <h5>Dostawa</h5>
-          <p>Otrzymujesz zdjęcia, wideo i krótką analizę lub raport.</p>
-          <p style="margin-top:8px; font-weight:700;">Płatność następuje po otrzymaniu materiałów i raportów.</p>
-        </div>
+        <div class="step"><div class="step-number">1</div><h5>Zgłoszenie</h5><p>Wypełnij formularz — podaj kontakt, lokalizację i opis.</p></div>
+        <div class="step"><div class="step-number">2</div><h5>Realizacja</h5><p>Przyjeżdżamy w umówionym terminie i wykonujemy zlecenie.</p></div>
+        <div class="step"><div class="step-number">3</div><h5>Dostawa</h5><p>Otrzymujesz zdjęcia, wideo i raport.</p><p style="margin-top:8px;font-weight:700;">Płatność następuje po otrzymaniu materiałów i raportów.</p></div>
       </div>
     </section>
 
-    <!-- Galeria realizacji (karuzela) -->
-    <section id="gallery-slider" class="fade-in">
+    <!-- Slider -->
+    <section id="gallery-slider">
       <h2>Realizacje</h2>
-
       <div class="slider" aria-roledescription="carousel">
         <button class="slider-btn prev" aria-label="Poprzednie">‹</button>
-
         <div class="slides" role="list">
-          <div class="slide" role="listitem" data-caption="Inspekcja dachu — szczegółowa dokumentacja">
-            <img src="assets/gallery1.jpg" alt="Realizacja 1" loading="lazy">
-            <div class="slide-caption">Inspekcja dachu — szczegółowa dokumentacja</div>
-          </div>
-
-          <div class="slide" role="listitem" data-caption="Fotografia nieruchomości — ujęcia do ogłoszeń">
-            <img src="assets/gallery2.jpg" alt="Realizacja 2" loading="lazy">
-            <div class="slide-caption">Fotografia nieruchomości — ujęcia do ogłoszeń</div>
-          </div>
-
-          <div class="slide" role="listitem" data-caption="Mapowanie terenu — raport i ortofotomapa">
-            <img src="assets/gallery3.jpg" alt="Realizacja 3" loading="lazy">
-            <div class="slide-caption">Mapowanie terenu — raport i ortofotomapa</div>
-          </div>
+          <div class="slide" role="listitem"><img src="assets/gallery1.jpg" alt="Realizacja 1" loading="lazy"><div class="slide-caption">Inspekcja dachu — szczegółowa dokumentacja</div></div>
+          <div class="slide" role="listitem"><img src="assets/gallery2.jpg" alt="Realizacja 2" loading="lazy"><div class="slide-caption">Fotografia nieruchomości — ujęcia do ogłoszeń</div></div>
+          <div class="slide" role="listitem"><img src="assets/gallery3.jpg" alt="Realizacja 3" loading="lazy"><div class="slide-caption">Mapowanie terenu — raport i ortofotomapa</div></div>
         </div>
-
         <button class="slider-btn next" aria-label="Następne">›</button>
       </div>
-
-      <div class="slider-dots" aria-hidden="false" role="tablist"></div>
+      <div class="slider-dots" role="tablist"></div>
     </section>
 
-    <!-- Cennik -->
-    <section class="fade-in">
+    <!-- Pricing -->
+    <section>
       <h2>Cennik orientacyjny</h2>
-      <div class="pricing">
-        <div class="price">
-          <h3>Inspekcja dachu</h3>
-          <p>Orientacyjnie od 100 zł — cena zależy od zakresu i lokalizacji</p>
-        </div>
-        <div class="price">
-          <h3>Fotografia nieruchomości</h3>
-          <p>Cena ustalana indywidualnie</p>
-        </div>
-        <div class="price">
-          <h3>Mapowanie i inspekcje</h3>
-          <p>Cena ustalana po konsultacji</p>
-        </div>
+      <div class="pricing" style="display:flex;gap:16px;margin-top:12px;">
+        <div class="price" style="background:#fff;padding:12px;border-radius:10px;flex:1;"> <h3>Inspekcja dachu</h3><p>Orientacyjnie od 100 zł</p></div>
+        <div class="price" style="background:#fff;padding:12px;border-radius:10px;flex:1;"> <h3>Fotografia</h3><p>Cena ustalana indywidualnie</p></div>
+        <div class="price" style="background:#fff;padding:12px;border-radius:10px;flex:1;"> <h3>Mapowanie</h3><p>Cena po konsultacji</p></div>
       </div>
     </section>
 
-    <!-- Stopka -->
-    <footer id="contact" aria-labelledby="contact-heading">
-      <h3 id="contact-heading" style="margin:0 0 8px 0; color:#fff;">Kontakt</h3>
-      <div style="margin-bottom:8px; color:#cbd5e1;">Usługi dostępne głównie w gminie <strong>Pobiedziska</strong>.</div>
-      <div style="margin-bottom:8px;">
-        <a href="mailto:jakubsoperatorbsp@gmail.com">jakubsoperatorbsp@gmail.com</a>
-      </div>
-      <div id="copyright">© <span id="year">2026</span> BSP Zlecenia — wersja testowa</div>
+    <footer id="contact">
+      <h3 style="color:#fff;">Kontakt</h3>
+      <div style="color:#cbd5e1;">Usługi dostępne głównie w gminie <strong>Pobiedziska</strong>.</div>
+      <div style="margin-top:8px;"><a href="mailto:jakubsoperatorbsp@gmail.com" style="color:#fff;">jakubsoperatorbsp@gmail.com</a></div>
+      <div style="margin-top:12px;color:#cbd5e1;">© <span id="year">2026</span> BSP Zlecenia — wersja testowa</div>
     </footer>
-
   </div>
 
-  <!-- Skrypt formularza (jeśli używasz) -->
-  <script src="functions/api/form.js"></script>
+  <!-- Zakomentowany zewnętrzny skrypt formularza (tymczasowo) -->
+  <!-- <script src="functions/api/form.js"></script> -->
 
-  <!-- Slider + header + reveal + dynamic year -->
   <script>
+    // header reveal + dynamic year + slider
     (function(){
-      // header sticky
       const header = document.querySelector('header');
       if (header) {
         const threshold = 10;
-        const onScroll = () => {
-          if (window.scrollY > threshold) header.classList.add('scrolled');
-          else header.classList.remove('scrolled');
-        };
+        const onScroll = () => header.classList.toggle('scrolled', window.scrollY > threshold);
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
       }
 
-      // reveal
+      // reveal simple
       const reveal = () => {
         document.querySelectorAll('.fade-in').forEach(el=>{
           const rect = el.getBoundingClientRect();
@@ -388,31 +223,25 @@
         const dotsContainer = document.querySelector('#gallery-slider .slider-dots');
         if (!slider || slides.length === 0) return;
 
-        let index = 0;
-        let autoplay = true;
-        let interval = 4500;
-        let timer;
+        let index = 0, autoplay = true, interval = 4500, timer;
 
-        slides.forEach((s, i) => {
+        slides.forEach((s,i)=>{
           const btn = document.createElement('button');
-          if (i === 0) btn.classList.add('active');
-          btn.addEventListener('click', () => { goTo(i); resetTimer(); });
+          if (i===0) btn.classList.add('active');
+          btn.addEventListener('click', ()=>{ goTo(i); resetTimer(); });
           dotsContainer.appendChild(btn);
         });
         const dots = Array.from(dotsContainer.children);
 
-        function update() {
-          slider.style.transform = `translateX(-${index * 100}%)`;
-          dots.forEach((d, i) => d.classList.toggle('active', i === index));
-        }
-        function goTo(i) { index = (i + slides.length) % slides.length; update(); }
-        function next() { goTo(index + 1); }
-        function prev() { goTo(index - 1); }
+        function update(){ slider.style.transform = `translateX(-${index*100}%)`; dots.forEach((d,i)=>d.classList.toggle('active', i===index)); }
+        function goTo(i){ index = (i + slides.length) % slides.length; update(); }
+        function next(){ goTo(index+1); }
+        function prev(){ goTo(index-1); }
 
-        nextBtn.addEventListener('click', () => { next(); resetTimer(); });
-        prevBtn.addEventListener('click', () => { prev(); resetTimer(); });
+        nextBtn.addEventListener('click', ()=>{ next(); resetTimer(); });
+        prevBtn.addEventListener('click', ()=>{ prev(); resetTimer(); });
 
-        function startTimer(){ if (!autoplay) return; timer = setInterval(next, interval); }
+        function startTimer(){ if(!autoplay) return; timer = setInterval(next, interval); }
         function stopTimer(){ clearInterval(timer); }
         function resetTimer(){ stopTimer(); startTimer(); }
 
@@ -420,10 +249,9 @@
         container.addEventListener('mouseenter', stopTimer);
         container.addEventListener('mouseleave', startTimer);
 
-        update();
-        startTimer();
+        update(); startTimer();
 
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', (e)=>{
           if (e.key === 'ArrowRight') { next(); resetTimer(); }
           if (e.key === 'ArrowLeft') { prev(); resetTimer(); }
         });
