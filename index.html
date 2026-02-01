@@ -78,7 +78,12 @@
 </header>
 
 <main>
-  <form id="bspForm">
+  <form id="bspForm" method="POST">
+
+    <!-- WYMAGANE PRZEZ FORMSPREE -->
+    <input type="hidden" name="_subject" value="Nowe zgłoszenie BSP">
+    <input type="hidden" name="_replyto" value="">
+
     <label for="contact">E-mail lub telefon</label>
     <input type="text" id="contact" name="contact" required>
 
@@ -104,7 +109,6 @@
   © 2026 BSP Zlecenia — wersja testowa
 </footer>
 
-<!-- Ładujemy Twój poprawiony form.js -->
 <script src="form.js"></script>
 
 </body>
