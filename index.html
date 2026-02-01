@@ -7,7 +7,7 @@
 
   <!-- Bezpieczeństwo -->
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'">
 
   <style>
     body {
@@ -73,7 +73,8 @@
 </header>
 
 <main>
-  <form id="bspForm">
+  <!-- FORMULARZ NETLIFY -->
+  <form name="bspForm" method="POST" netlify>
     <label for="contact">E-mail lub telefon</label>
     <input type="text" id="contact" name="contact" required>
 
@@ -91,43 +92,11 @@
 
     <button type="submit">Wyślij zgłoszenie</button>
   </form>
-
-  <p id="status"></p>
 </main>
 
 <footer>
   © 2026 BSP Zlecenia — wersja testowa
 </footer>
-
-<script>
-document.getElementById("bspForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const data = {
-    contact: contact.value,
-    location: location.value,
-    description: description.value,
-    date: date.value,
-    budget: budget.value
-  };
-
-  const status = document.getElementById("status");
-  status.textContent = "Wysyłanie...";
-
-  const res = await fetch("/api/send", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-
-  if (res.ok) {
-    status.textContent = "Zgłoszenie wysłane!";
-    e.target.reset();
-  } else {
-    status.textContent = "Błąd podczas wysyłania.";
-  }
-});
-</script>
 
 </body>
 </html>
