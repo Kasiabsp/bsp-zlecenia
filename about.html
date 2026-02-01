@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>O nas — BSP Zlecenia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f7f9fb;
+      --card:#ffffff;
+      --nav:#0f1724;
+      --muted:#6b7280;
+      --accent:#2563eb;
+      --radius:10px;
+      --max-width:900px;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:var(--nav);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+    .wrap{max-width:var(--max-width); margin:28px auto; padding:20px;}
+    header{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;}
+    .logo{width:44px; height:44px; background:var(--nav); color:white; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:700;}
+    h1{margin:0 0 8px 0; font-size:22px;}
+    h2{margin:18px 0 8px 0; font-size:18px;}
+    p{margin:0 0 12px 0; color:var(--muted);}
+    ul{margin:0 0 12px 0; padding-left:18px; color:var(--muted);}
+    li{margin-bottom:8px;}
+    .back{display:inline-block; margin-top:14px; text-decoration:none; color:white; background:var(--accent); padding:10px 14px; border-radius:8px; font-weight:700;}
+    .card{background:var(--card); padding:18px; border-radius:12px; box-shadow:0 8px 30px rgba(2,6,23,0.06);}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="logo" aria-hidden="true">BSP</div>
+        <div>
+          <div style="font-weight:700;">BSP Zlecenia</div>
+          <div style="font-size:13px;color:var(--muted);">Inspekcje dronem • Pobiedziska</div>
+        </div>
+      </div>
+      <nav aria-label="Nawigacja">
+        <a href="index.html" class="back" aria-label="Powrót do strony głównej">Powrót</a>
+      </nav>
+    </header>
+
+    <main class="card" role="main" aria-labelledby="about-heading">
+      <h1 id="about-heading">O nas</h1>
+
+      <p><strong>BSP Zlecenia</strong> dostarcza rzetelne materiały z lotu drona: zdjęcia, wideo i dokumentację wizualną. Specjalizujemy się w inspekcjach, fotografii nieruchomości oraz mapowaniu terenu, koncentrując się na praktycznych rezultatach i czytelnej prezentacji danych.</p>
+
+      <h2>Usługi</h2>
+      <ul>
+        <li><strong>Inspekcje dachów i konstrukcji</strong> — szczegółowe zdjęcia i nagrania wideo z naciskiem na identyfikację widocznych usterek i miejsc wymagających uwagi.</li>
+        <li><strong>Fotografia nieruchomości</strong> — ujęcia z lotu przygotowane z myślą o prezentacjach sprzedażowych i marketingowych.</li>
+        <li><strong>Mapowanie i dokumentacja terenu</strong> — zestawy zdjęć i ortofotomapy wspierające analizę przestrzenną i planowanie.</li>
+      </ul>
+
+      <h2>Podejście do realizacji</h2>
+      <p>Pracujemy metodycznie: plan lotu, bezpieczne wykonanie i staranna selekcja materiałów. Materiały dostarczamy w przejrzystym formacie wraz z krótkim podsumowaniem najważniejszych obserwacji i praktycznymi wskazówkami.</p>
+
+      <h2>Obszar działania i terminy</h2>
+      <p>Realizacje głównie na terenie gminy <strong>Pobiedziska</strong> i okolic. Oferujemy elastyczne terminy — czas realizacji ustalamy indywidualnie, w zależności od zakresu zlecenia.</p>
+
+      <h2>Kontakt</h2>
+      <p>Wypełnij formularz zgłoszeniowy — odpowiemy szybko i ustalimy szczegóły realizacji oraz orientacyjny koszt.</p>
+    </main>
+  </div>
+</body>
+</html>
