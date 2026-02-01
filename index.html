@@ -5,6 +5,7 @@
   <title>Zlecenia BSP — inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Content Security Policy: allow fetch do Formspree -->
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://formspree.io">
 
@@ -90,7 +91,7 @@
 
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-left" role="img" aria-label="Zdjęcie z drona">
-        <!-- Uwaga: plik w repo ma nazwę hero.jpg.jpg — jeśli zmienisz nazwę na hero.jpg, zaktualizuj ścieżkę -->
+        <!-- Jeśli plik ma nazwę hero.jpg, zmień ścieżkę na /assets/hero.jpg -->
         <img src="/assets/hero.jpg.jpg" alt="Zdjęcie z drona - inspekcja" />
         <div class="hero-overlay">
           <div class="hero-text">
@@ -115,7 +116,7 @@
 
           <div style="margin-top:10px;">
             <label for="location">Lokalizacja zlecenia <span style="color:#d00">*</span></label>
-            <input id="location" name="location" type="text" required placeholder="np. Biskupice Wielkopolskie">
+            <input id="location" name="location" type="text" required placeholder="np. Pobiedziska">
           </div>
 
           <div style="margin-top:10px;">
