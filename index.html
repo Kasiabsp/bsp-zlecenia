@@ -6,167 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://formspree.io">
-
-  <style>
-    :root{
-      --bg:#f4f6f8;
-      --nav:#0f1724;
-      --accent:#2563eb;
-      --accent-2:#f5c542;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --radius:12px;
-      --max-width:1100px;
-      --header-height:80px;
-      --section-gap:72px;
-      --container-padding:20px;
-      --shadow-1: 0 6px 20px rgba(16,24,40,0.06);
-      --shadow-2: 0 10px 30px rgba(16,24,40,0.08);
-    }
-
-    html,body{height:100%;}
-    body{
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:var(--bg);
-      color:#0b1220;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.5;
-      -webkit-font-kerning:normal;
-      font-kerning:normal;
-    }
-
-    /* Header */
-    header{
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 9999;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
-      backdrop-filter: blur(6px);
-      box-shadow: 0 2px 8px rgba(2,6,23,0.06);
-      padding: 14px var(--container-padding);
-      transition: box-shadow .18s ease, transform .18s ease;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px;
-      height:var(--header-height);
-    }
-
-    header.scrolled{
-      box-shadow: 0 8px 30px rgba(2,6,23,0.12);
-      transform: translateY(-1px);
-    }
-
-    .wrap{max-width:var(--max-width); margin:0 auto; padding:0 var(--container-padding); padding-top: calc(var(--header-height) + 28px);}
-
-    [id] { scroll-margin-top: calc(var(--header-height) + 12px); }
-
-    .brand{display:flex; align-items:center; gap:12px;}
-    .logo{width:52px; height:52px; background:var(--nav); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:18px; box-shadow:var(--shadow-1);}
-    nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center;}
-    nav a{color:var(--nav); text-decoration:none; font-weight:600; font-size:15px;}
-    .contact-cta{background:var(--accent); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:800; box-shadow:0 8px 20px rgba(37,99,235,0.12);}
-
-    /* Hero */
-    .hero{display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:stretch; margin-bottom:var(--section-gap);}
-    .hero-left{position:relative; border-radius:var(--radius); overflow:hidden; min-height:460px; box-shadow:var(--shadow-2); transform:translateZ(0);}
-    .hero-left img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease; will-change:transform;}
-    .hero-left:hover img{transform:scale(1.04);}
-    .hero-overlay{position:absolute; inset:0; background:linear-gradient(90deg, rgba(2,6,23,0.45) 0%, rgba(37,99,235,0.08) 60%); display:flex; align-items:flex-end; padding:36px; color:white;}
-    .hero-text{max-width:640px;}
-    .hero-text h1{margin:0 0 10px 0; font-size:44px; line-height:1.02; font-weight:800; letter-spacing:-0.02em;}
-    .hero-text p{margin:0; color:rgba(255,255,255,0.95); font-weight:600; font-size:16px;}
-
-    /* Form card */
-    .form-card{background:var(--card); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow-1); display:flex; flex-direction:column; gap:12px; height:fit-content; align-self:start;}
-    .form-card h3{margin:0 0 6px 0; font-size:18px; color:var(--nav);}
-    label{display:block; font-weight:700; margin-bottom:6px; color:var(--nav); font-size:13px;}
-    .field{position:relative;}
-    .field .icon{
-      position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; pointer-events:none;
-    }
-    input[type="text"], input[type="email"], input[type="date"], textarea, select{
-      width:100%; padding:12px 12px 12px 36px; border-radius:10px; border:1px solid #e6e9ee; background:white; font-size:14px; color:#111827; box-sizing:border-box;
-      transition:box-shadow .12s ease, border-color .12s ease;
-    }
-    input:focus, textarea:focus{outline:none; box-shadow:0 6px 18px rgba(37,99,235,0.08); border-color:rgba(37,99,235,0.18);}
-    textarea{min-height:120px; resize:vertical;}
-    .btn{display:inline-block; background:var(--accent); color:white; padding:12px 16px; border-radius:10px; font-weight:800; border:none; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
-    .btn:hover{transform:translateY(-3px); box-shadow:0 12px 30px rgba(37,99,235,0.14);}
-    .status{margin-top:8px; font-weight:700; color:var(--muted); text-align:center; font-size:14px;}
-
-    /* Services */
-    section h2{margin:0 0 14px 0; font-size:20px; color:var(--nav);}
-    .services{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:var(--section-gap);}
-    .card{background:var(--card); padding:20px; border-radius:14px; box-shadow:var(--shadow-1); transition:transform .18s ease, box-shadow .18s ease;}
-    .card:hover{transform:translateY(-6px); box-shadow:0 18px 40px rgba(16,24,40,0.08);}
-    .card h4{margin:0 0 8px 0; font-size:16px; color:var(--nav); font-weight:800;}
-    .card p{margin:0; color:var(--muted); font-size:14px;}
-
-    /* How it works */
-    .how{display:flex; gap:18px; margin-bottom:var(--section-gap);}
-    .step{background:var(--card); padding:18px; border-radius:12px; flex:1; text-align:center; box-shadow:var(--shadow-1);}
-    .step-number{
-      width:48px; height:48px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-weight:800; color:white; margin-bottom:10px;
-      background:linear-gradient(180deg,var(--accent), #1e40af);
-      box-shadow:0 8px 20px rgba(37,99,235,0.12);
-      font-size:18px;
-    }
-    .step h5{margin:6px 0 8px 0; font-size:15px; color:var(--nav);}
-    .step p{margin:0; color:var(--muted); font-size:14px;}
-
-    /* Gallery */
-    .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:var(--section-gap);}
-    .gallery img{width:100%; aspect-ratio:16/10; object-fit:cover; border-radius:10px; box-shadow:var(--shadow-1); transition:transform .3s ease;}
-    .gallery img:hover{transform:translateY(-6px) scale(1.02);}
-
-    /* Pricing */
-    .pricing{display:flex; gap:16px; margin-bottom:var(--section-gap);}
-    .price{background:linear-gradient(180deg,#fff,#fbfbff); padding:18px; border-radius:12px; flex:1; text-align:center; box-shadow:var(--shadow-1);}
-    .price h3{margin:0 0 8px 0; font-size:16px; color:var(--nav); font-weight:800;}
-    .price p{margin:0; color:var(--muted); font-size:14px;}
-
-    /* Footer */
-    footer{margin-top:12px; padding:28px; text-align:center; color:var(--muted); font-size:14px; background:#0b1220; color:#cbd5e1; border-radius:12px; margin-bottom:36px;}
-    footer a{color:#fff; text-decoration:none; font-weight:700;}
-
-    /* Responsive */
-    @media (max-width:1100px){ .hero{grid-template-columns:1fr 380px;} }
-    @media (max-width:900px){
-      .hero{grid-template-columns:1fr;}
-      .hero-left{min-height:360px;}
-      .services{grid-template-columns:repeat(2,1fr);}
-      .gallery{grid-template-columns:repeat(2,1fr);}
-      .pricing{flex-direction:column;}
-      .how{flex-direction:column;}
-    }
-    @media (max-width:520px){
-      nav ul{display:none;}
-      .contact-cta{display:none;}
-      .hero-overlay{align-items:flex-end; padding:16px;}
-      .hero-text h1{font-size:26px;}
-      .form-card{padding:14px;}
-      .gallery img{aspect-ratio:4/3;}
-      :root { --header-height:72px; }
-      .wrap{ padding-top: calc(var(--header-height) + 12px); }
-      [id] { scroll-margin-top: calc(var(--header-height) + 6px); }
-    }
-
-    /* Simple fade-in for sections */
-    .fade-in{opacity:0; transform:translateY(8px); transition:opacity .6s ease, transform .6s ease;}
-    .fade-in.visible{opacity:1; transform:none;}
-  </style>
+  <!-- Jeśli trzymasz CSS w zewnętrznym pliku, podmień poniżej -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Sticky header -->
   <header>
     <div class="brand">
       <div class="logo" aria-hidden="true">BSP</div>
       <div>
-        <div style="font-weight:800;">BSP Zlecenia</div>
+        <div style="font-weight:700;">BSP Zlecenia</div>
         <div style="font-size:13px;color:var(--muted);">Inspekcje dronem • Gmina Pobiedziska</div>
       </div>
     </div>
@@ -185,21 +34,20 @@
   </header>
 
   <div class="wrap">
-
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-left fade-in" role="img" aria-label="Zdjęcie z drona">
+      <div class="hero-left" role="img" aria-label="Zdjęcie z drona" style="position:relative;">
         <img src="/assets/hero.jpg" alt="Zdjęcie z drona - inspekcja" />
         <div class="hero-overlay">
           <div class="hero-text">
             <h1 id="hero-heading">Dokładna dokumentacja z lotu drona</h1>
-            <p>Zleć inspekcję, fotografię nieruchomości lub mapowanie — szybkie terminy i profesjonalne materiały.</p>
+            <p>Zleć inspekcję, fotografię nieruchomości lub mapowanie — szybkie terminy, profesjonalne materiały.</p>
           </div>
         </div>
       </div>
 
       <!-- Formularz -->
-      <aside class="form-card fade-in" id="form" aria-labelledby="form-title">
+      <aside class="form-card" id="form" aria-labelledby="form-title">
         <h3 id="form-title">Zgłoś zlecenie</h3>
 
         <form id="bspForm" action="https://formspree.io/f/xqebvvow" method="POST" novalidate>
@@ -231,7 +79,7 @@
             </div>
           </div>
 
-          <div class="form-row" style="margin-top:10px; display:flex; gap:10px; align-items:flex-end;">
+          <div class="form-row" style="margin-top:10px;">
             <div style="flex:1;">
               <label for="date">Preferowany termin</label>
               <div class="field">
@@ -248,7 +96,7 @@
             </div>
           </div>
 
-          <div style="margin-top:14px;">
+          <div style="margin-top:12px;">
             <button class="btn" type="submit">Wyślij zgłoszenie</button>
           </div>
 
@@ -262,8 +110,8 @@
     </section>
 
     <!-- Usługi -->
-    <section id="services" class="fade-in">
-      <h2>Usługi</h2>
+    <section id="services">
+      <h2 style="margin:0 0 12px 0;">Usługi</h2>
       <div class="services">
         <div class="card">
           <h4>Inspekcja dachu</h4>
@@ -281,21 +129,21 @@
     </section>
 
     <!-- Jak to działa -->
-    <section class="fade-in">
-      <h2>Jak to działa</h2>
+    <section style="margin-top:6px;">
+      <h2 style="margin:0 0 12px 0;">Jak to działa</h2>
       <div class="how">
         <div class="step">
-          <div class="step-number">1</div>
+          <div style="font-size:20px;font-weight:700;">1</div>
           <h5>Zgłoszenie</h5>
           <p>Wypełnij formularz — podaj kontakt, lokalizację i opis.</p>
         </div>
         <div class="step">
-          <div class="step-number">2</div>
+          <div style="font-size:20px;font-weight:700;">2</div>
           <h5>Realizacja</h5>
           <p>Przyjeżdżamy w umówionym terminie i wykonujemy zlecenie.</p>
         </div>
         <div class="step">
-          <div class="step-number">3</div>
+          <div style="font-size:20px;font-weight:700;">3</div>
           <h5>Dostawa</h5>
           <p>Otrzymujesz zdjęcia, wideo i krótką analizę lub raport.</p>
         </div>
@@ -303,8 +151,8 @@
     </section>
 
     <!-- Galeria realizacji -->
-    <section class="fade-in">
-      <h2>Realizacje</h2>
+    <section style="margin-top:6px;">
+      <h2 style="margin:0 0 12px 0;">Realizacje</h2>
       <div class="gallery" aria-hidden="false">
         <img src="/assets/gallery1.jpg" alt="Realizacja 1">
         <img src="/assets/gallery2.jpg" alt="Realizacja 2">
@@ -313,8 +161,8 @@
     </section>
 
     <!-- Cennik -->
-    <section class="fade-in">
-      <h2>Cennik orientacyjny</h2>
+    <section style="margin-top:6px;">
+      <h2 style="margin:0 0 12px 0;">Cennik (orientacyjny)</h2>
       <div class="pricing">
         <div class="price">
           <h3>Inspekcja dachu</h3>
@@ -325,7 +173,7 @@
           <p>Cena ustalana indywidualnie</p>
         </div>
         <div class="price">
-          <h3>Mapowanie i inspekcje</h3>
+          <h3>Mapowanie / inspekcje</h3>
           <p>Cena ustalana po konsultacji</p>
         </div>
       </div>
@@ -333,35 +181,35 @@
 
     <!-- Stopka -->
     <footer id="contact" aria-labelledby="contact-heading">
-      <h3 id="contact-heading" style="margin:0 0 8px 0; color:#fff;">Kontakt</h3>
-      <div style="margin-bottom:8px; color:#cbd5e1;">Usługi dostępne głównie w gminie <strong>Pobiedziska</strong>.</div>
+      <h3 id="contact-heading" style="margin:0 0 8px 0;">Kontakt</h3>
+      <div style="margin-bottom:8px;">Usługi dostępne głównie w gminie <strong>Pobiedziska</strong>.</div>
       <div style="margin-bottom:8px;">
-        <a href="mailto:jakubsoperatorbsp@gmail.com">jakubsoperatorbsp@gmail.com</a>
+        <a href="mailto:jakubsoperatorbsp@gmail.com" style="color:var(--nav); font-weight:700; text-decoration:none;">jakubsoperatorbsp@gmail.com</a>
       </div>
       <div id="copyright">© <span id="year">2026</span> BSP Zlecenia — wersja testowa</div>
     </footer>
-
   </div>
 
-  <!-- Skrypt formularza -->
+  <!-- Skrypt formularza (jeśli masz) -->
   <script src="functions/api/form.js"></script>
 
-  <!-- Sticky header and reveal on scroll -->
+  <!-- Sticky header + reveal + dynamic year -->
   <script>
     (function(){
       const header = document.querySelector('header');
-      if (!header) return;
-      const threshold = 10;
-      const onScroll = () => {
-        if (window.scrollY > threshold) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+      if (header) {
+        const threshold = 10;
+        const onScroll = () => {
+          if (window.scrollY > threshold) header.classList.add('scrolled');
+          else header.classList.remove('scrolled');
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
 
-      // simple reveal
+      // reveal simple
       const reveal = () => {
-        document.querySelectorAll('.fade-in').forEach(el=>{
+        document.querySelectorAll('.fade-in, .hero-left, .form-card, .services, .how, .gallery, .pricing').forEach(el=>{
           const rect = el.getBoundingClientRect();
           if (rect.top < window.innerHeight - 60) el.classList.add('visible');
         });
@@ -370,7 +218,7 @@
       window.addEventListener('resize', reveal);
       reveal();
 
-      // dynamic year in footer
+      // dynamic year
       const y = new Date().getFullYear();
       const yearEl = document.getElementById('year');
       if (yearEl) yearEl.textContent = y;
