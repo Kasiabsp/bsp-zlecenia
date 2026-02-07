@@ -5,8 +5,8 @@
   <title>Zlecenia BSP — inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- model-viewer web component -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <!-- Lokalny loader model-viewer (importuje oficjalny moduł z CDN) -->
+  <script type="module" src="scripts/model-viewer.js"></script>
 
   <style>
     :root{
@@ -32,7 +32,7 @@
       line-height:1.4;
     }
 
-    /* Sticky header */
+    /* Header */
     header{
       position: fixed;
       top: 0;
@@ -43,15 +43,10 @@
       backdrop-filter: blur(6px);
       box-shadow: 0 2px 8px rgba(2,6,23,0.06);
       padding: 12px 20px;
-      transition: box-shadow .18s ease, transform .18s ease;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:20px;
-    }
-
-    header.scrolled{
-      box-shadow: 0 6px 24px rgba(2,6,23,0.12);
     }
 
     .wrap{max-width:var(--max-width); margin:28px auto; padding:0 20px; padding-top: calc(var(--header-height) + 20px);}
@@ -63,9 +58,10 @@
     nav a{color:var(--nav); text-decoration:none; font-weight:600;}
     .contact-cta{background:var(--accent); color:white; padding:10px 14px; border-radius:8px; text-decoration:none; font-weight:700;}
 
+    /* Layout */
     .hero{display:grid; grid-template-columns: 1fr 420px; gap:28px; align-items:stretch; margin-bottom:28px;}
     .hero-left{position:relative; border-radius:var(--radius); overflow:hidden; min-height:420px; box-shadow:0 8px 30px rgba(16,24,40,0.08);}
-    .hero-left img{width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.02);}
+    .hero-left img{width:100%; height:100%; object-fit:cover; display:block;}
     .hero-overlay{position:absolute; inset:0; background:linear-gradient(90deg, rgba(30,41,59,0.45) 0%, rgba(37,99,235,0.12) 60%); display:flex; align-items:flex-end; padding:28px; color:white;}
     .hero-text{max-width:560px;}
     .hero-text h1{margin:0 0 8px 0; font-size:28px; line-height:1.05; font-weight:700;}
@@ -79,6 +75,7 @@
     .btn{display:inline-block; background:var(--accent-2); color:#111827; padding:12px 14px; border-radius:8px; font-weight:700; border:none; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
     .btn:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(37,99,235,0.12);}
     .status{margin-top:8px; font-weight:700; color:var(--muted); text-align:center;}
+
     .services{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:28px 0;}
     .card{background:var(--card); padding:18px; border-radius:12px; box-shadow:0 6px 18px rgba(16,24,40,0.04);}
     .how{display:flex; gap:16px; margin-bottom:22px;}
@@ -92,28 +89,14 @@
     /* Model 3D styles */
     .model-wrapper { display:block; margin:12px 0; }
     model-viewer { display:block; width:100%; height:480px; border-radius:10px; overflow:hidden; background:#f3f4f6; }
-    @media (max-width:900px){
-      model-viewer { height:360px; }
-    }
-    @media (max-width:520px){
-      model-viewer { height:300px; }
-      nav ul{display:none;}
-      .contact-cta{display:none;}
-      .hero-overlay{align-items:flex-end; padding:16px;}
-      .hero-text h1{font-size:22px;}
-      .form-card{padding:14px;}
-      .gallery img{height:120px;}
-      :root { --header-height:72px; }
-      .wrap{ padding-top: calc(var(--header-height) + 12px); }
-      [id] { scroll-margin-top: calc(var(--header-height) + 6px); }
-    }
 
+    /* Responsive */
     @media (max-width:1100px){ .hero{grid-template-columns:1fr 380px;} }
-    @media (max-width:900px){ .hero{grid-template-columns:1fr;} .hero-left{min-height:320px;} .services{grid-template-columns:repeat(2,1fr);} .gallery{grid-template-columns:repeat(2,1fr);} .pricing{flex-direction:column;} }
+    @media (max-width:900px){ .hero{grid-template-columns:1fr;} model-viewer{height:360px;} .services{grid-template-columns:repeat(2,1fr);} .gallery{grid-template-columns:repeat(2,1fr);} .pricing{flex-direction:column;} }
+    @media (max-width:520px){ model-viewer{height:300px;} nav ul{display:none;} .contact-cta{display:none;} .hero-text h1{font-size:22px;} .form-card{padding:14px;} .gallery img{height:120px;} :root { --header-height:72px; } .wrap{ padding-top: calc(var(--header-height) + 12px); } [id] { scroll-margin-top: calc(var(--header-height) + 6px); } }
   </style>
 </head>
 <body>
-  <!-- Header (sticky) -->
   <header>
     <div class="brand">
       <div class="logo" aria-hidden="true">BSP</div>
@@ -137,11 +120,10 @@
   </header>
 
   <div class="wrap">
-
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-left" role="img" aria-label="Zdjęcie z drona">
-        <!-- używamy dokładnej nazwy pliku hero.jpg.jpg -->
+        <!-- Uwaga: używamy dokładnej nazwy pliku hero.jpg.jpg jeśli taki jest w assets -->
         <img src="assets/hero.jpg.jpg" alt="Zdjęcie z drona - inspekcja"
              onerror="this.onerror=null;this.src='assets/placeholder.jpg';" />
         <div class="hero-overlay">
@@ -152,7 +134,7 @@
         </div>
       </div>
 
-      <!-- Formularz (po prawej) -->
+      <!-- Formularz -->
       <aside class="form-card" id="form" aria-labelledby="form-title">
         <h3 id="form-title">Zgłoś zlecenie</h3>
 
@@ -176,7 +158,7 @@
             <textarea id="description" name="description" required placeholder="Opisz, co ma zrobić operator (np. inspekcja dachu, zdjęcia elewacji)"></textarea>
           </div>
 
-          <div class="form-row" style="margin-top:10px;">
+          <div class="form-row" style="margin-top:10px; display:flex; gap:10px;">
             <div style="flex:1;">
               <label for="date">Preferowany termin</label>
               <input id="date" name="date" type="date">
@@ -219,29 +201,7 @@
       </div>
     </section>
 
-    <!-- Jak to działa -->
-    <section style="margin-top:6px;">
-      <h2 style="margin:0 0 12px 0;">Jak to działa</h2>
-      <div class="how">
-        <div class="step">
-          <div style="font-size:20px;font-weight:700;">1</div>
-          <h5>Zgłoszenie</h5>
-          <p>Wypełnij formularz — podaj kontakt, lokalizację i opis.</p>
-        </div>
-        <div class="step">
-          <div style="font-size:20px;font-weight:700;">2</div>
-          <h5>Realizacja</h5>
-          <p>Przylatuję w umówionym terminie i wykonuję zlecenie.</p>
-        </div>
-        <div class="step">
-          <div style="font-size:20px;font-weight:700;">3</div>
-          <h5>Dostawa</h5>
-          <p>Otrzymujesz zdjęcia, wideo i krótką analizę lub raport.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Galeria realizacji -->
+    <!-- Realizacje -->
     <section style="margin-top:6px;">
       <h2 style="margin:0 0 12px 0;">Realizacje</h2>
       <div class="gallery" aria-hidden="false">
@@ -251,13 +211,12 @@
       </div>
     </section>
 
-    <!-- 3D model viewer (po galerii) -->
+    <!-- Model 3D -->
     <section id="model3d" style="margin-top:18px;">
       <h2 style="margin:0 0 12px 0;">Model 3D</h2>
 
       <div class="model-wrapper card">
-        <!-- Upewnij się, że plik w repo ma nazwę assets/model.glb -->
-        <model-viewer
+        <model-viewer id="mv"
           src="assets/model.glb"
           alt="Model 3D obiektu"
           camera-controls
@@ -266,6 +225,7 @@
           shadow-intensity="1"
           ar
           ar-modes="webxr scene-viewer quick-look"
+          poster="assets/model-poster.jpg"
           crossorigin="anonymous"
           style="width:100%; height:480px; max-height:60vh; border-radius:10px;">
         </model-viewer>
@@ -291,7 +251,7 @@
       </div>
     </section>
 
-    <!-- Stopka z kontaktem -->
+    <!-- Stopka -->
     <footer id="contact" aria-labelledby="contact-heading">
       <h3 id="contact-heading" style="margin:0 0 8px 0;">Kontakt</h3>
       <div style="margin-bottom:8px;">Usługi dostępne głównie w gminie <strong>Pobiedziska</strong>.</div>
@@ -300,25 +260,29 @@
       </div>
       <div>© 2026 BSP Zlecenia — wersja testowa</div>
     </footer>
-
   </div>
 
-  <!-- Skrypt formularza (jeśli używasz fetch, upewnij się, że wysyła POST na Formspree) -->
+  <!-- Skrypt formularza -->
   <script src="functions/api/form.js"></script>
 
-  <!-- Sticky header script -->
+  <!-- Logowanie błędów model-viewer -->
   <script>
-    (function(){
-      const header = document.querySelector('header');
-      if (!header) return;
-      const threshold = 10;
-      const onScroll = () => {
-        if (window.scrollY > threshold) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    })();
+    document.addEventListener('DOMContentLoaded', () => {
+      const mv = document.getElementById('mv');
+      if (!mv) return;
+      mv.addEventListener('error', (ev) => {
+        console.error('model-viewer error event:', ev);
+        console.error('detail:', ev.detail || 'brak detail');
+        const msg = document.createElement('div');
+        msg.style.color = '#b91c1c';
+        msg.style.fontWeight = '700';
+        msg.style.marginTop = '8px';
+        msg.textContent = 'Błąd ładowania modelu 3D — sprawdź konsolę (F12).';
+        mv.parentElement.appendChild(msg);
+      });
+      mv.addEventListener('progress', (ev) => console.log('model-viewer progress:', ev));
+      console.log('model-viewer src:', mv && mv.getAttribute('src'));
+    });
   </script>
 </body>
 </html>
