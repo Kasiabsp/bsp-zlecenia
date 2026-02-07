@@ -5,10 +5,6 @@
   <title>Zlecenia BSP — inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Content Security Policy: allow fetch do Formspree i model-viewer z unpkg -->
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://unpkg.com; connect-src 'self' https://formspree.io">
-
   <!-- model-viewer web component -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
@@ -58,10 +54,7 @@
       box-shadow: 0 6px 24px rgba(2,6,23,0.12);
     }
 
-    /* Ensure page content is not hidden under fixed header */
     .wrap{max-width:var(--max-width); margin:28px auto; padding:0 20px; padding-top: calc(var(--header-height) + 20px);}
-
-    /* Prevent anchors from being hidden under header */
     [id] { scroll-margin-top: calc(var(--header-height) + 12px); }
 
     .brand{display:flex; align-items:center; gap:12px;}
@@ -98,7 +91,10 @@
 
     /* Model 3D styles */
     .model-wrapper { display:block; margin:12px 0; }
-    model-viewer { display:block; width:100%; height:480px; border-radius:10px; overflow:hidden; }
+    model-viewer { display:block; width:100%; height:480px; border-radius:10px; overflow:hidden; background:#f3f4f6; }
+    /* Hide default download fallback UI if any */
+    model-viewer ::slotted(a) { display:none !important; }
+
     @media (max-width:900px){
       model-viewer { height:360px; }
     }
@@ -115,7 +111,6 @@
       [id] { scroll-margin-top: calc(var(--header-height) + 6px); }
     }
 
-    /* Responsive tweaks */
     @media (max-width:1100px){ .hero{grid-template-columns:1fr 380px;} }
     @media (max-width:900px){ .hero{grid-template-columns:1fr;} .hero-left{min-height:320px;} .services{grid-template-columns:repeat(2,1fr);} .gallery{grid-template-columns:repeat(2,1fr);} .pricing{flex-direction:column;} }
   </style>
@@ -149,7 +144,7 @@
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-left" role="img" aria-label="Zdjęcie z drona">
-        <img src="/assets/hero.jpg.jpg" alt="Zdjęcie z drona - inspekcja" />
+        <img src="assets/hero.jpg" alt="Zdjęcie z drona - inspekcja" />
         <div class="hero-overlay">
           <div class="hero-text">
             <h1 id="hero-heading">Dokładna dokumentacja z lotu drona</h1>
@@ -162,7 +157,6 @@
       <aside class="form-card" id="form" aria-labelledby="form-title">
         <h3 id="form-title">Zgłoś zlecenie</h3>
 
-        <!-- Formularz podłączony do Formspree -->
         <form id="bspForm" action="https://formspree.io/f/xqebvvow" method="POST" novalidate>
           <input type="hidden" name="_subject" value="Nowe zgłoszenie BSP">
           <input type="hidden" name="_replyto" value="">
@@ -201,7 +195,6 @@
           <div class="status" id="status" role="status" aria-live="polite"></div>
         </form>
 
-        <!-- Link do pełnej strony O nas -->
         <div style="margin-top:12px;">
           <a href="about.html" class="contact-cta" style="background:var(--nav);">O nas — więcej</a>
         </div>
@@ -253,9 +246,9 @@
     <section style="margin-top:6px;">
       <h2 style="margin:0 0 12px 0;">Realizacje</h2>
       <div class="gallery" aria-hidden="false">
-        <img src="/assets/gallery1.jpg" alt="Realizacja 1">
-        <img src="/assets/gallery2.jpg" alt="Realizacja 2">
-        <img src="/assets/gallery3.jpg" alt="Realizacja 3">
+        <img src="assets/gallery1.jpg" alt="Realizacja 1">
+        <img src="assets/gallery2.jpg" alt="Realizacja 2">
+        <img src="assets/gallery3.jpg" alt="Realizacja 3">
       </div>
     </section>
 
@@ -264,8 +257,9 @@
       <h2 style="margin:0 0 12px 0;">Model 3D</h2>
 
       <div class="model-wrapper card">
+        <!-- Użyj prostszej nazwy pliku: assets/model.glb -->
         <model-viewer
-          src="/assets/7.02.2026(1).glb"
+          src="assets/model.glb"
           alt="Model 3D obiektu"
           camera-controls
           auto-rotate
@@ -273,13 +267,8 @@
           shadow-intensity="1"
           ar
           ar-modes="webxr scene-viewer quick-look"
-          poster="/assets/model-poster.jpg"
-          style="width:100%; height:480px; max-height:60vh; background:#f3f4f6; border-radius:10px;">
-          <div style="padding:16px; text-align:center;">
-            <a href="/assets/7.02.2026(1).glb" download style="color:var(--nav); font-weight:700; text-decoration:none;">
-              Pobierz model 3D
-            </a>
-          </div>
+          crossorigin="anonymous"
+          style="width:100%; height:480px; max-height:60vh; border-radius:10px;">
         </model-viewer>
       </div>
     </section>
@@ -303,7 +292,7 @@
       </div>
     </section>
 
-    <!-- Stopka z kontaktem (anchor #contact prowadzi tutaj) -->
+    <!-- Stopka z kontaktem -->
     <footer id="contact" aria-labelledby="contact-heading">
       <h3 id="contact-heading" style="margin:0 0 8px 0;">Kontakt</h3>
       <div style="margin-bottom:8px;">Usługi dostępne głównie w gminie <strong>Pobiedziska</strong>.</div>
@@ -315,7 +304,7 @@
 
   </div>
 
-  <!-- Skrypt formularza (jeśli używasz fetch, upewnij się, że wysyła POST na Formspree) -->
+  <!-- Skrypt formularza -->
   <script src="functions/api/form.js"></script>
 
   <!-- Sticky header script -->
