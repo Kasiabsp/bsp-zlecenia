@@ -9,7 +9,7 @@
     }
 
     // Import modułu (top-level await w module jest wspierany, ale używamy IIFE dla kompatybilności)
-    await import('https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js');
+    await import('https://unpkg.com/@google/model-viewer/dist/model-viewer.js');
 
     // Sprawdzenie rejestracji elementu
     if (window.customElements && window.customElements.get('model-viewer')) {
