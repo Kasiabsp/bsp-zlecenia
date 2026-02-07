@@ -1,63 +1,32 @@
-// form.js
-// Wysyła formularz do Formspree i pokazuje status.
-// Upewnij się, że endpoint jest poprawny (zamień xqebvvow na swoje ID jeśli trzeba).
+// functions/api/form.js
+// Prosty handler: przechwytuje submit i wysyła fetch do Formspree.
+// Jeśli wolisz używać bezpośredniego action w formie, możesz pominąć ten plik.
 
-const form = document.getElementById('bspForm');
-const statusDiv = document.getElementById('status');
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('bspForm');
+  const status = document.getElementById('status');
+  if (!form) return;
 
-if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    // Prosta walidacja front-end
-    const contact = document.getElementById('contact').value.trim();
-    const location = document.getElementById('location').value.trim();
-    const description = document.getElementById('description').value.trim();
-
-    if (!contact || !location || !description) {
-      statusDiv.textContent = 'Uzupełnij pola oznaczone gwiazdką.';
-      statusDiv.style.color = '#b91c1c';
-      return;
-    }
-
-    // Honeypot check
-    const gotcha = form.querySelector('input[name="_gotcha"]');
-    if (gotcha && gotcha.value) {
-      // prawdopodobnie bot
-      statusDiv.textContent = 'Wysłano.';
-      return;
-    }
-
-    statusDiv.style.color = '#374151';
-    statusDiv.textContent = 'Wysyłanie...';
-
-    const formData = new FormData(form);
-
+    status.textContent = 'Wysyłanie...';
+    const data = new FormData(form);
     try {
-      const res = await fetch('https://formspree.io/f/xqebvvow', {
+      const res = await fetch(form.action, {
         method: 'POST',
-        body: formData,
+        body: data,
         headers: { 'Accept': 'application/json' }
       });
-
       if (res.ok) {
-        statusDiv.style.color = '#065f46';
-        statusDiv.textContent = 'Zgłoszenie wysłane! Dziękuję.';
+        status.textContent = 'Dziękujemy — zgłoszenie wysłane.';
         form.reset();
       } else {
-        // Spróbuj odczytać odpowiedź JSON z błędem
-        let msg = 'Błąd przy wysyłce zgłoszenia.';
-        try {
-          const data = await res.json();
-          if (data && data.error) msg = data.error;
-        } catch (err) { /* ignore */ }
-        statusDiv.style.color = '#b91c1c';
-        statusDiv.textContent = msg;
+        const json = await res.json().catch(()=>null);
+        status.textContent = json && json.error ? 'Błąd: ' + json.error : 'Wystąpił błąd przy wysyłce.';
       }
     } catch (err) {
-      statusDiv.style.color = '#b91c1c';
-      statusDiv.textContent = 'Błąd sieci. Spróbuj ponownie.';
       console.error('Form submit error:', err);
+      status.textContent = 'Błąd sieci — spróbuj ponownie.';
     }
   });
-}
+});
