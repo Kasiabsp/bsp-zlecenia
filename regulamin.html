@@ -1,147 +1,89 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>Banner akceptacji regulaminu — BSP</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Polityka prywatności — BSP Zlecenia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{
+      --bg:#f7f9fb;
+      --card:#ffffff;
       --nav:#0f1724;
-      --accent:#2563eb;
       --muted:#6b7280;
-      --bg:#ffffff;
-      --radius:12px;
-      --shadow:0 8px 30px rgba(2,6,23,0.08);
-      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      --accent:#2563eb;
+      --radius:10px;
+      --max-width:900px;
     }
-    html,body{margin:0;padding:0;font-family:var(--font);}
-
-    /* Banner */
-    #bsp-terms-banner {
-      position: fixed;
-      left: 16px;
-      right: 16px;
-      bottom: 18px;
-      z-index: 99999;
-      background: var(--bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px 16px;
-      display: flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
       color:var(--nav);
-      font-size:14px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
     }
-    #bsp-terms-banner .text { line-height:1.3; color:var(--nav); }
-    #bsp-terms-banner .actions { display:flex; gap:8px; align-items:center; }
-    #bsp-terms-banner a { color:var(--accent); text-decoration:underline; font-weight:600; }
-    .bsp-btn-accept { background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; }
-    .bsp-btn-more { background:transparent; color:var(--nav); border:1px solid #e6e9ee; padding:8px 12px; border-radius:8px; cursor:pointer; }
-
-    /* Modal */
-    #bsp-terms-modal-backdrop { position:fixed; inset:0; background:rgba(2,6,23,0.45); display:none; align-items:center; justify-content:center; z-index:100000; }
-    #bsp-terms-modal { width: min(920px, 96%); max-height:80vh; overflow:auto; background:white; border-radius:12px; padding:20px; box-shadow:0 20px 60px rgba(2,6,23,0.4); color:#111827; }
-    #bsp-terms-modal h2{ margin:0 0 12px 0; font-size:20px; color:var(--nav); }
-    #bsp-terms-modal p{ color:#374151; line-height:1.5; margin:0 0 12px 0; }
-    #bsp-terms-modal .modal-footer{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
-    #bsp-terms-modal .bsp-btn-close { background:#e6e9ee; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
-    #bsp-terms-modal .bsp-btn-accept-modal { background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; }
-
-    @media (max-width:520px){
-      #bsp-terms-banner { flex-direction:column; align-items:flex-start; }
-      #bsp-terms-banner .actions { width:100%; justify-content:flex-end; }
-    }
+    .wrap{max-width:var(--max-width); margin:28px auto; padding:20px;}
+    .card{background:var(--card); padding:20px; border-radius:12px; box-shadow:0 8px 30px rgba(2,6,23,0.04);}
+    h1{font-size:22px; margin:0 0 12px 0;}
+    h2{font-size:16px; margin:16px 0 8px 0;}
+    p{margin:0 0 12px 0; color:var(--muted);}
+    ul{margin:0 0 12px 0; padding-left:18px; color:var(--muted);}
+    li{margin-bottom:8px;}
+    a{color:var(--accent); text-decoration:none; font-weight:700;}
+    .meta{font-size:13px; color:var(--muted);}
+    hr{border:none; border-top:1px solid #eef2f7; margin:18px 0;}
   </style>
 </head>
 <body>
-  <!-- Banner -->
-  <div id="bsp-terms-banner" role="region" aria-label="Informacja o regulaminie" hidden>
-    <div class="text">
-      Korzystając ze strony akceptujesz <a href="regulamin.html" id="bsp-terms-link" target="_blank" rel="noopener">Regulamin</a>.
-    </div>
-    <div class="actions">
-      <button class="bsp-btn-more" id="bsp-btn-open-terms" type="button">Zobacz regulamin</button>
-      <button class="bsp-btn-accept" id="bsp-btn-accept-terms" type="button">Akceptuję</button>
-    </div>
-  </div>
+  <main class="wrap card" role="main" aria-labelledby="policy-heading">
+    <h1 id="policy-heading">Polityka prywatności</h1>
+    <p class="meta">Aktualizacja: 2026</p>
 
-  <!-- Modal -->
-  <div id="bsp-terms-modal-backdrop" aria-hidden="true">
-    <div id="bsp-terms-modal" role="dialog" aria-modal="true" aria-labelledby="bsp-terms-modal-title">
-      <h2 id="bsp-terms-modal-title">Regulamin — BSP Zlecenia</h2>
+    <hr>
 
-      <div id="bsp-terms-modal-content">
-        <p><strong>BSP Zlecenia</strong> — regulamin świadczenia usług. Pełny regulamin dostępny w pliku <a href="regulamin.html" target="_blank" rel="noopener">regulamin.html</a>.</p>
-        <p>Akceptacja regulaminu jest wymagana do przesłania zgłoszenia przez formularz. Akceptacja zostanie zapamiętana lokalnie na Twoim urządzeniu przez określony czas.</p>
-        <p>Jeśli chcesz, możesz otworzyć pełny dokument regulaminu w nowej karcie i zapoznać się z jego treścią przed akceptacją.</p>
-      </div>
+    <h2>Zakres i cel przetwarzania danych</h2>
+    <p>Przetwarzamy dane osobowe wyłącznie w celu obsługi zgłoszeń przesyłanych przez formularz kontaktowy oraz w celu realizacji zleceń (ustalenie terminu, zakresu prac, przekazanie materiałów). Dane nie są wykorzystywane do działań marketingowych bez wyraźnej zgody.</p>
 
-      <div class="modal-footer">
-        <button class="bsp-btn-close" id="bsp-btn-close-modal" type="button">Zamknij</button>
-        <button class="bsp-btn-accept-modal" id="bsp-btn-accept-modal" type="button">Akceptuję regulamin</button>
-      </div>
-    </div>
-  </div>
+    <h2>Jakie dane zbieramy</h2>
+    <ul>
+      <li><strong>Dane kontaktowe</strong> — e‑mail, numer telefonu;</li>
+      <li><strong>Dane zlecenia</strong> — lokalizacja, opis zlecenia, preferowany termin, budżet;</li>
+      <li><strong>Metadane</strong> — data zgłoszenia, ewentualne informacje techniczne niezbędne do realizacji zlecenia.</li>
+    </ul>
 
-  <script>
-    (function(){
-      const STORAGE_KEY = 'bsp_terms_accepted';
-      const DEFAULT_DAYS = 30;
+    <h2>Okres przechowywania</h2>
+    <p>Dane związane ze zgłoszeniem przechowujemy maksymalnie przez 30 dni od daty zakończenia sprawy, chyba że obowiązujące przepisy prawa wymagają dłuższego okresu przechowywania. Po upływie tego terminu dane są usuwane lub anonimizowane.</p>
 
-      const banner = document.getElementById('bsp-terms-banner');
-      const modalBackdrop = document.getElementById('bsp-terms-modal-backdrop');
-      const btnOpen = document.getElementById('bsp-btn-open-terms');
-      const btnAccept = document.getElementById('bsp-btn-accept-terms');
-      const btnAcceptModal = document.getElementById('bsp-btn-accept-modal');
-      const btnCloseModal = document.getElementById('bsp-btn-close-modal');
+    <h2>Podstawa prawna przetwarzania</h2>
+    <p>Podstawą przetwarzania jest realizacja umowy lub podjęcie działań na żądanie osoby, której dane dotyczą (art. 6 ust. 1 lit. b RODO) oraz prawnie uzasadniony interes administratora w zakresie obsługi zgłoszeń (art. 6 ust. 1 lit. f RODO). Szczegółowe informacje dotyczące praw i podstaw RODO znajdują się w pliku <a href="rodo.html">rodo.html</a>.</p>
 
-      function setAccepted(days = DEFAULT_DAYS){
-        const expires = Date.now() + days * 24 * 60 * 60 * 1000;
-        const payload = { accepted: true, expires: expires };
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); }
-        catch(e){ console.warn('LocalStorage niedostępne', e); }
-        hideBanner();
-      }
+    <h2>Prawa osoby, której dane dotyczą</h2>
+    <ul>
+      <li><strong>Dostęp</strong> — prawo do uzyskania potwierdzenia i kopii przetwarzanych danych;</li>
+      <li><strong>Sprostowanie</strong> — prawo do poprawienia nieprawidłowych danych;</li>
+      - <strong>Usunięcie</strong> — prawo do żądania usunięcia danych (prawo do bycia zapomnianym) w zakresie przewidzianym prawem;</li>
+      <li><strong>Ograniczenie przetwarzania</strong> — prawo do żądania ograniczenia przetwarzania w określonych sytuacjach;</li>
+      <li><strong>Sprzeciw</strong> — prawo do wniesienia sprzeciwu wobec przetwarzania danych w określonych przypadkach;</li>
+      <li><strong>Wniesienie skargi</strong> — prawo do wniesienia skargi do organu nadzorczego.</li>
+    </ul>
 
-      function getAccepted(){
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return false;
-          const obj = JSON.parse(raw);
-          if (!obj || !obj.expires) return false;
-          if (Date.now() > obj.expires) { localStorage.removeItem(STORAGE_KEY); return false; }
-          return !!obj.accepted;
-        } catch(e){ return false; }
-      }
+    <h2>Usuwanie danych i kontakt</h2>
+    <p>Masz prawo żądać usunięcia swoich danych w dowolnym momencie. W celu usunięcia danych lub realizacji innych praw skontaktuj się pod adresem e‑mail: <a href="mailto:jakubsoperatorbsp@gmail.com">jakubsoperatorbsp@gmail.com</a>. W zgłoszeniu podaj dane, których żądanie dotyczy, oraz preferowany sposób kontaktu.</p>
 
-      function showBanner(){ banner.hidden = false; }
-      function hideBanner(){ banner.hidden = true; }
+    <h2>Udostępnianie danych</h2>
+    <p>Dane nie są przekazywane podmiotom trzecim w celach marketingowych. Dane mogą być udostępnione wyłącznie podwykonawcom niezbędnym do realizacji zlecenia (np. dostawcom usług chmurowych, jeśli klient wyrazi zgodę na przesłanie materiałów), zawsze na podstawie umowy powierzenia przetwarzania lub innej wymaganej prawem podstawy.</p>
 
-      function openModal(){
-        modalBackdrop.style.display = 'flex';
-        modalBackdrop.setAttribute('aria-hidden','false');
-        btnCloseModal.focus();
-      }
-      function closeModal(){
-        modalBackdrop.style.display = 'none';
-        modalBackdrop.setAttribute('aria-hidden','true');
-      }
+    <h2>Pliki cookies i narzędzia analityczne</h2>
+    <p>Strona używa minimalnej liczby plików cookies niezbędnych do działania formularza i poprawnego działania serwisu. Szczegóły dotyczące cookies oraz ewentualnych narzędzi analitycznych opisano w pliku <a href="rodo.html">rodo.html</a>.</p>
 
-      btnOpen.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-      btnAccept.addEventListener('click', (e) => { e.preventDefault(); setAccepted(); });
-      btnAcceptModal.addEventListener('click', (e) => { e.preventDefault(); setAccepted(); closeModal(); });
-      btnCloseModal.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
+    <hr>
 
-      modalBackdrop.addEventListener('click', (ev) => { if (ev.target === modalBackdrop) closeModal(); });
-      document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeModal(); });
+    <h2>Informacje dodatkowe</h2>
+    <p>Dokładne informacje dotyczące realizacji praw wynikających z RODO, podstaw prawnych oraz szczegółowe zasady przetwarzania danych osobowych znajdują się w oddzielnym dokumencie: <a href="rodo.html">rodo.html</a>. Prosimy o zapoznanie się z nim, jeśli potrzebujesz pełnych informacji prawnych.</p>
 
-      if (!getAccepted()) showBanner();
-
-      // expose for debugging
-      window.BSPTerms = { isAccepted: getAccepted, accept: setAccepted, clear: () => localStorage.removeItem(STORAGE_KEY) };
-    })();
-  </script>
+    <p class="meta">W razie pytań lub wątpliwości: <a href="mailto:jakubsoperatorbsp@gmail.com">jakubsoperatorbsp@gmail.com</a>.</p>
+  </main>
 </body>
 </html>
