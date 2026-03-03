@@ -295,3 +295,23 @@
 </script>
 </body>
 </html>
+<div id="terms-consent-root"></div>
+<script>
+  fetch('terms-consent.html')
+    .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
+    .then(html => {
+      document.getElementById('terms-consent-root').innerHTML = html;
+      // jeśli skrypt wewnątrz pliku nie wykona się automatycznie (inline <script> w fetchowanej treści nie jest wykonywany),
+      // wykonaj dodatkowe wstrzyknięcie skryptu:
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      const scripts = temp.querySelectorAll('script');
+      scripts.forEach(s => {
+        const ns = document.createElement('script');
+        if (s.src) ns.src = s.src;
+        else ns.textContent = s.textContent;
+        document.body.appendChild(ns);
+      });
+    })
+    .catch(err => console.warn('Ładowanie banneru regulaminu nie powiodło się:', err));
+</script>
