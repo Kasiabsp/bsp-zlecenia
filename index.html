@@ -98,7 +98,7 @@
 <body>
   <header>
    <div class="brand">
-  <div class="logo" aria-hidden="true">BSP</div>
+   <div class="logo" aria-hidden="true">BSP</div>
   <div>
     <div style="font-weight:700; font-size:16px;">BSP Zlecenia</div>
     <div style="font-size:13px; color:var(--muted);">
@@ -123,8 +123,8 @@
 <div class="wrap">
   <section class="hero" aria-labelledby="hero-heading">
     <div class="hero-left" role="img" aria-label="Zdjęcie z drona">
-      <img src="assets/hero.jpg" alt="Zdjęcie z drona - inspekcja"
-           onerror="this.onerror=null;this.src='assets/placeholder.jpg';" />
+      <img src="assets/hero.jpg.jpg" alt="Zdjęcie z drona - inspekcja"
+           onerror="this.onerror=null;this.src='assets/gallery1.jpg';" />
       <div class="hero-overlay">
         <div class="hero-text">
           <h1 id="hero-heading">Dokładna dokumentacja z lotu drona</h1>
@@ -150,13 +150,7 @@
         </div>
 
         <div style="margin-top:10px;">
-          <label for="location">Lokalizacja zlecenia <span style="color:#d00">*</span></label>
-          <input id="location" name="location" type="text" required placeholder="np. Pobiedziska">
-        </div>
-
-        <div style="margin-top:10px;">
-          <label for="description">Opis zlecenia <span style="color:#d00">*</span></label>
-          <textarea id="description" name="description" required placeholder="Opisz, co ma zrobić operator (np. inspekcja dachu, zdjęcia elewacji)"></textarea>
+@@ -160,25 +160,106 @@
         </div>
 
         <div class="form-row" style="margin-top:10px; display:flex; gap:10px;">
@@ -182,3 +176,84 @@
       </div>
     </aside>
   </section>
+
+  <section id="services" aria-labelledby="services-heading">
+    <h2 id="services-heading">Usługi</h2>
+    <div class="services">
+      <article class="card">
+        <h3>Inspekcje dachów</h3>
+        <p>Dokumentacja zdjęciowa i wideo trudno dostępnych miejsc bez stawiania rusztowań.</p>
+      </article>
+      <article class="card">
+        <h3>Zdjęcia nieruchomości</h3>
+        <p>Materiały marketingowe dla biur nieruchomości, inwestorów i właścicieli obiektów.</p>
+      </article>
+      <article class="card">
+        <h3>Mapowanie terenu</h3>
+        <p>Przegląd działek i terenów inwestycyjnych przed rozpoczęciem prac projektowych.</p>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="how-heading">
+    <h2 id="how-heading">Jak to działa?</h2>
+    <div class="how">
+      <div class="step"><strong>1.</strong> Wysyłasz zgłoszenie</div>
+      <div class="step"><strong>2.</strong> Ustalamy zakres i termin</div>
+      <div class="step"><strong>3.</strong> Realizuję lot i przekazuję materiały</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="model-heading">
+    <h2 id="model-heading">Podgląd modelu 3D</h2>
+    <div class="model-wrapper">
+      <model-viewer
+        src="assets/model.glb"
+        alt="Model 3D drona"
+        camera-controls
+        auto-rotate
+        ar
+        loading="lazy">
+      </model-viewer>
+    </div>
+  </section>
+
+  <section aria-labelledby="gallery-heading">
+    <h2 id="gallery-heading">Galeria realizacji</h2>
+    <div class="gallery">
+      <img src="assets/gallery1.jpg" alt="Zdjęcie realizacji 1" />
+      <img src="assets/gallery2.jpg" alt="Zdjęcie realizacji 2" />
+      <img src="assets/gallery3.jpg" alt="Zdjęcie realizacji 3" />
+    </div>
+  </section>
+
+  <section aria-labelledby="pricing-heading">
+    <h2 id="pricing-heading">Orientacyjny cennik</h2>
+    <div class="pricing">
+      <div class="price"><strong>od 350 zł</strong><br>Inspekcja dachu</div>
+      <div class="price"><strong>od 500 zł</strong><br>Pakiet zdjęć nieruchomości</div>
+      <div class="price"><strong>od 700 zł</strong><br>Mapowanie i dokumentacja terenu</div>
+    </div>
+  </section>
+
+  <section id="contact" aria-labelledby="contact-heading">
+    <h2 id="contact-heading">Kontakt</h2>
+    <div class="card">
+      <p><strong>E-mail:</strong> kontakt@bsp-zlecenia.pl</p>
+      <p><strong>Telefon:</strong> +48 600 000 000</p>
+      <p><strong>Obszar działania:</strong> Pobiedziska i okolice</p>
+      <p><a href="bsp-zlecenia-main/rodo.html">Polityka prywatności</a></p>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
+  </footer>
+</div>
+
+<script src="scripts/from.js" defer></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
