@@ -292,20 +292,16 @@
   </footer>
 </div>
 
-<script src="scripts/from.js" defer></script>
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
-</body>
-</html>
 <div id="terms-consent-root"></div>
+
 <script>
   fetch('terms-consent.html')
     .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
     .then(html => {
-      document.getElementById('terms-consent-root').innerHTML = html;
-      // jeśli skrypt wewnątrz pliku nie wykona się automatycznie (inline <script> w fetchowanej treści nie jest wykonywany),
-      // wykonaj dodatkowe wstrzyknięcie skryptu:
+      const root = document.getElementById('terms-consent-root');
+      root.innerHTML = html;
+
+      // aktywacja skryptów z załadowanego HTML
       const temp = document.createElement('div');
       temp.innerHTML = html;
       const scripts = temp.querySelectorAll('script');
@@ -315,6 +311,16 @@
         else ns.textContent = s.textContent;
         document.body.appendChild(ns);
       });
+
+      // obsługa przycisku "Akceptuj"
+      const acceptBtn = root.querySelector('#terms-accept');
+      const banner = root.querySelector('#terms-banner');
+
+      if (acceptBtn && banner) {
+        acceptBtn.addEventListener('click', () => {
+          banner.style.display = 'none';
+        });
+      }
     })
     .catch(err => console.warn('Ładowanie banneru regulaminu nie powiodło się:', err));
 </script>
