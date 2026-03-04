@@ -1,147 +1,139 @@
-<!doctype html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8" />
-  <title>Banner akceptacji regulaminu — BSP</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    :root{
-      --nav:#0f1724;
-      --accent:#2563eb;
-      --muted:#6b7280;
-      --bg:#ffffff;
-      --radius:12px;
-      --shadow:0 8px 30px rgba(2,6,23,0.08);
-      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-    }
-    html,body{margin:0;padding:0;font-family:var(--font);}
+<style>
+  :root{
+    --nav:#0f1724;
+    --accent:#2563eb;
+    --muted:#6b7280;
+    --bg:#ffffff;
+    --radius:12px;
+    --shadow:0 8px 30px rgba(2,6,23,0.08);
+    --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  }
 
-    /* Banner */
-    #bsp-terms-banner {
-      position: fixed;
-      left: 16px;
-      right: 16px;
-      bottom: 18px;
-      z-index: 99999;
-      background: var(--bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px 16px;
-      display: flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      color:var(--nav);
-      font-size:14px;
-    }
-    #bsp-terms-banner .text { line-height:1.3; color:var(--nav); }
-    #bsp-terms-banner .actions { display:flex; gap:8px; align-items:center; }
-    #bsp-terms-banner a { color:var(--accent); text-decoration:underline; font-weight:600; }
-    .bsp-btn-accept { background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; }
-    .bsp-btn-more { background:transparent; color:var(--nav); border:1px solid #e6e9ee; padding:8px 12px; border-radius:8px; cursor:pointer; }
+  #bsp-terms-banner {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 18px;
+    z-index: 99999;
+    background: var(--bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    display: flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    color:var(--nav);
+    font-size:14px;
+  }
+  #bsp-terms-banner .text { line-height:1.3; color:var(--nav); }
+  #bsp-terms-banner .actions { display:flex; gap:8px; align-items:center; }
+  #bsp-terms-banner a { color:var(--accent); text-decoration:underline; font-weight:600; }
+  .bsp-btn-accept { background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; }
+  .bsp-btn-more { background:transparent; color:var(--nav); border:1px solid #e6e9ee; padding:8px 12px; border-radius:8px; cursor:pointer; }
 
-    /* Modal */
-    #bsp-terms-modal-backdrop { position:fixed; inset:0; background:rgba(2,6,23,0.45); display:none; align-items:center; justify-content:center; z-index:100000; }
-    #bsp-terms-modal { width: min(920px, 96%); max-height:80vh; overflow:auto; background:white; border-radius:12px; padding:20px; box-shadow:0 20px 60px rgba(2,6,23,0.4); color:#111827; }
-    #bsp-terms-modal h2{ margin:0 0 12px 0; font-size:20px; color:var(--nav); }
-    #bsp-terms-modal p{ color:#374151; line-height:1.5; margin:0 0 12px 0; }
-    #bsp-terms-modal .modal-footer{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
-    #bsp-terms-modal .bsp-btn-close { background:#e6e9ee; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
-    #bsp-terms-modal .bsp-btn-accept-modal { background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; }
+  #bsp-terms-modal-backdrop { position:fixed; inset:0; background:rgba(2,6,23,0.45); display:none; align-items:center; justify-content:center; z-index:100000; }
+  #bsp-terms-modal { width: min(920px, 96%); max-height:80vh; overflow:auto; background:white; border-radius:12px; padding:20px; box-shadow:0 20px 60px rgba(2,6,23,0.4); color:#111827; }
+  #bsp-terms-modal h2{ margin:0 0 12px 0; font-size:20px; color:var(--nav); }
+  #bsp-terms-modal p{ color:#374151; line-height:1.5; margin:0 0 12px 0; }
+  #bsp-terms-modal .modal-footer{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
+  #bsp-terms-modal .bsp-btn-close { background:#e6e9ee; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
+  #bsp-terms-modal .bsp-btn-accept-modal { background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; }
 
-    @media (max-width:520px){
-      #bsp-terms-banner { flex-direction:column; align-items:flex-start; }
-      #bsp-terms-banner .actions { width:100%; justify-content:flex-end; }
-    }
-  </style>
-</head>
-<body>
-  <!-- Banner -->
-  <div id="bsp-terms-banner" role="region" aria-label="Informacja o regulaminie" hidden>
-    <div class="text">
-      Korzystając ze strony akceptujesz <a href="regulamin.html" id="bsp-terms-link" target="_blank" rel="noopener">Regulamin</a>.
+  @media (max-width:520px){
+    #bsp-terms-banner { flex-direction:column; align-items:flex-start; }
+    #bsp-terms-banner .actions { width:100%; justify-content:flex-end; }
+  }
+</style>
+
+<!-- Banner -->
+<div id="bsp-terms-banner" role="region" aria-label="Informacja o regulaminie" hidden>
+  <div class="text">
+    Korzystając ze strony akceptujesz <a href="regulamin.html" target="_blank" rel="noopener">Regulamin</a>.
+  </div>
+  <div class="actions">
+    <button class="bsp-btn-more" id="bsp-btn-open-terms" type="button">Zobacz regulamin</button>
+    <button class="bsp-btn-accept" id="bsp-btn-accept-terms" type="button">Akceptuję</button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="bsp-terms-modal-backdrop" aria-hidden="true">
+  <div id="bsp-terms-modal" role="dialog" aria-modal="true" aria-labelledby="bsp-terms-modal-title">
+    <h2 id="bsp-terms-modal-title">Regulamin — BSP Zlecenia</h2>
+
+    <div id="bsp-terms-modal-content">
+      <p><strong>BSP Zlecenia</strong> — regulamin świadczenia usług. Pełny regulamin dostępny w pliku <a href="regulamin.html" target="_blank" rel="noopener">regulamin.html</a>.</p>
+      <p>Akceptacja regulaminu jest wymagana do przesłania zgłoszenia przez formularz. Akceptacja zostanie zapamiętana lokalnie na Twoim urządzeniu przez określony czas.</p>
     </div>
-    <div class="actions">
-      <button class="bsp-btn-more" id="bsp-btn-open-terms" type="button">Zobacz regulamin</button>
-      <button class="bsp-btn-accept" id="bsp-btn-accept-terms" type="button">Akceptuję</button>
+
+    <div class="modal-footer">
+      <button class="bsp-btn-close" id="bsp-btn-close-modal" type="button">Zamknij</button>
+      <button class="bsp-btn-accept-modal" id="bsp-btn-accept-modal" type="button">Akceptuję regulamin</button>
     </div>
   </div>
+</div>
 
-  <!-- Modal -->
-  <div id="bsp-terms-modal-backdrop" aria-hidden="true">
-    <div id="bsp-terms-modal" role="dialog" aria-modal="true" aria-labelledby="bsp-terms-modal-title">
-      <h2 id="bsp-terms-modal-title">Regulamin — BSP Zlecenia</h2>
+<script>
+(function(){
+  const STORAGE_KEY = 'bsp_terms_accepted';
+  const DAYS = 30;
 
-      <div id="bsp-terms-modal-content">
-        <p><strong>BSP Zlecenia</strong> — regulamin świadczenia usług. Pełny regulamin dostępny w pliku <a href="regulamin.html" target="_blank" rel="noopener">regulamin.html</a>.</p>
-        <p>Akceptacja regulaminu jest wymagana do przesłania zgłoszenia przez formularz. Akceptacja zostanie zapamiętana lokalnie na Twoim urządzeniu przez określony czas.</p>
-        <p>Jeśli chcesz, możesz otworzyć pełny dokument regulaminu w nowej karcie i zapoznać się z jego treścią przed akceptacją.</p>
-      </div>
+  const banner = document.getElementById('bsp-terms-banner');
+  const modalBackdrop = document.getElementById('bsp-terms-modal-backdrop');
+  const btnOpen = document.getElementById('bsp-btn-open-terms');
+  const btnAccept = document.getElementById('bsp-btn-accept-terms');
+  const btnAcceptModal = document.getElementById('bsp-btn-accept-modal');
+  const btnCloseModal = document.getElementById('bsp-btn-close-modal');
 
-      <div class="modal-footer">
-        <button class="bsp-btn-close" id="bsp-btn-close-modal" type="button">Zamknij</button>
-        <button class="bsp-btn-accept-modal" id="bsp-btn-accept-modal" type="button">Akceptuję regulamin</button>
-      </div>
-    </div>
-  </div>
+  function setAccepted(){
+    const expires = Date.now() + DAYS * 24 * 60 * 60 * 1000;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ accepted:true, expires }));
+    hideBanner();
+    closeModal();
+  }
 
-  <script>
-    (function(){
-      const STORAGE_KEY = 'bsp_terms_accepted';
-      const DEFAULT_DAYS = 30;
-
-      const banner = document.getElementById('bsp-terms-banner');
-      const modalBackdrop = document.getElementById('bsp-terms-modal-backdrop');
-      const btnOpen = document.getElementById('bsp-btn-open-terms');
-      const btnAccept = document.getElementById('bsp-btn-accept-terms');
-      const btnAcceptModal = document.getElementById('bsp-btn-accept-modal');
-      const btnCloseModal = document.getElementById('bsp-btn-close-modal');
-
-      function setAccepted(days = DEFAULT_DAYS){
-        const expires = Date.now() + days * 24 * 60 * 60 * 1000;
-        const payload = { accepted: true, expires: expires };
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); }
-        catch(e){ console.warn('LocalStorage niedostępne', e); }
-        hideBanner();
+  function getAccepted(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    try {
+      const obj = JSON.parse(raw);
+      if (!obj.expires || Date.now() > obj.expires) {
+        localStorage.removeItem(STORAGE_KEY);
+        return false;
       }
+      return obj.accepted === true;
+    } catch {
+      return false;
+    }
+  }
 
-      function getAccepted(){
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return false;
-          const obj = JSON.parse(raw);
-          if (!obj || !obj.expires) return false;
-          if (Date.now() > obj.expires) { localStorage.removeItem(STORAGE_KEY); return false; }
-          return !!obj.accepted;
-        } catch(e){ return false; }
-      }
+  function showBanner(){ banner.hidden = false; }
+  function hideBanner(){ banner.hidden = true; }
 
-      function showBanner(){ banner.hidden = false; }
-      function hideBanner(){ banner.hidden = true; }
+  function openModal(){
+    modalBackdrop.style.display = 'flex';
+    modalBackdrop.setAttribute('aria-hidden','false');
+  }
+  function closeModal(){
+    modalBackdrop.style.display = 'none';
+    modalBackdrop.setAttribute('aria-hidden','true');
+  }
 
-      function openModal(){
-        modalBackdrop.style.display = 'flex';
-        modalBackdrop.setAttribute('aria-hidden','false');
-        btnCloseModal.focus();
-      }
-      function closeModal(){
-        modalBackdrop.style.display = 'none';
-        modalBackdrop.setAttribute('aria-hidden','true');
-      }
+  btnOpen.addEventListener('click', openModal);
+  btnAccept.addEventListener('click', setAccepted);
+  btnAcceptModal.addEventListener('click', setAccepted);
+  btnCloseModal.addEventListener('click', closeModal);
 
-      btnOpen.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-      btnAccept.addEventListener('click', (e) => { e.preventDefault(); setAccepted(); });
-      btnAcceptModal.addEventListener('click', (e) => { e.preventDefault(); setAccepted(); closeModal(); });
-      btnCloseModal.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
+  modalBackdrop.addEventListener('click', (ev) => {
+    if (ev.target === modalBackdrop) closeModal();
+  });
 
-      modalBackdrop.addEventListener('click', (ev) => { if (ev.target === modalBackdrop) closeModal(); });
-      document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') closeModal();
+  });
 
-      if (!getAccepted()) showBanner();
+  if (!getAccepted()) showBanner();
+})();
+</script>
 
-      // expose for debugging
-      window.BSPTerms = { isAccepted: getAccepted, accept: setAccepted, clear: () => localStorage.removeItem(STORAGE_KEY) };
-    })();
-  </script>
-</body>
-</html>
