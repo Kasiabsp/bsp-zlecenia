@@ -139,27 +139,33 @@
     <aside class="form-card" id="form" aria-labelledby="form-title">
       <h3 id="form-title">Zgłoś zlecenie</h3>
 
-      <form id="bspForm" action="https://formspree.io/f/xqebvvow" method="POST" novalidate>
-        <input type="hidden" name="_subject" value="Nowe zgłoszenie BSP">
-        <input type="hidden" name="_replyto" value="">
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+<form id="bspForm" action="https://formspree.io/f/xqebvvow" method="POST" novalidate>
+  <input type="hidden" name="_subject" value="Nowe zgłoszenie BSP">
+  <input type="hidden" name="_replyto" value="">
+  <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
 
-        <div>
-          <label for="contact">E-mail lub telefon <span style="color:#d00">*</span></label>
-          <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon">
-        </div>
+  <div>
+    <label for="contact">E-mail lub telefon <span style="color:#d00">*</span></label>
+    <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon">
+  </div>
 
+  <div style="margin-top:10px;">
+    <label for="description">Opis zlecenia <span style="color:#d00">*</span></label>
+    <textarea id="description" name="description" rows="5" required placeholder="Opisz, czego potrzebujesz" style="width:100%;"></textarea>
+  </div>
 
-        <div class="form-row" style="margin-top:10px; display:flex; gap:10px;">
-          <div style="flex:1;">
-            <label for="date">Preferowany termin</label>
-            <input id="date" name="date" type="date">
-          </div>
-          <div style="width:140px;">
-            <label for="budget">Budżet</label>
-            <input id="budget" name="budget" type="text" placeholder="PLN">
-          </div>
-        </div>
+  <div class="form-row" style="margin-top:10px; display:flex; gap:10px;">
+    <div style="flex:1;">
+      <label for="date">Preferowany termin</label>
+      <input id="date" name="date" type="date">
+    </div>
+    <div style="width:140px;">
+      <label for="budget">Budżet</label>
+      <input id="budget" name="budget" type="text" placeholder="PLN">
+    </div>
+  </div>
+</form>
+
 
         <div style="margin-top:12px;">
           <button class="btn" type="submit">Wyślij zgłoszenie</button>
