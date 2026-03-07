@@ -3,7 +3,7 @@ export async function onRequestPost(context) {
 
   const data = await request.json();
 
-  const emailTo = "twoj-email@example.com"; // ← TU WSTAW SWÓJ MAIL
+  const emailTo = "jakubsoperatorbsp@gmail.com"; // ← TU WSTAW SWÓJ MAIL
 
   const message = `
 Nowe zgłoszenie BSP:
