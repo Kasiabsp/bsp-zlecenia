@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>Panel admin</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>body{font-family:system-ui;padding:28px;background:#f6f7fb} .card{max-width:900px;margin:20px auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 8px 30px rgba(15,23,42,0.06)}</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <h2>Panel administracyjny</h2>
+    <p id="who"></p>
+    <div id="content">
+      <p>Tu możesz dodać formularz do publikacji aktualności (np. zapisywać do localStorage lub wysyłać do API).</p>
+      <button id="logout">Wyloguj</button>
+    </div>
+  </div>
+
+  <script>
+    // Sprawdzenie "sesji" (symulacja)
+    if (sessionStorage.getItem('bsp_admin') !== '1') {
+      // brak dostępu — przekieruj do logowania
+      location.href = '/admin-login.html';
+    } else {
+      document.getElementById('who').textContent = 'Zalogowany: KASIA_rst (symulacja)';
+    }
+
+    document.getElementById('logout').addEventListener('click', function(){
+      sessionStorage.removeItem('bsp_admin');
+      location.href = '/admin-login.html';
+    });
+  </script>
+</body>
+</html>
