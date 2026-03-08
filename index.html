@@ -137,37 +137,41 @@
     </div>
 
     <aside class="form-card" id="form" aria-labelledby="form-title">
-     <h3 id="form-title">Zgłoś zlecenie</h3>
+    <!-- Sekcja: Zgłoś zlecenie -->
+<aside class="sidebar">
+  <h3 id="form-title">Zgłoś zlecenie</h3>
 
-<form id="bspForm" novalidate>
-  <div>
-    <label for="contact">E-mail lub telefon <span style="color:#d00">*</span></label>
-    <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon" autocomplete="email">
-  </div>
-
-  <div style="margin-top:10px;">
-    <label for="description">Opis zlecenia <span style="color:#d00">*</span></label>
-    <textarea id="description" name="description" rows="5" required placeholder="Opisz, czego potrzebujesz" style="width:100%;"></textarea>
-  </div>
-
-  <div class="form-row" style="margin-top:10px; display:flex; gap:10px;">
-    <div style="flex:1;">
-      <label for="date">Preferowany termin</label>
-      <input id="date" name="date" type="date">
+  <form id="bspForm" novalidate>
+    <div class="field">
+      <label for="contact">E-mail lub telefon <span class="required">*</span></label>
+      <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon" autocomplete="email">
     </div>
-    <div style="width:140px;">
-      <label for="budget">Budżet</label>
-      <input id="budget" name="budget" type="text" placeholder="PLN" inputmode="numeric">
+
+    <div class="field" style="margin-top:10px;">
+      <label for="description">Opis zlecenia <span class="required">*</span></label>
+      <textarea id="description" name="description" rows="5" required placeholder="Opisz, czego potrzebujesz" style="width:100%;"></textarea>
     </div>
-  </div>
 
-  <div style="margin-top:12px;">
-    <button class="btn" type="submit" id="submitBtn">Wyślij zgłoszenie</button>
-  </div>
+    <div class="form-row" style="margin-top:10px; display:flex; gap:10px; align-items:flex-end;">
+      <div style="flex:1;">
+        <label for="date">Preferowany termin</label>
+        <input id="date" name="date" type="date">
+      </div>
+      <div style="width:140px;">
+        <label for="budget">Budżet</label>
+        <input id="budget" name="budget" type="text" placeholder="PLN" inputmode="numeric">
+      </div>
+    </div>
 
-  <div class="status" id="status" role="status" aria-live="polite" style="margin-top:8px;"></div>
-</form>
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit" id="submitBtn">Wyślij zgłoszenie</button>
+    </div>
 
+    <div class="status" id="status" role="status" aria-live="polite" style="margin-top:8px;"></div>
+  </form>
+</aside>
+
+<!-- Skrypt obsługi formularza -->
 <script>
   const form = document.getElementById("bspForm");
   const status = document.getElementById("status");
@@ -181,7 +185,6 @@
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Walidacja klienta
     if (!form.contact.value.trim() || !form.description.value.trim()) {
       showStatus("Uzupełnij wymagane pola.", true);
       return;
@@ -225,6 +228,25 @@
     }
   });
 </script>
+
+<!-- Sekcja: Usługi -->
+<section id="services" aria-labelledby="services-heading">
+  <h2 id="services-heading">Usługi</h2>
+  <div class="services">
+    <article class="card">
+      <h3>Inspekcje dachów</h3>
+      <p>Dokumentacja zdjęciowa i wideo trudno dostępnych miejsc bez stawiania rusztowań.</p>
+    </article>
+    <article class="card">
+      <h3>Zdjęcia nieruchomości</h3>
+      <p>Materiały marketingowe dla biur nieruchomości, inwestorów i właścicieli obiektów.</p>
+    </article>
+    <article class="card">
+      <h3>Mapowanie terenu</h3>
+      <p>Przegląd działek i terenów inwestycyjnych przed rozpoczęciem prac projektowych.</p>
+    </article>
+  </div>
+</section>
 
 <h2 id="services-heading">Usługi</h2>
 <div class="services">
