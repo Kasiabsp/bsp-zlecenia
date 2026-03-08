@@ -137,7 +137,7 @@
     </div>
 
     <aside class="form-card" id="form" aria-labelledby="form-title">
-   <!-- Sekcja: Zgłoś zlecenie -->
+<!-- Sekcja: Zgłoś zlecenie -->
 <aside class="sidebar">
   <h3 id="form-title">Zgłoś zlecenie</h3>
 
@@ -334,37 +334,26 @@
 <div id="terms-consent-root"></div>
 
 <script>
-  // Ustaw aktualny rok w stopce
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
 <script>
-  // Ładowanie banneru regulaminu (jeśli masz plik terms-consent.html)
   fetch('terms-consent.html')
     .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
     .then(html => {
       const root = document.getElementById('terms-consent-root');
       root.innerHTML = html;
-
-      // aktywacja skryptów z załadowanego HTML
       const temp = document.createElement('div');
       temp.innerHTML = html;
       const scripts = temp.querySelectorAll('script');
       scripts.forEach(s => {
         const ns = document.createElement('script');
-        if (s.src) ns.src = s.src;
-        else ns.textContent = s.textContent;
+        if (s.src) ns.src = s.src; else ns.textContent = s.textContent;
         document.body.appendChild(ns);
       });
-
       const acceptBtn = root.querySelector('#terms-accept');
       const banner = root.querySelector('#terms-banner');
-
-      if (acceptBtn && banner) {
-        acceptBtn.addEventListener('click', () => {
-          banner.style.display = 'none';
-        });
-      }
+      if (acceptBtn && banner) acceptBtn.addEventListener('click', () => { banner.style.display = 'none'; });
     })
     .catch(err => console.warn('Ładowanie banneru regulaminu nie powiodło się:', err));
 </script>
