@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>Logowanie admin</title>
+  <title>Logowanie admin — BSP</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     body{font-family:system-ui,Arial;background:#f6f7fb;padding:28px;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
@@ -28,12 +28,11 @@
   </div>
 
   <script>
-    // --- TUTAJ ZMIENIASZ ZAKODOWANE DANE (Base64) ---
+    // --- Base64 obfuskacja (tylko do testów) ---
     // login: KASIA_rst
     // hasło: rstkasia.2020
     const storedLoginB64 = 'S0FTQ0lfcnN0';        // Base64("KASIA_rst")
     const storedPassB64  = 'cnN0a2FzaWEuMjAyMA=='; // Base64("rstkasia.2020")
-    // -------------------------------------------------
 
     function toB64(str){ try { return btoa(str); } catch(e){ return ''; } }
     function showMsg(text, isError=true){ const el=document.getElementById('msg'); el.textContent=text; el.style.color = isError ? '#b91c1c' : '#0a7a2a'; }
@@ -48,16 +47,13 @@
 
       if (lB === storedLoginB64 && pB === storedPassB64) {
         showMsg('Zalogowano. Przekierowanie...', false);
-        // ustaw prosty znacznik w sessionStorage, by panel wiedział, że jesteś zalogowany
         sessionStorage.setItem('bsp_admin', '1');
-        // przekierowanie do panelu (utwórz admin/index.html)
         setTimeout(()=> location.href = '/admin/index.html', 600);
       } else {
         showMsg('Nieprawidłowy login lub hasło.');
       }
     });
 
-    // Jeśli chcesz, możesz też pozwolić na Enter:
     document.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') document.getElementById('btn').click(); });
   </script>
 </body>
