@@ -5,7 +5,6 @@
   <title>BSP Zlecenia — kalkulator i modele 3D</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- model-viewer loader (umieść właściwy skrypt w scripts/model-viewer.js) -->
   <script type="module" src="scripts/model-viewer.js"></script>
 
   <!-- Leaflet (mapa) -->
@@ -102,7 +101,7 @@
     .calc-row { display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
     .calc-row label { width:220px; font-weight:600; color:var(--nav); }
     .calc-small { width:120px; }
-    .calc-breakdown { background:#fafafa; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; color:var(--muted); white-space:pre-line; }
+    .calc-breakdown { background:#fafafa; padding:12px; border-radius:8px; margin-top:10px; font-size:14px; color:var(--muted); white-space:pre-line; }
 
     nav ul li a.active { color: var(--accent-2); font-weight:800; }
 
@@ -208,7 +207,6 @@
       </div>
     </section>
 
-    <!-- Przykładowe modele 3D -->
     <section id="models-3d" aria-labelledby="models-3d-heading" style="margin-top:28px;">
       <h2 id="models-3d-heading">Przykładowe modele 3D</h2>
       <p style="color:var(--muted); margin-top:6px;">Kliknij "Otwórz podgląd", aby zobaczyć model w dużym oknie. Opisy: do uzupełnienia.</p>
@@ -252,7 +250,6 @@
       </div>
     </section>
 
-    <!-- Modal: duży podgląd modelu -->
     <div id="modelModal" aria-hidden="true">
       <div class="modal-inner">
         <button id="modalClose" class="btn" style="position:absolute; right:12px; top:12px; z-index:2;">Zamknij</button>
@@ -269,10 +266,9 @@
 
     <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
 
-    <!-- Zasady wyceny + Kalkulator ceny z mapą -->
     <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:18px;">
       <h2 id="pricing-rules-heading">Zasady wyceny</h2>
-      <p style="color:var(--muted); margin-top:6px;">Podstawowa struktura: <strong>opłata za dojazd</strong> + koszty pracy (loty × koszt/lot × liczba modeli) + dopłaty (linie, drzewa, RAW) + ewentualna dopłata za pilny termin.</p>
+      <p style="color:var(--muted); margin-top:6px;">Opłata za dojazd + koszt pracy (loty × koszt/lot + opłata za ar) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.</p>
 
       <div style="display:grid; gap:12px; margin-top:12px;">
         <div style="background:var(--card); padding:14px; border-radius:10px;">
@@ -286,39 +282,33 @@
             <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong>.</li>
             <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong>.</li>
             <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie).</li>
-            <li>Minimalna opłata i inne zasady zgodnie z polityką firmy.</li>
           </ul>
         </div>
 
         <div class="calc" id="priceCalc">
           <h3 style="margin-top:0;">Kalkulator orientacyjnej ceny</h3>
 
-          <!-- Mapa wyboru miejsca -->
           <div class="calc-row" style="flex-direction:column; align-items:flex-start;">
             <label>Wskaż miejsce zlecenia na mapie</label>
             <div id="map" style="height:320px; border-radius:8px; overflow:hidden; width:100%;"></div>
             <div style="margin-top:8px; color:var(--muted); font-size:13px;">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic Wielkopolskich zostanie obliczony automatycznie.</div>
           </div>
 
-          <!-- Odległość (readonly) -->
           <div class="calc-row">
             <label for="calc-distance">Odległość (km)</label>
             <input id="calc-distance" type="number" readonly class="calc-small" value="0">
           </div>
 
-          <!-- Wielkość terenu (ha) -->
           <div class="calc-row">
             <label for="calc-area">Wielkość terenu (ha)</label>
             <input id="calc-area" type="number" min="0" step="0.01" value="0.10" class="calc-small">
           </div>
 
-          <!-- Liczba modeli -->
           <div class="calc-row">
             <label for="calc-models">Liczba modeli do wykonania</label>
             <input id="calc-models" type="number" min="1" step="1" value="1" class="calc-small">
           </div>
 
-          <!-- Rodzaj usługi -->
           <div class="calc-row">
             <label for="service-type">Rodzaj usługi</label>
             <select id="service-type" class="calc-small">
@@ -329,7 +319,6 @@
             </select>
           </div>
 
-          <!-- Opcje dodatkowe (linie/drzewa/RAW) -->
           <div class="calc-row">
             <label>Opcje dodatkowe</label>
             <div style="display:flex; gap:12px; align-items:center;">
@@ -342,12 +331,6 @@
           <div class="calc-row">
             <label for="calc-date">Preferowany termin (wpływ na dopłatę)</label>
             <input id="calc-date" type="date" class="calc-small">
-          </div>
-
-          <div class="calc-row">
-            <label for="base-per-flight">Koszt bazowy za lot (PLN)</label>
-            <input id="base-per-flight" type="number" min="10" step="10" value="100" class="calc-small">
-            <div style="color:var(--muted); font-size:13px;">(wartość bazowa; do obliczeń dodawana jest opłata za ar zgodnie z wybraną usługą)</div>
           </div>
 
           <div style="margin-top:8px; display:flex; gap:8px;">
@@ -382,30 +365,16 @@
   </script>
 
   <script>
-    // --- Ustawienia domyślne i ceny per ar (użytkownik podał)
-    const perArPrices = {
-      mapping: 150,   // +150 zł / ar
-      photos: 50,     // +50 zł / ar
-      video: 100,     // +100 zł / ar
-      model3d: 200    // +200 zł / ar
-    };
-
-    // Domyślne unitCosts (bazowy koszt pracy za lot)
-    const unitCosts = {
-      mapping: 120,
-      photos: 100,
-      video: 140,
-      model3d: 180
-    };
-
-    // Punkt referencyjny: Biskupice Wielkopolskie (potwierdź lub zmień)
-    const latRef = 52.4550;
+    // ceny per ar i domyślne koszty
+    const perArPrices = { mapping:150, photos:50, video:100, model3d:200 };
+    const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
+    const latRef = 52.4550; // Biskupice Wielkopolskie
     const lngRef = 17.3090;
   </script>
 
   <script>
-    // Formularz: walidacja i wysyłka do /api/send
     (function(){
+      // Formularz wysyłka
       const form = document.getElementById("bspForm");
       const status = document.getElementById("status");
       const submitBtn = document.getElementById("submitBtn");
@@ -417,7 +386,6 @@
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const contact = form.contact.value.trim();
         const description = form.description.value.trim();
         if (!contact || !description) {
@@ -457,7 +425,6 @@
           if (res.ok && json && json.status === "ok") {
             showStatus("Wysłano!");
             form.reset();
-            // wyczyść ukryte pola
             ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'].forEach(id => document.getElementById(id).value = '');
           } else {
             const details = json && json.details ? ` (${json.details})` : "";
@@ -476,7 +443,7 @@
   </script>
 
   <script>
-    // Modal model viewer, reset, fullscreen i prefill formularza
+    // Modal model viewer
     (function(){
       const modal = document.getElementById('modelModal');
       const modalViewer = document.getElementById('modalViewer');
@@ -536,7 +503,6 @@
         else if (mv.webkitRequestFullscreen) mv.webkitRequestFullscreen();
       });
 
-      // prefill form and scroll to it
       window.prefillAndScroll = function(event) {
         const btn = event.currentTarget;
         const modelName = btn.getAttribute('data-model') || '';
@@ -544,9 +510,7 @@
         if (!form) return;
         const descField = form.querySelector('#description');
         if (descField) descField.value = `Prośba o wycenę modelu: ${modelName} — opis: `;
-        // set selected_model hidden field
         document.getElementById('selected_model').value = modelName;
-        document.getElementById('service_type').value = ''; // user will choose in calc/form
         document.getElementById('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
         setTimeout(()=> descField && descField.focus(), 600);
       };
@@ -554,9 +518,8 @@
   </script>
 
   <script>
-    // Mapa (Leaflet), Haversine, estymacja lotów i kalkulator
+    // Mapa, estymacja lotów i kalkulator (live podliczenie)
     (function(){
-      // map init
       const mapEl = document.getElementById('map');
       const map = L.map(mapEl).setView([latRef, lngRef], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -570,9 +533,9 @@
         else marker = L.marker([lat, lng]).addTo(map);
         const km = haversineKm(latRef, lngRef, lat, lng);
         document.getElementById('calc-distance').value = Math.round(km * 10) / 10;
-        // store coords in hidden fields for form
         document.getElementById('location_lat').value = lat;
         document.getElementById('location_lng').value = lng;
+        compute(); // live update
       });
 
       function toRad(v){ return v * Math.PI / 180; }
@@ -585,16 +548,14 @@
         return R * c;
       }
 
-      // estimate flights from area (ha)
-      function estimateFlights(areaHa, serviceType) {
-        if (areaHa <= 0.01) return 1; // <=1 ar
+      function estimateFlights(areaHa) {
+        if (areaHa <= 0.01) return 1;
         if (areaHa <= 0.1) return 1;
         if (areaHa <= 0.5) return 2;
         if (areaHa <= 2) return Math.min(5, Math.max(2, Math.round(areaHa * 2)));
-        return Math.ceil(areaHa * 2); // 2 loty per ha
+        return Math.ceil(areaHa * 2);
       }
 
-      // elements
       const distanceEl = document.getElementById('calc-distance');
       const areaEl = document.getElementById('calc-area');
       const modelsEl = document.getElementById('calc-models');
@@ -603,19 +564,14 @@
       const treesEl = document.getElementById('calc-trees');
       const rawEl = document.getElementById('calc-raw');
       const dateEl = document.getElementById('calc-date');
-      const basePerFlightEl = document.getElementById('base-per-flight');
-      const linesFeeEl = document.getElementById('lines-fee');
-      const treesFeeEl = document.getElementById('trees-fee');
       const runBtn = document.getElementById('calc-run');
       const resetBtn = document.getElementById('calc-reset');
       const resultEl = document.getElementById('calc-result');
       const toFormBtn = document.getElementById('calc-to-form');
 
-      // set fixed fees in UI (non-editable)
-      linesFeeEl.value = 50;
-      treesFeeEl.value = 50;
-      linesFeeEl.setAttribute('readonly','readonly');
-      treesFeeEl.setAttribute('readonly','readonly');
+      // fixed fees shown but not editable
+      const linesFee = 50;
+      const treesFee = 50;
 
       function daysUntil(dateStr) {
         if (!dateStr) return Infinity;
@@ -635,22 +591,22 @@
         const area = Math.max(0, Number(areaEl.value) || 0.1);
         const models = Math.max(1, Number(modelsEl.value) || 1);
         const service = serviceEl.value;
-        const basePerFlight = Math.max(0, Number(basePerFlightEl.value) || (unitCosts[service] || 100));
         const perAr = perArPrices[service] || 0;
+        const basePerFlight = unitCosts[service] || 100;
 
-        // area in ar (1 ar = 0.01 ha)
-        const areaAr = Math.round(area * 100); // e.g., 0.5 ha -> 50 ar
-        const areaChargePerModel = perAr * areaAr; // per model total area charge
-
-        const flights = estimateFlights(area, service);
+        const areaAr = Math.round(area * 100);
+        const flights = estimateFlights(area);
         const travel = travelFee(distance);
+
+        // area charge per model (perAr * ar)
+        const areaChargePerModel = perAr * areaAr;
 
         // work cost: (basePerFlight + areaChargePerModel) * flights * models
         const workCost = (basePerFlight + areaChargePerModel) * flights * models;
 
         let extras = 0;
-        if (linesEl.checked) extras += 50;
-        if (treesEl.checked) extras += 50;
+        if (linesEl.checked) extras += linesFee;
+        if (treesEl.checked) extras += treesFee;
         if (rawEl.checked) extras += 100;
 
         let subtotal = travel + workCost + extras;
@@ -665,23 +621,25 @@
           `Odległość: ${distance} km (opłata dojazd: ${travel} zł)`,
           `Powierzchnia: ${area} ha (${areaAr} ar)`,
           `Szacowane loty: ${flights}`,
-          `Koszt pracy bazowy: ${basePerFlight} zł / lot`,
+          `Koszt bazowy za lot: ${basePerFlight} zł`,
           `Opłata za ar (usługa ${service}): ${perAr} zł × ${areaAr} ar = ${areaChargePerModel} zł (na model)`,
           `Koszt pracy ( (bazowy + opłata za ar) × loty × modele ) = ${workCost} zł`,
-          `Dodatki: linie ${linesEl.checked ? 50 : 0} zł, drzewa ${treesEl.checked ? 50 : 0} zł, RAW ${rawEl.checked ? 100 : 0} zł => ${extras} zł`,
+          `Dodatki: linie ${linesEl.checked ? linesFee : 0} zł, drzewa ${treesEl.checked ? treesFee : 0} zł, RAW ${rawEl.checked ? 100 : 0} zł => ${extras} zł`,
           `Dopłata za pilny termin (jeśli dotyczy): ${rush} zł`,
           `—`,
           `Suma orientacyjna: ${total} zł`
         ];
 
-        resultEl.innerHTML = breakdownLines.join('\n');
+        resultEl.textContent = breakdownLines.join('\n\n');
         resultEl.style.display = 'block';
-
-        // store last computed values for "Wstaw do formularza"
-        resultEl._computed = {
-          total, travel, flights, workCost, extras, rush, area, areaAr, models, service
-        };
+        resultEl._computed = { total, travel, flights, workCost, extras, rush, area, areaAr, models, service };
       }
+
+      // live compute on input changes
+      [areaEl, modelsEl, serviceEl, linesEl, treesEl, rawEl, dateEl].forEach(el => {
+        el.addEventListener('change', compute);
+        el.addEventListener('input', compute);
+      });
 
       runBtn.addEventListener('click', (e) => { e.preventDefault(); compute(); });
 
@@ -695,19 +653,15 @@
         treesEl.checked = false;
         rawEl.checked = false;
         dateEl.value = '';
-        basePerFlightEl.value = 100;
         resultEl.style.display = 'none';
-        resultEl.innerHTML = '';
-        // clear map marker and hidden coords
+        resultEl.textContent = '';
         if (marker) { map.removeLayer(marker); marker = null; }
         document.getElementById('location_lat').value = '';
         document.getElementById('location_lng').value = '';
       });
 
-      // Wstaw wynik do formularza (ukryte pola)
       toFormBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        // ensure computed
         if (!resultEl._computed) compute();
         const c = resultEl._computed;
         if (!c) return;
@@ -721,8 +675,6 @@
           rawEl.checked ? 'RAW' : null
         ].filter(Boolean).join(',');
         document.getElementById('extras_list').value = extrasList;
-        // if user hasn't selected model, leave selected_model as is
-        // scroll to form and focus description
         document.getElementById('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
         setTimeout(()=> {
           const desc = document.getElementById('description');
@@ -734,12 +686,8 @@
         }, 600);
       });
 
-      // quick compute on Enter
-      [areaEl, modelsEl, basePerFlightEl].forEach(inp => {
-        inp.addEventListener('keydown', (ev) => {
-          if (ev.key === 'Enter') { ev.preventDefault(); compute(); }
-        });
-      });
+      // initial compute
+      compute();
     })();
   </script>
 
