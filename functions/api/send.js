@@ -48,10 +48,13 @@ Budżet: ${data.budget || "brak"}
 
   if (!response.ok) {
     const errorText = await response.text();
-    return new Response(JSON.stringify({ status: "error", details: errorText }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return new Response(
+      JSON.stringify({ status: "error", details: errorText }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }
+    );
   }
 
   return new Response(JSON.stringify({ status: "ok" }), {
