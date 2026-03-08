@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>BSP Zlecenia — kalkulator, modele 3D i proces</title>
+  <title>BSP Zlecenia — modele 3D, kalkulator i proces</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <script type="module" src="scripts/model-viewer.js"></script>
@@ -19,7 +19,7 @@
       --success:#0a7a2a;
       --danger:#b91c1c;
       --radius:12px;
-      --max-width:1200px;
+      --max-width:960px; /* zwężona szerokość strony */
       --header-h:76px;
       --shadow: 0 8px 30px rgba(15,23,42,0.06);
       --mono: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -45,33 +45,33 @@
       align-items:center;
       justify-content:space-between;
       gap:20px;
-      padding:12px 24px;
+      padding:12px 20px;
       background:rgba(255,255,255,0.92);
       backdrop-filter: blur(6px);
       box-shadow:0 2px 8px rgba(2,6,23,0.06);
       z-index:1200;
     }
-    .brand{display:flex;align-items:center;gap:14px}
+    .brand{display:flex;align-items:center;gap:12px}
     .logo{
-      width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;
+      width:52px;height:52px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;
       box-shadow:0 6px 18px rgba(11,18,32,0.12);
     }
-    .brand .title{font-weight:700;font-size:16px}
-    .brand .subtitle{font-size:13px;color:var(--muted)}
+    .brand .title{font-weight:700;font-size:15px}
+    .brand .subtitle{font-size:12px;color:var(--muted)}
 
-    nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0;align-items:center}
-    nav a{color:#0f172a;text-decoration:none;font-weight:600}
-    .cta{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700;box-shadow:0 8px 20px rgba(11,94,255,0.12)}
+    nav ul{display:flex;gap:14px;list-style:none;margin:0;padding:0;align-items:center}
+    nav a{color:#0f172a;text-decoration:none;font-weight:600;font-size:14px}
+    .cta{background:var(--accent);color:#fff;padding:9px 12px;border-radius:10px;text-decoration:none;font-weight:700;box-shadow:0 8px 20px rgba(11,94,255,0.12)}
 
-    .container{max-width:var(--max-width);margin:calc(var(--header-h) + 28px) auto;padding:28px}
-    .grid-2{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start}
+    .container{max-width:var(--max-width);margin:calc(var(--header-h) + 22px) auto;padding:20px}
+    .grid-2{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
     @media (max-width:980px){ .grid-2{grid-template-columns:1fr} }
 
-    .hero-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);flex:1;}
-    .hero-card h1{margin:0 0 8px;font-size:22px}
-    .hero-card p{margin:0;color:var(--muted)}
+    .hero-card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);flex:1;}
+    .hero-card h1{margin:0 0 8px;font-size:20px}
+    .hero-card p{margin:0;color:var(--muted);font-size:14px}
 
-    .form-card{background:linear-gradient(180deg,#fff,#fbfdff);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+    .form-card{background:linear-gradient(180deg,#fff,#fbfdff);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
     label{display:block;font-weight:700;margin-bottom:6px;color:#0f172a;font-size:13px}
     input[type="text"], input[type="date"], textarea, select, input[type="number"]{
       width:100%;padding:10px 12px;border-radius:10px;border:1px solid #e6e9ee;background:#fff;font-size:14px;color:#0f172a;
@@ -81,41 +81,41 @@
     .btn.secondary{background:#eef2ff;color:var(--accent-2);font-weight:700}
     .status{margin-top:10px;font-weight:700;color:var(--muted);font-size:14px;text-align:center}
 
-    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
     @media (max-width:900px){ .services{grid-template-columns:repeat(2,1fr)} }
-    .service{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
-    .service h3{margin:0 0 6px;font-size:15px}
+    .service{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
+    .service h3{margin:0 0 6px;font-size:14px}
     .service p{margin:0;color:var(--muted);font-size:13px}
 
-    .models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:18px}
-    .model-card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 8px 24px rgba(11,18,32,0.04);display:flex;flex-direction:column;gap:10px}
-    .model-card h4{margin:0;font-size:15px}
+    .models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .model-card{background:var(--card);padding:10px;border-radius:10px;box-shadow:0 8px 20px rgba(11,18,32,0.04);display:flex;flex-direction:column;gap:8px}
+    .model-card h4{margin:0;font-size:14px}
     .model-card p{margin:0;color:var(--muted);font-size:13px}
-    model-viewer{width:100%;height:220px;border-radius:8px;background:#f7f9fc;display:block;overflow:hidden}
+    model-viewer{width:100%;height:200px;border-radius:8px;background:#f7f9fc;display:block;overflow:hidden}
 
     #modelModal{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:1400}
     #modelModal .inner{width:92%;max-width:1100px;background:#fff;border-radius:12px;overflow:hidden}
     #modelModal .body{padding:14px}
 
-    .calc{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow);margin-top:12px}
-    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .calc{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);margin-top:12px}
+    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media (max-width:720px){ .calc-grid{grid-template-columns:1fr} }
     .calc-row{display:flex;flex-direction:column;gap:6px}
-    .small{width:140px}
-    .map-box{height:320px;border-radius:10px;overflow:hidden;border:1px solid #e6e9ee}
+    .small{width:130px}
+    .map-box{height:300px;border-radius:10px;overflow:hidden;border:1px solid #e6e9ee}
 
     .breakdown{background:#fbfdff;border-radius:10px;padding:12px;margin-top:12px;color:#0f172a;font-size:14px;white-space:pre-line}
     .muted{color:var(--muted);font-size:13px}
 
     /* How we work */
-    #how-we-work { margin-top:18px; }
-    .hw-timeline { display:flex; gap:12px; align-items:stretch; overflow:auto; padding-bottom:8px; }
-    .hw-step { min-width:220px; background:var(--card); border-radius:10px; padding:14px; box-shadow:0 8px 20px rgba(11,18,32,0.04); }
-    .hw-step h3 { margin:0 0 6px; font-size:15px; }
-    .hw-step p { margin:0 0 10px; color:var(--muted); font-size:14px; }
+    #how-we-work { margin-top:16px; }
+    .hw-timeline { display:flex; gap:10px; align-items:stretch; overflow:auto; padding-bottom:8px; }
+    .hw-step { min-width:200px; background:var(--card); border-radius:10px; padding:12px; box-shadow:0 8px 20px rgba(11,18,32,0.04); }
+    .hw-step h3 { margin:0 0 6px; font-size:14px; }
+    .hw-step p { margin:0 0 10px; color:var(--muted); font-size:13px; }
     .btn-small { background:#0b5ed7; color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:700; }
 
-    footer{margin-top:28px;padding:18px 0;text-align:center;color:var(--muted);font-size:13px}
+    footer{margin-top:20px;padding:14px 0;text-align:center;color:var(--muted);font-size:13px}
   </style>
 </head>
 <body>
@@ -149,7 +149,7 @@
           <p class="muted">Inspekcje dachów, zdjęcia nieruchomości, mapowanie i modele 3D. Szybkie terminy, przejrzyste zasady wyceny.</p>
 
           <section id="services" aria-labelledby="services-heading">
-            <h2 style="margin-top:18px">Usługi</h2>
+            <h2 style="margin-top:14px">Usługi</h2>
             <div class="services" role="list">
               <article class="service" role="listitem">
                 <h3>Inspekcje dachów</h3>
@@ -166,13 +166,15 @@
             </div>
           </section>
 
-          <section id="models-3d" aria-labelledby="models-heading">
-            <h2 style="margin-top:18px">Przykładowe modele 3D</h2>
+          <section id="models-3d" aria-labelledby="models-heading" style="margin-top:14px;">
+            <h2>Przykładowe modele 3D</h2>
             <div class="models-grid" role="list">
               <article class="model-card" role="listitem">
                 <h4>8.03.2026</h4>
                 <model-viewer src="assets/8.03.2026.glb" alt="Model 8.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
-                <p class="muted">Opis: do uzupełnienia</p>
+                <p class="muted">
+                  Fotogrametryczny model 3D częściowo zrujnowanego budynku murowanego z płaskim dachem betonowym. Wysoka szczegółowość tekstur cegły i betonu, widoczne ściany wewnętrzne i układ pomieszczeń. Idealny do analiz technicznych, dokumentacji stanu oraz planowania prac remontowych.
+                </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/8.03.2026.glb" data-title="8.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
                   <button class="btn secondary" onclick="selectModel('8.03.2026')">Poproś o wycenę</button>
@@ -182,7 +184,9 @@
               <article class="model-card" role="listitem">
                 <h4>7.03.2026</h4>
                 <model-viewer src="assets/7.03.2026.glb" alt="Model 7.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
-                <p class="muted">Opis: do uzupełnienia</p>
+                <p class="muted">
+                  Model 3D opuszczonego budynku z widocznymi uszkodzeniami elewacji, graffiti i roślinnością na dachu. Dokładne odwzorowanie struktury ścian i otoczenia umożliwia ocenę stanu technicznego, przygotowanie kosztorysów oraz monitoring zmian w czasie.
+                </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/7.03.2026.glb" data-title="7.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
                   <button class="btn secondary" onclick="selectModel('7.03.2026')">Poproś o wycenę</button>
@@ -190,31 +194,32 @@
               </article>
 
               <article class="model-card" role="listitem">
-                <h4>model</h4>
-                <model-viewer src="assets/model.glb" alt="Model przykładowy" camera-controls auto-rotate loading="lazy"></model-viewer>
-                <p class="muted">Opis: do uzupełnienia</p>
+                <h4>Model hydrotechniczny</h4>
+                <model-viewer src="assets/model.glb" alt="Model hydrotechniczny" camera-controls auto-rotate loading="lazy"></model-viewer>
+                <p class="muted">
+                  Fotogrametryczny model 3D konstrukcji hydrotechnicznej z betonową komorą, schodami i elementami technicznymi. Wysoka dokładność geometrii i tekstur pozwala na inspekcję infrastruktury, analizę uszkodzeń oraz planowanie prac konserwacyjnych.
+                </p>
                 <div style="display:flex;gap:8px">
-                  <button class="btn" data-src="assets/model.glb" data-title="model" onclick="openModelModal(this)">Otwórz podgląd</button>
+                  <button class="btn" data-src="assets/model.glb" data-title="Model hydrotechniczny" onclick="openModelModal(this)">Otwórz podgląd</button>
                   <button class="btn secondary" onclick="selectModel('model')">Poproś o wycenę</button>
                 </div>
               </article>
             </div>
           </section>
 
-          <!-- Pricing rules & calculator -->
-          <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:18px;">
+          <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:14px;">
             <h2 id="pricing-rules-heading">Zasady wyceny</h2>
             <p class="muted" style="margin-top:6px;">Opłata za dojazd + koszt pracy (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.</p>
 
-            <div style="display:grid;gap:12px;margin-top:12px">
-              <div style="background:var(--card);padding:14px;border-radius:10px;">
-                <h3 style="margin:0 0 8px 0;">Opłata za dojazd</h3>
-                <p style="margin:0;color:var(--muted);">0–5 km = 10 zł; 5–10 km = 20 zł; 10–15 km = 30 zł; dalej co 5 km +10 zł. Dystans obliczany w linii prostej z Biskupic Wielkopolskich po wskazaniu lokalizacji na mapie.</p>
+            <div style="display:grid;gap:10px;margin-top:10px">
+              <div style="background:var(--card);padding:12px;border-radius:10px;">
+                <h3 style="margin:0 0 6px 0;">Opłata za dojazd</h3>
+                <p style="margin:0;color:var(--muted);font-size:13px;">0–5 km = 10 zł; 5–10 km = 20 zł; 10–15 km = 30 zł; dalej co 5 km +10 zł. Dystans obliczany w linii prostej z Biskupic Wielkopolskich po wskazaniu lokalizacji na mapie.</p>
               </div>
 
-              <div style="background:var(--card);padding:14px;border-radius:10px;">
-                <h3 style="margin:0 0 8px 0;">Czynniki i stałe dopłaty</h3>
-                <ul style="margin:0;padding-left:18px;color:var(--muted)">
+              <div style="background:var(--card);padding:12px;border-radius:10px;">
+                <h3 style="margin:0 0 6px 0;">Czynniki i stałe dopłaty</h3>
+                <ul style="margin:6px 0 0 16px;color:var(--muted);font-size:13px">
                   <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong>.</li>
                   <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong>.</li>
                   <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie).</li>
@@ -224,14 +229,14 @@
               <div class="calc" id="priceCalc">
                 <h3 style="margin-top:0;">Kalkulator orientacyjnej ceny</h3>
 
-                <div class="calc-grid" style="margin-top:10px">
+                <div class="calc-grid" style="margin-top:8px">
                   <div class="calc-row">
                     <label>Wskaż miejsce zlecenia na mapie</label>
                     <div id="map" class="map-box" aria-label="Mapa do wyboru lokalizacji"></div>
                     <div class="muted" style="margin-top:8px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic Wielkopolskich zostanie obliczony automatycznie.</div>
                   </div>
 
-                  <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="display:flex;flex-direction:column;gap:8px">
                     <div class="calc-row">
                       <label for="calc-distance">Odległość (km)</label>
                       <input id="calc-distance" class="small" type="number" readonly value="0">
@@ -284,10 +289,9 @@
             </div>
           </section>
 
-          <!-- How we work section inserted here -->
           <section id="how-we-work" aria-labelledby="how-we-work-title">
-            <h2 id="how-we-work-title" style="font-size:20px;margin:18px 0 8px;">Jak pracujemy</h2>
-            <p class="muted" style="margin:0 0 12px;">Proces w 6 krokach — od zgłoszenia do gotowych materiałów. Płatność: 50% po locie, 50% po dostawie; 14 dni na poprawki.</p>
+            <h2 id="how-we-work-title" style="font-size:18px;margin:14px 0 8px;">Jak pracujemy</h2>
+            <p class="muted" style="margin:0 0 10px;">Proces w 6 krokach — od zgłoszenia do gotowych materiałów. Płatność: 50% po locie, 50% po dostawie; 14 dni na poprawki.</p>
 
             <div class="hw-timeline" aria-hidden="false">
               <article class="hw-step" data-step="1">
@@ -326,20 +330,10 @@
                 <button class="btn-small hw-use" data-area="0.10" data-models="1">Użyj w wycenie</button>
               </article>
             </div>
-
-            <div style="margin-top:12px;background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(11,18,32,0.04);">
-              <strong style="display:block;margin-bottom:6px;">Szybkie informacje</strong>
-              <div class="muted" style="font-size:14px;line-height:1.5;">
-                - Formaty dostawy: <strong>JPG, RAW, GLB</strong>.<br>
-                - Płatność: <strong>50% po locie</strong>, <strong>50% po dostawie</strong> materiałów.<br>
-                - Poprawki: <strong>14 dni</strong> od dostawy; poprawki drobne w cenie.
-              </div>
-            </div>
           </section>
         </section>
       </div>
 
-      <!-- Right column: form -->
       <aside>
         <div class="form-card" id="form" aria-labelledby="form-title">
           <h3 id="form-title" style="margin:0 0 8px">Zgłoś zlecenie</h3>
@@ -388,7 +382,6 @@
     </footer>
   </main>
 
-  <!-- Modal for model viewer -->
   <div id="modelModal" role="dialog" aria-hidden="true">
     <div class="inner">
       <div style="display:flex;justify-content:flex-end;padding:8px">
@@ -403,18 +396,14 @@
   </script>
 
   <script>
-    // Pricing settings: per-hectare price set to 100 zł / ha
     const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
     const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
     const latRef = 52.4550;
     const lngRef = 17.3090;
-
-    // Utility: format PLN
     const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
   </script>
 
   <script>
-    // Model modal functions
     function openModelModal(btn){
       const src = btn.getAttribute('data-src');
       const title = btn.getAttribute('data-title') || '';
@@ -446,7 +435,6 @@
   </script>
 
   <script>
-    // Form submission
     (function(){
       const form = document.getElementById('bspForm');
       const status = document.getElementById('status');
@@ -511,7 +499,6 @@
   </script>
 
   <script>
-    // Map + calculator + how-we-work integration
     (function(){
       const map = L.map('map').setView([latRef, lngRef], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
@@ -672,7 +659,6 @@
         }, 600);
       });
 
-      // How-we-work buttons: fill calculator and scroll
       document.querySelectorAll('.hw-use').forEach(btn => {
         btn.addEventListener('click', function(){
           const area = Number(this.dataset.area) || 0.1;
@@ -687,31 +673,8 @@
         });
       });
 
-      // initial compute
       compute();
     })();
   </script>
-
-  <script>
-    // Load optional terms banner if present
-    fetch('terms-consent.html')
-      .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
-      .then(html => {
-        const root = document.getElementById('terms-consent-root');
-        if (!root) return;
-        root.innerHTML = html;
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const scripts = temp.querySelectorAll('script');
-        scripts.forEach(s => {
-          const ns = document.createElement('script');
-          if (s.src) ns.src = s.src; else ns.textContent = s.textContent;
-          document.body.appendChild(ns);
-        });
-      })
-      .catch(() => {});
-  </script>
-
-  <div id="terms-consent-root" style="display:none;"></div>
 </body>
 </html>
