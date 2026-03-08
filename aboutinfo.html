@@ -7,14 +7,8 @@
   <meta name="description" content="Aktualności i komunikaty BSP Zlecenia — informacje o zmianach w realizacji usług, przerwach i ogłoszeniach.">
   <style>
     :root{
-      --bg:#f4f6fb;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --accent:#0b5ed7;
-      --accent-2:#0f62fe;
-      --radius:12px;
-      --max-width:980px;
-      --shadow: 0 10px 30px rgba(15,23,42,0.06);
+      --bg:#f4f6fb; --card:#ffffff; --muted:#6b7280; --accent:#0b5ed7;
+      --radius:12px; --max-width:980px; --shadow: 0 10px 30px rgba(15,23,42,0.06);
       --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
     *{box-sizing:border-box}
@@ -22,39 +16,19 @@
     body{
       font-family:var(--font);
       background:linear-gradient(180deg,var(--bg),#eef2ff 800px);
-      color:#0f172a;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding:28px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
+      color:#0f172a;padding:28px;display:flex;align-items:flex-start;justify-content:center;
     }
-
-    .box{
-      width:100%;
-      max-width:var(--max-width);
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      padding:22px;
-    }
-
+    .box{width:100%;max-width:var(--max-width);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;padding:22px}
     header{display:flex;gap:14px;align-items:center;margin-bottom:6px}
-    .logo{width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;box-shadow:0 8px 24px rgba(11,18,32,0.08)}
+    .logo{width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
     h1{margin:0;font-size:20px}
     .subtitle{color:var(--muted);font-size:13px;margin-top:6px}
-
     h2{margin:18px 0 8px;font-size:16px}
     p{margin:8px 0;color:var(--muted);line-height:1.45}
     .lead{color:#0f172a;font-weight:700;margin-top:6px}
-
     .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;color:#fff;background:var(--accent);box-shadow:0 8px 20px rgba(11,94,255,0.08)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;color:#fff;background:var(--accent)}
     .btn.secondary{background:#eef2ff;color:var(--accent);border:1px solid rgba(11,94,215,0.06);font-weight:700}
-    .small{font-size:13px;color:var(--muted)}
-
     .note{margin-top:12px;font-size:13px;color:#6b7280}
     .meta{font-size:13px;color:var(--muted);margin-top:8px}
 
@@ -76,6 +50,7 @@
     .admin-controls button{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
     .publish-btn{background:#0b5ed7;color:#fff;font-weight:700}
     .logout-btn{background:#eef2ff;color:#0b5ed7;border:1px solid rgba(11,94,215,0.06);font-weight:700}
+    .admin-msg{margin-top:8px;font-size:14px}
 
     /* News list */
     .news-list{margin-top:14px;display:grid;gap:10px}
@@ -104,15 +79,11 @@
     <h2>Aktualności i komunikaty</h2>
     <p>Na tej stronie publikujemy oficjalne komunikaty dotyczące przerw w realizacji usług, zmian terminów i innych ważnych informacji operacyjnych. Najnowsze komunikaty i archiwum znajdują się poniżej.</p>
 
-    <!-- News list (dynamic) -->
-    <div id="newsList" class="news-list" aria-live="polite">
-      <!-- dynamic items inserted here -->
-    </div>
+    <div id="newsList" class="news-list" aria-live="polite"></div>
 
     <h2>Panel administracyjny (logowanie)</h2>
     <p class="login-hint">Panel logowania jest widoczny poniżej. To klientowa symulacja — mechanizm testowy, nie używaj go do ochrony wrażliwych danych.</p>
 
-    <!-- Login panel (visible always) -->
     <section class="login-panel" aria-labelledby="loginTitle">
       <h3 id="loginTitle">Logowanie administratora</h3>
 
@@ -133,9 +104,8 @@
       </form>
     </section>
 
-    <!-- Admin editor (hidden until logged in) -->
-    <section id="adminArea" class="admin-area" aria-hidden="true" aria-labelledby="adminTitle">
-      <h3 id="adminTitle">Edytor aktualności (panel administracyjny)</h3>
+    <section id="adminArea" class="admin-area" aria-hidden="true">
+      <h3>Edytor aktualności (panel administracyjny)</h3>
 
       <div class="admin-row">
         <textarea id="announcement" placeholder="Np. 15.03.2026 — przerwa techniczna, usługi ograniczone..."></textarea>
@@ -147,7 +117,7 @@
         <div class="meta" style="margin-left:auto">Publikacje zapisywane lokalnie (symulacja)</div>
       </div>
 
-      <div id="adminMsg" class="login-msg" role="status" aria-live="polite"></div>
+      <div id="adminMsg" class="admin-msg" role="status" aria-live="polite"></div>
     </section>
 
     <h2>Kontakt</h2>
@@ -167,16 +137,13 @@
   </main>
 
   <script>
-    // Rok w stopce
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- Base64 obfuskacja (tylko do testów) ---
-    // login: KASIA_rst
-    // hasło: rstkasia.2020
-    const storedLoginB64 = 'S0FTQ0lfcnN0';
-    const storedPassB64  = 'cnN0a2FzaWEuMjAyMA==';
+    // Testowe dane (zakodowane) — tylko do testów lokalnych
+    const storedLoginB64 = 'S0FTQ0lfcnN0';        // "KASIA_rst"
+    const storedPassB64  = 'cnN0a2FzaWEuMjAyMA=='; // "rstkasia.2020"
 
-    // Utility: render news list from localStorage
+    // Render news from localStorage
     function renderNewsList() {
       const key = 'bsp_announcements';
       const list = document.getElementById('newsList');
@@ -203,30 +170,45 @@
       });
     }
 
-    // Clear potential autofill on load
+    // Show/hide admin area
+    function showAdminArea(show) {
+      const area = document.getElementById('adminArea');
+      const aboutMsg = document.getElementById('aboutMsg');
+      if (show) {
+        area.style.display = 'block';
+        area.setAttribute('aria-hidden', 'false');
+        if (aboutMsg) { aboutMsg.textContent = ''; }
+      } else {
+        area.style.display = 'none';
+        area.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    // On load: clear autofill, render news, and show admin if already logged
     window.addEventListener('load', () => {
       const loginEl = document.getElementById('aboutLogin');
       const passEl = document.getElementById('aboutPass');
       if (loginEl) loginEl.value = '';
       if (passEl) passEl.value = '';
       renderNewsList();
-      // If already logged in, show admin area
       if (sessionStorage.getItem('bsp_admin') === '1') {
         showAdminArea(true);
       }
     });
 
-    // Show/hide admin area
-    function showAdminArea(show) {
-      const area = document.getElementById('adminArea');
-      if (show) {
-        area.style.display = 'block';
-        area.setAttribute('aria-hidden', 'false');
-      } else {
-        area.style.display = 'none';
-        area.setAttribute('aria-hidden', 'true');
+    // Listen for storage events (other tabs)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'bsp_admin') {
+        if (e.newValue === '1') {
+          showAdminArea(true);
+        } else {
+          showAdminArea(false);
+        }
       }
-    }
+      if (e.key === 'bsp_announcements') {
+        renderNewsList();
+      }
+    });
 
     // Login handler
     document.getElementById('aboutBtn').addEventListener('click', function(){
@@ -235,7 +217,6 @@
       const msgEl = document.getElementById('aboutMsg');
       msgEl.textContent = '';
       if (!login || !pass) { msgEl.textContent = 'Wypełnij login i hasło.'; msgEl.style.color = '#b91c1c'; return; }
-
       try {
         const lB = btoa(login);
         const pB = btoa(pass);
@@ -244,10 +225,8 @@
           msgEl.style.color = '#0a7a2a';
           msgEl.textContent = 'Zalogowano. Edytor dostępny poniżej.';
           showAdminArea(true);
-          // clear inputs for security
           document.getElementById('aboutLogin').value = '';
           document.getElementById('aboutPass').value = '';
-          // focus editor
           setTimeout(()=> document.getElementById('announcement').focus(), 200);
         } else {
           msgEl.style.color = '#b91c1c';
@@ -259,45 +238,45 @@
       }
     });
 
-    // Enter key submits login
-    ['aboutLogin','aboutPass'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('keydown', function(e){ if (e.key === 'Enter') document.getElementById('aboutBtn').click(); });
-    });
-
-    // Publish announcement (admin)
+    // Publish announcement
     document.getElementById('publish').addEventListener('click', function(){
       if (sessionStorage.getItem('bsp_admin') !== '1') {
-        document.getElementById('adminMsg').style.color = '#b91c1c';
-        document.getElementById('adminMsg').textContent = 'Brak uprawnień. Zaloguj się.';
+        const am = document.getElementById('adminMsg');
+        am.style.color = '#b91c1c';
+        am.textContent = 'Brak uprawnień. Zaloguj się.';
         return;
       }
       const text = document.getElementById('announcement').value.trim();
       if (!text) {
-        document.getElementById('adminMsg').style.color = '#b91c1c';
-        document.getElementById('adminMsg').textContent = 'Wpisz treść komunikatu.';
+        const am = document.getElementById('adminMsg');
+        am.style.color = '#b91c1c';
+        am.textContent = 'Wpisz treść komunikatu.';
         return;
       }
       const key = 'bsp_announcements';
       const existing = JSON.parse(localStorage.getItem(key) || '[]');
       existing.unshift({ text: text, date: new Date().toISOString() });
       localStorage.setItem(key, JSON.stringify(existing));
+      // trigger storage event for other tabs (some browsers don't fire storage on same tab)
+      try { localStorage.setItem('bsp_announcements_sync', Date.now().toString()); } catch(e){}
       document.getElementById('announcement').value = '';
-      document.getElementById('adminMsg').style.color = '#0a7a2a';
-      document.getElementById('adminMsg').textContent = 'Komunikat zapisany lokalnie.';
+      const am = document.getElementById('adminMsg');
+      am.style.color = '#0a7a2a';
+      am.textContent = 'Komunikat zapisany lokalnie.';
       renderNewsList();
-      setTimeout(()=> document.getElementById('adminMsg').textContent = '', 2000);
+      setTimeout(()=> am.textContent = '', 2000);
     });
 
     // Logout
     document.getElementById('logout').addEventListener('click', function(){
       sessionStorage.removeItem('bsp_admin');
       showAdminArea(false);
-      document.getElementById('aboutMsg').textContent = 'Wylogowano.';
-      document.getElementById('aboutMsg').style.color = '#6b7280';
+      const aboutMsg = document.getElementById('aboutMsg');
+      aboutMsg.style.color = '#6b7280';
+      aboutMsg.textContent = 'Wylogowano.';
     });
 
-    // Accessibility: allow publish on Ctrl+Enter inside textarea
+    // Ctrl/Cmd+Enter to publish
     document.getElementById('announcement').addEventListener('keydown', function(e){
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
