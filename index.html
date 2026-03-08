@@ -5,7 +5,7 @@
   <title>Zlecenia BSP — inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Opcjonalny loader model-viewer (jeśli używasz) -->
+  <!-- model-viewer loader (jeśli używasz model-viewer, umieść właściwy skrypt w scripts/model-viewer.js) -->
   <script type="module" src="scripts/model-viewer.js"></script>
 
   <style>
@@ -21,6 +21,7 @@
       --header-height:76px;
     }
 
+    html { scroll-behavior: smooth; }
     html,body{height:100%;}
     body{
       margin:0;
@@ -70,13 +71,11 @@
     label{display:block; font-weight:600; margin-bottom:6px; color:var(--nav); font-size:14px;}
     input[type="text"], input[type="email"], input[type="date"], textarea, select{width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ee; background:white; font-size:14px; color:#111827; box-sizing:border-box;}
     textarea{min-height:110px; resize:vertical;}
-    .btn{display:inline-block; background:var(--accent-2); color:#111827; padding:12px 14px; border-radius:8px; font-weight:700; border:none; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+    .btn{display:inline-block; background:var(--accent-2); color:#111827; padding:10px 12px; border-radius:8px; font-weight:700; border:none; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
     .btn:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(37,99,235,0.12);}
     .status{margin-top:8px; font-weight:700; color:var(--muted); text-align:center;}
     .services{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:28px 0;}
     .card{background:var(--card); padding:18px; border-radius:12px; box-shadow:0 6px 18px rgba(16,24,40,0.04);}
-    .how{display:flex; gap:16px; margin-bottom:22px;}
-    .step{background:var(--card); padding:16px; border-radius:10px; flex:1; text-align:center;}
     .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:22px;}
     .gallery img{width:100%; height:160px; object-fit:cover; border-radius:8px;}
     .pricing{display:flex; gap:12px; margin-bottom:22px;}
@@ -85,6 +84,19 @@
 
     .model-wrapper { display:block; margin:12px 0; }
     model-viewer { display:block; width:100%; height:480px; border-radius:10px; overflow:hidden; background:#f3f4f6; }
+
+    /* models grid */
+    .models-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+    .model-card h3{font-size:16px; margin:0 0 8px 0;}
+    .model-card p{margin:0; color:var(--muted); font-size:13px;}
+
+    /* modal */
+    #modelModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:12000; }
+    #modelModal .modal-inner { width:90%; max-width:1100px; background:white; border-radius:10px; overflow:hidden; position:relative; }
+    #modelModal .modal-body { padding:12px; }
+    #modelModal .modal-viewer { width:100%; height:640px; background:#f3f4f6; border-radius:8px; overflow:hidden; }
+
+    nav ul li a.active { color: var(--accent-2); font-weight:800; }
 
     @media (max-width:1100px){ .hero{grid-template-columns:1fr 380px;} }
     @media (max-width:900px){ .hero{grid-template-columns:1fr;} model-viewer{height:360px;} .services{grid-template-columns:repeat(2,1fr);} .gallery{grid-template-columns:repeat(2,1fr);} .pricing{flex-direction:column;} }
@@ -106,15 +118,15 @@
        <li><a href="index.html">Strona główna</a></li>
        <li><a href="about.html">O mnie</a></li>
        <li><a href="#services">Usługi</a></li>
-       <li><a href="#form">Zgłoś zlecenie</a></li>
-       <li><a href="#contact">Kontakt</a></li>
+       <li><a href="#models-3d">Przykładowe modele 3D</a></li>
+       <li><a href="#pricing-rules">Zasady wyceny</a></li>
      </ul>
    </nav>
 
    <a class="contact-cta" href="#form">Wyślij zgłoszenie</a>
   </header>
 
-  <div class="wrap">
+  <main class="wrap">
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-left" role="img" aria-label="Zdjęcie z drona">
         <img src="assets/hero.jpg" alt="Zdjęcie z drona - inspekcja"
@@ -179,75 +191,98 @@
       </div>
     </section>
 
-    <section aria-labelledby="model-heading">
-      <h2 id="model-heading">Podgląd modelu 3D</h2>
-      <div class="model-wrapper">
-        <model-viewer
-          src="assets/model.glb"
-          alt="Model 3D drona"
-          camera-controls
-          auto-rotate
-          ar
-          loading="lazy">
-        </model-viewer>
+    <!-- Przykładowe modele 3D (wszystkie trzy na jednej podstronie) -->
+    <section id="models-3d" aria-labelledby="models-3d-heading" style="margin-top:28px;">
+      <h2 id="models-3d-heading">Przykładowe modele 3D</h2>
+      <p style="color:var(--muted); margin-top:6px;">Kliknij "Otwórz podgląd", aby zobaczyć model w dużym oknie. Opisy: do uzupełnienia.</p>
+
+      <div class="models-grid" style="margin-top:12px;">
+        <article class="model-card" style="background:var(--card); padding:12px; border-radius:10px;">
+          <h3>8.03.2026</h3>
+          <div style="border-radius:8px; overflow:hidden; background:#f3f4f6;">
+            <model-viewer src="assets/8.03.2026.glb" alt="Model 8.03.2026" camera-controls auto-rotate loading="lazy" style="width:100%; height:220px;"></model-viewer>
+          </div>
+          <p>Opis: do uzupełnienia</p>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn open-model" data-src="assets/8.03.2026.glb" data-title="8.03.2026">Otwórz podgląd</button>
+            <button class="btn" data-model="8.03.2026" onclick="prefillAndScroll(event)">Poproś o wycenę</button>
+          </div>
+        </article>
+
+        <article class="model-card" style="background:var(--card); padding:12px; border-radius:10px;">
+          <h3>7.03.2026</h3>
+          <div style="border-radius:8px; overflow:hidden; background:#f3f4f6;">
+            <model-viewer src="assets/7.03.2026.glb" alt="Model 7.03.2026" camera-controls auto-rotate loading="lazy" style="width:100%; height:220px;"></model-viewer>
+          </div>
+          <p>Opis: do uzupełnienia</p>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn open-model" data-src="assets/7.03.2026.glb" data-title="7.03.2026">Otwórz podgląd</button>
+            <button class="btn" data-model="7.03.2026" onclick="prefillAndScroll(event)">Poproś o wycenę</button>
+          </div>
+        </article>
+
+        <article class="model-card" style="background:var(--card); padding:12px; border-radius:10px;">
+          <h3>model</h3>
+          <div style="border-radius:8px; overflow:hidden; background:#f3f4f6;">
+            <model-viewer src="assets/model.glb" alt="Model przykładowy" camera-controls auto-rotate loading="lazy" style="width:100%; height:220px;"></model-viewer>
+          </div>
+          <p>Opis: do uzupełnienia</p>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn open-model" data-src="assets/model.glb" data-title="model">Otwórz podgląd</button>
+            <button class="btn" data-model="model" onclick="prefillAndScroll(event)">Poproś o wycenę</button>
+          </div>
+        </article>
       </div>
     </section>
 
-    <section aria-labelledby="gallery-heading">
-      <h2 id="gallery-heading">Galeria realizacji</h2>
-      <div class="gallery">
-        <img src="assets/gallery1.jpg" alt="Zdjęcie realizacji 1" />
-        <img src="assets/gallery2.jpg" alt="Zdjęcie realizacji 2" />
-        <img src="assets/gallery3.jpg" alt="Zdjęcie realizacji 3" />
+    <!-- Modal: duży podgląd modelu -->
+    <div id="modelModal" aria-hidden="true">
+      <div class="modal-inner">
+        <button id="modalClose" class="btn" style="position:absolute; right:12px; top:12px; z-index:2;">Zamknij</button>
+        <div class="modal-body">
+          <h3 id="modalTitle" style="margin:0 0 8px 0;"></h3>
+          <div id="modalViewer" class="modal-viewer"></div>
+          <div style="margin-top:8px; display:flex; gap:8px;">
+            <button id="modalReset" class="btn">Reset kamery</button>
+            <button id="modalFullscreen" class="btn">Pełny ekran</button>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
 
-    <section aria-labelledby="pricing-heading">
-      <h2 id="pricing-heading">Orientacyjny cennik</h2>
+    <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
 
-      <p style="color:var(--accent); font-weight:700; margin-top:6px; margin-bottom:12px;">
-        Niższa cena z uwagi na początek działalności — promocje czasowe, zapytaj o dostępność terminów.
-      </p>
+    <!-- Zasady wyceny -->
+    <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:18px;">
+      <h2 id="pricing-rules-heading">Zasady wyceny</h2>
+      <p style="color:var(--muted); margin-top:6px;">Podstawowa struktura: <strong>opłata za dojazd</strong> + czynniki podnoszące (linie, drzewa, ryzyko) + liczba modeli i lotów. Poniżej szczegóły i przykładowe stawki.</p>
 
-      <div class="pricing">
-        <div class="price" role="region" aria-label="Inspekcja dachu — cena">
-          <h3 style="margin:0 0 8px 0;">Inspekcja dachu</h3>
-          <p style="margin:6px 0; color:var(--muted); font-size:14px;">
-            <span style="text-decoration:line-through; color:#b91c1c;">od 100 zł</span><br>
-            <span style="font-size:20px; font-weight:700; color:var(--accent);">10–50 zł</span>
-          </p>
-          <p style="font-size:13px; color:var(--muted); margin:0;">
-            Cena promocyjna zależna od zakresu i lokalizacji; standardowa cena widoczna powyżej.
-          </p>
+      <div style="display:grid; gap:12px; margin-top:12px;">
+        <div style="background:var(--card); padding:14px; border-radius:10px;">
+          <h3 style="margin:0 0 8px 0;">Opłata za dojazd</h3>
+          <p style="margin:0; color:var(--muted);">Stawka orientacyjna: 0–5 km = 10 zł; 5–10 km = 20 zł; 10–15 km = 30 zł; dalej co 5 km +10 zł.</p>
         </div>
 
-        <div class="price" role="region" aria-label="Pakiet zdjęć nieruchomości — cena">
-          <h3 style="margin:0 0 8px 0;">Pakiet zdjęć nieruchomości</h3>
-          <p style="margin:6px 0; color:var(--muted); font-size:14px;">
-            <span style="text-decoration:line-through; color:#b91c1c;">od 150 zł</span><br>
-            <span style="font-size:20px; font-weight:700; color:var(--accent);">Cena indywidualna (promocyjna)</span>
-          </p>
-          <p style="font-size:13px; color:var(--muted); margin:0;">
-            Dokładna wycena po krótkiej rozmowie — w promocji oferuję korzystniejsze warunki dla pierwszych klientów.
-          </p>
+        <div style="background:var(--card); padding:14px; border-radius:10px;">
+          <h3 style="margin:0 0 8px 0;">Czynniki podnoszące cenę</h3>
+          <ul style="margin:0; padding-left:18px; color:var(--muted);">
+            <li>Obecność linii energetycznych — dopłata (do ustalenia).</li>
+            <li>Gęsta zabudowa, drzewa, trudny dostęp — dopłata.</li>
+            <li>Ilość lotów potrzebnych do zebrania materiału — mnożnik do podstawowej stawki.</li>
+            <li>Ilość modeli do wykonania — cena rośnie proporcjonalnie.</li>
+          </ul>
         </div>
 
-        <div class="price" role="region" aria-label="Mapowanie i dokumentacja terenu — cena">
-          <h3 style="margin:0 0 8px 0;">Mapowanie i dokumentacja terenu</h3>
-          <p style="margin:6px 0; color:var(--muted); font-size:14px;">
-            <span style="text-decoration:line-through; color:#b91c1c;">od 200 zł</span><br>
-            <span style="font-size:20px; font-weight:700; color:var(--accent);">Cena po konsultacji (promocyjna)</span>
-          </p>
-          <p style="font-size:13px; color:var(--muted); margin:0;">
-            Zależnie od powierzchni i zakresu prac; zapytaj o ofertę startową.
-          </p>
+        <div style="background:var(--card); padding:14px; border-radius:10px;">
+          <h3 style="margin:0 0 8px 0;">Przykładowe scenariusze</h3>
+          <p style="margin:0; color:var(--muted);">Przygotuję trzy przykładowe kalkulacje po doprecyzowaniu typowych zleceń — omówimy je dalej.</p>
         </div>
       </div>
     </section>
 
-    <section id="contact" aria-labelledby="contact-heading">
+    <section id="contact" aria-labelledby="contact-heading" style="margin-top:28px;">
       <h2 id="contact-heading">Kontakt</h2>
-      <div class="card">
+      <div class="card" style="margin-top:8px;">
         <p><strong>E-mail:</strong> jakubsoperatorbsp@gmail.com</p>
         <p><strong>Obszar działania:</strong> Pobiedziska i okolice</p>
         <p><a href="bsp-zlecenia-main/rodo.html">Polityka prywatności</a></p>
@@ -259,13 +294,15 @@
     </footer>
 
     <div id="terms-consent-root"></div>
-  </div>
+  </main>
 
   <script>
+    // stopka: aktualny rok
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
   <script>
+    // Formularz: walidacja i wysyłka do /api/send
     (function(){
       const form = document.getElementById("bspForm");
       const status = document.getElementById("status");
@@ -327,6 +364,82 @@
   </script>
 
   <script>
+    // Modal model viewer, reset, fullscreen i prefill formularza
+    (function(){
+      const modal = document.getElementById('modelModal');
+      const modalViewer = document.getElementById('modalViewer');
+      const modalTitle = document.getElementById('modalTitle');
+      const closeBtn = document.getElementById('modalClose');
+      const resetBtn = document.getElementById('modalReset');
+      const fsBtn = document.getElementById('modalFullscreen');
+
+      function openModal(src, title) {
+        modalViewer.innerHTML = '';
+        modalTitle.textContent = title || '';
+        const mv = document.createElement('model-viewer');
+        mv.setAttribute('src', src);
+        mv.setAttribute('camera-controls', '');
+        mv.setAttribute('auto-rotate', '');
+        mv.setAttribute('style', 'width:100%; height:100%; display:block;');
+        mv.setAttribute('loading','lazy');
+        modalViewer.appendChild(mv);
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden','false');
+        modal._mv = mv;
+      }
+
+      function closeModal() {
+        modal.style.display = 'none';
+        modalViewer.innerHTML = '';
+        modal.setAttribute('aria-hidden','true');
+        modal._mv = null;
+      }
+
+      document.querySelectorAll('.open-model').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const src = btn.getAttribute('data-src');
+          const title = btn.getAttribute('data-title');
+          openModal(src, title);
+        });
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+      resetBtn.addEventListener('click', () => {
+        const mv = modal._mv;
+        if (mv && typeof mv.reset === 'function') {
+          try { mv.reset(); } catch(e){ /* ignore */ }
+        } else if (mv) {
+          const s = mv.getAttribute('src');
+          mv.removeAttribute('src');
+          setTimeout(()=> mv.setAttribute('src', s), 50);
+        }
+      });
+
+      fsBtn.addEventListener('click', () => {
+        const mv = modal._mv;
+        if (!mv) return;
+        if (mv.requestFullscreen) mv.requestFullscreen();
+        else if (mv.webkitRequestFullscreen) mv.webkitRequestFullscreen();
+      });
+
+      // prefill form and scroll to it
+      window.prefillAndScroll = function(event) {
+        const btn = event.currentTarget;
+        const modelName = btn.getAttribute('data-model') || '';
+        const form = document.getElementById('bspForm');
+        if (!form) return;
+        const descField = form.querySelector('#description');
+        if (descField) descField.value = `Prośba o wycenę modelu: ${modelName} — opis: `;
+        document.getElementById('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(()=> descField && descField.focus(), 600);
+      };
+    })();
+  </script>
+
+  <script>
+    // Ładowanie banneru regulaminu (jeśli masz plik terms-consent.html)
     fetch('terms-consent.html')
       .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
       .then(html => {
