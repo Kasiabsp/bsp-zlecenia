@@ -139,10 +139,7 @@
     <aside class="form-card" id="form" aria-labelledby="form-title">
       <h3 id="form-title">Zgłoś zlecenie</h3>
 
-<form id="bspForm" action="https://formspree.io/f/xqebvvow" method="POST" novalidate>
-  <input type="hidden" name="_subject" value="Nowe zgłoszenie BSP">
-  <input type="hidden" name="_replyto" value="">
-  <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+<form id="bspForm" novalidate>
 
   <div>
     <label for="contact">E-mail lub telefon <span style="color:#d00">*</span></label>
@@ -164,23 +161,14 @@
       <input id="budget" name="budget" type="text" placeholder="PLN">
     </div>
   </div>
+
+  <div style="margin-top:12px;">
+    <button class="btn" type="submit">Wyślij zgłoszenie</button>
+  </div>
+
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
 </form>
-
-
-        <div style="margin-top:12px;">
-          <button class="btn" type="submit">Wyślij zgłoszenie</button>
-        </div>
-
-        <div class="status" id="status" role="status" aria-live="polite"></div>
-      </form>
-
-      <div style="margin-top:12px;">
-        <a href="about.html" class="contact-cta" style="background:var(--nav);">O mnie — więcej</a>
-      </div>
-    </aside>
-  </section>
-
-  <section id="services" aria-labelledby="services-heading">
     <h2 id="services-heading">Usługi</h2>
     <div class="services">
       <article class="card">
