@@ -2,33 +2,54 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>Panel admin</title>
+  <title>BSP Zlecenia — Strona główna</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>body{font-family:system-ui;padding:28px;background:#f6f7fb} .card{max-width:900px;margin:20px auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 8px 30px rgba(15,23,42,0.06)}</style>
+  <meta name="description" content="BSP Zlecenia — usługi dronowe, mapowanie, inspekcje i modele 3D.">
+  <style>
+    body{font-family:system-ui,Arial;margin:0;background:#f6f7fb;color:#0f172a;display:flex;align-items:center;justify-content:center;padding:28px}
+    .wrap{max-width:980px;width:100%;background:#fff;border-radius:12px;padding:22px;box-shadow:0 10px 30px rgba(15,23,42,0.06)}
+    header{display:flex;align-items:center;gap:14px}
+    .logo{width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+    h1{margin:0;font-size:22px}
+    .lead{color:#475569;margin-top:8px}
+    .actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+    .btn{background:#0b5ed7;color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+    .btn.ghost{background:#eef2ff;color:#0b5ed7}
+    section{margin-top:18px}
+    footer{margin-top:18px;color:#6b7280;font-size:13px}
+  </style>
 </head>
 <body>
-  <div class="card" id="card">
-    <h2>Panel administracyjny</h2>
-    <p id="who"></p>
-    <div id="content">
-      <p>Tu możesz dodać formularz do publikacji aktualności (np. zapisywać do localStorage lub wysyłać do API).</p>
-      <button id="logout">Wyloguj</button>
-    </div>
+  <div class="wrap" role="main" aria-labelledby="mainTitle">
+    <header>
+      <div class="logo" aria-hidden="true">BSP</div>
+      <div>
+        <h1 id="mainTitle">BSP Zlecenia</h1>
+        <div class="lead">Usługi dronowe: mapowanie, inspekcje, modele 3D — szybkie i profesjonalne.</div>
+      </div>
+    </header>
+
+    <section aria-labelledby="newsTitle">
+      <h2 id="newsTitle">Aktualności</h2>
+      <p>Pełna lista komunikatów znajduje się w sekcji Aktualności. Kliknij przycisk, aby przejść do najnowszych ogłoszeń.</p>
+      <div class="actions" role="navigation" aria-label="Szybkie linki">
+        <a class="btn" href="./index.html#aktualnosci">Przejdź do Aktualności</a>
+        <a class="btn ghost" href="./aboutinfo.html">Informacje i aktualności (skrót)</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="contactTitle">
+      <h2 id="contactTitle">Kontakt</h2>
+      <p>Formularz kontaktowy i pełne dane kontaktowe dostępne są na stronie głównej (sekcja Kontakt). W pilnych sprawach prosimy o wiadomość przez formularz — odpowiadamy zwykle w ciągu 24–48 godzin roboczych.</p>
+    </section>
+
+    <footer>
+      © <span id="year"></span> BSP Zlecenia
+    </footer>
   </div>
 
   <script>
-    // Sprawdzenie "sesji" (symulacja)
-    if (sessionStorage.getItem('bsp_admin') !== '1') {
-      // brak dostępu — przekieruj do logowania
-      location.href = '/admin-login.html';
-    } else {
-      document.getElementById('who').textContent = 'Zalogowany: KASIA_rst (symulacja)';
-    }
-
-    document.getElementById('logout').addEventListener('click', function(){
-      sessionStorage.removeItem('bsp_admin');
-      location.href = '/admin-login.html';
-    });
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
