@@ -140,10 +140,9 @@
       <h3 id="form-title">Zgłoś zlecenie</h3>
 
 <form id="bspForm" novalidate>
-
   <div>
     <label for="contact">E-mail lub telefon <span style="color:#d00">*</span></label>
-    <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon">
+    <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon" autocomplete="email">
   </div>
 
   <div style="margin-top:10px;">
@@ -158,32 +157,45 @@
     </div>
     <div style="width:140px;">
       <label for="budget">Budżet</label>
-      <input id="budget" name="budget" type="text" placeholder="PLN">
+      <input id="budget" name="budget" type="text" placeholder="PLN" inputmode="numeric">
     </div>
   </div>
 
   <div style="margin-top:12px;">
-    <button class="btn" type="submit">Wyślij zgłoszenie</button>
+    <button class="btn" type="submit" id="submitBtn">Wyślij zgłoszenie</button>
   </div>
 
-  <div class="status" id="status" role="status" aria-live="polite"></div>
-
+  <div class="status" id="status" role="status" aria-live="polite" style="margin-top:8px;"></div>
 </form>
-      <script>
+
+<script>
   const form = document.getElementById("bspForm");
   const status = document.getElementById("status");
+  const submitBtn = document.getElementById("submitBtn");
+
+  function showStatus(text, isError = false) {
+    status.innerText = text;
+    status.style.color = isError ? "#b00" : "#080";
+  }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    if (!form.contact.value.trim() || !form.description.value.trim()) {
+      showStatus("Uzupełnij wymagane pola.", true);
+      return;
+    }
+
     const formData = {
-      contact: form.contact.value,
-      description: form.description.value,
-      date: form.date.value,
-      budget: form.budget.value
+      contact: form.contact.value.trim(),
+      description: form.description.value.trim(),
+      date: form.date.value || "",
+      budget: form.budget.value.trim() || ""
     };
 
-    status.innerText = "Wysyłanie...";
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Wysyłanie...";
+    showStatus("Wysyłanie...");
 
     try {
       const res = await fetch("/api/send", {
@@ -192,46 +204,42 @@
         body: JSON.stringify(formData)
       });
 
-      const json = await res.json();
+      let json = null;
+      try { json = await res.json(); } catch {}
 
-      if (json.status === "ok") {
-        status.innerText = "Wysłano!";
+      if (res.ok && json && json.status === "ok") {
+        showStatus("Wysłano!");
         form.reset();
       } else {
-        status.innerText = "Błąd wysyłania.";
+        const details = json && json.details ? ` (${json.details})` : "";
+        showStatus("Błąd wysyłania." + details, true);
+        console.error("Send error:", res.status, json || await res.text());
       }
     } catch (err) {
-      status.innerText = "Błąd połączenia.";
-      console.error(err);
+      showStatus("Błąd połączenia.", true);
+      console.error("Fetch error:", err);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Wyślij zgłoszenie";
     }
   });
 </script>
-    <h2 id="services-heading">Usługi</h2>
-    <div class="services">
-      <article class="card">
-        <h3>Inspekcje dachów</h3>
-        <p>Dokumentacja zdjęciowa i wideo trudno dostępnych miejsc bez stawiania rusztowań.</p>
-      </article>
-      <article class="card">
-        <h3>Zdjęcia nieruchomości</h3>
-        <p>Materiały marketingowe dla biur nieruchomości, inwestorów i właścicieli obiektów.</p>
-      </article>
-      <article class="card">
-        <h3>Mapowanie terenu</h3>
-        <p>Przegląd działek i terenów inwestycyjnych przed rozpoczęciem prac projektowych.</p>
-      </article>
-    </div>
-  </section>
 
-  <section aria-labelledby="how-heading">
-    <h2 id="how-heading">Jak to działa?</h2>
-    <div class="how">
-      <div class="step"><strong>1.</strong> Wysyłasz zgłoszenie</div>
-      <div class="step"><strong>2.</strong> Ustalamy zakres i termin</div>
-      <div class="step"><strong>3.</strong> Realizuję lot i przekazuję materiały</div>
-    </div>
-  </section>
-
+<h2 id="services-heading">Usługi</h2>
+<div class="services">
+  <article class="card">
+    <h3>Inspekcje dachów</h3>
+    <p>Dokumentacja zdjęciowa i wideo trudno dostępnych miejsc bez stawiania rusztowań.</p>
+  </article>
+  <article class="card">
+    <h3>Zdjęcia nieruchomości</h3>
+    <p>Materiały marketingowe dla biur nieruchomości, inwestorów i właścicieli obiektów.</p>
+  </article>
+  <article class="card">
+    <h3>Mapowanie terenu</h3>
+    <p>Przegląd działek i terenów inwestycyjnych przed rozpoczęciem prac projektowych.</p>
+  </article>
+</div>
   <section aria-labelledby="model-heading">
     <h2 id="model-heading">Podgląd modelu 3D</h2>
     <div class="model-wrapper">
