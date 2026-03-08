@@ -19,8 +19,8 @@
       --success:#0a7a2a;
       --danger:#b91c1c;
       --radius:12px;
-      --max-width:960px; /* zwężona szerokość strony */
-      --header-h:76px;
+      --max-width:820px; /* jeszcze węższa szerokość strony */
+      --header-h:72px;
       --shadow: 0 8px 30px rgba(15,23,42,0.06);
       --mono: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
@@ -44,78 +44,78 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:20px;
-      padding:12px 20px;
-      background:rgba(255,255,255,0.92);
+      gap:12px;
+      padding:10px 16px;
+      background:rgba(255,255,255,0.94);
       backdrop-filter: blur(6px);
       box-shadow:0 2px 8px rgba(2,6,23,0.06);
       z-index:1200;
     }
-    .brand{display:flex;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
     .logo{
-      width:52px;height:52px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;
+      width:48px;height:48px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;
       box-shadow:0 6px 18px rgba(11,18,32,0.12);
     }
-    .brand .title{font-weight:700;font-size:15px}
+    .brand .title{font-weight:700;font-size:14px}
     .brand .subtitle{font-size:12px;color:var(--muted)}
 
-    nav ul{display:flex;gap:14px;list-style:none;margin:0;padding:0;align-items:center}
-    nav a{color:#0f172a;text-decoration:none;font-weight:600;font-size:14px}
-    .cta{background:var(--accent);color:#fff;padding:9px 12px;border-radius:10px;text-decoration:none;font-weight:700;box-shadow:0 8px 20px rgba(11,94,255,0.12)}
+    nav ul{display:flex;gap:12px;list-style:none;margin:0;padding:0;align-items:center}
+    nav a{color:#0f172a;text-decoration:none;font-weight:600;font-size:13px}
+    .cta{background:var(--accent);color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700;box-shadow:0 8px 20px rgba(11,94,255,0.12)}
 
-    .container{max-width:var(--max-width);margin:calc(var(--header-h) + 22px) auto;padding:20px}
-    .grid-2{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
-    @media (max-width:980px){ .grid-2{grid-template-columns:1fr} }
+    .container{max-width:var(--max-width);margin:calc(var(--header-h) + 18px) auto;padding:16px}
+    .grid-2{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start}
+    @media (max-width:900px){ .grid-2{grid-template-columns:1fr} }
 
-    .hero-card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);flex:1;}
-    .hero-card h1{margin:0 0 8px;font-size:20px}
-    .hero-card p{margin:0;color:var(--muted);font-size:14px}
+    .hero-card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);flex:1;}
+    .hero-card h1{margin:0 0 8px;font-size:18px}
+    .hero-card p{margin:0;color:var(--muted);font-size:13px}
 
-    .form-card{background:linear-gradient(180deg,#fff,#fbfdff);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+    .form-card{background:linear-gradient(180deg,#fff,#fbfdff);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
     label{display:block;font-weight:700;margin-bottom:6px;color:#0f172a;font-size:13px}
     input[type="text"], input[type="date"], textarea, select, input[type="number"]{
-      width:100%;padding:10px 12px;border-radius:10px;border:1px solid #e6e9ee;background:#fff;font-size:14px;color:#0f172a;
+      width:100%;padding:9px 10px;border-radius:10px;border:1px solid #e6e9ee;background:#fff;font-size:14px;color:#0f172a;
     }
-    textarea{min-height:110px;resize:vertical}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:none;background:var(--accent-2);color:#fff;font-weight:800;cursor:pointer}
+    textarea{min-height:100px;resize:vertical}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;border:none;background:var(--accent-2);color:#fff;font-weight:800;cursor:pointer}
     .btn.secondary{background:#eef2ff;color:var(--accent-2);font-weight:700}
-    .status{margin-top:10px;font-weight:700;color:var(--muted);font-size:14px;text-align:center}
+    .status{margin-top:10px;font-weight:700;color:var(--muted);font-size:13px;text-align:center}
 
-    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
-    @media (max-width:900px){ .services{grid-template-columns:repeat(2,1fr)} }
-    .service{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
-    .service h3{margin:0 0 6px;font-size:14px}
-    .service p{margin:0;color:var(--muted);font-size:13px}
+    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    @media (max-width:720px){ .services{grid-template-columns:repeat(2,1fr)} }
+    .service{background:var(--card);padding:10px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
+    .service h3{margin:0 0 6px;font-size:13px}
+    .service p{margin:0;color:var(--muted);font-size:12px}
 
-    .models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:12px}
     .model-card{background:var(--card);padding:10px;border-radius:10px;box-shadow:0 8px 20px rgba(11,18,32,0.04);display:flex;flex-direction:column;gap:8px}
-    .model-card h4{margin:0;font-size:14px}
-    .model-card p{margin:0;color:var(--muted);font-size:13px}
-    model-viewer{width:100%;height:200px;border-radius:8px;background:#f7f9fc;display:block;overflow:hidden}
+    .model-card h4{margin:0;font-size:13px}
+    .model-card p{margin:0;color:var(--muted);font-size:12px}
+    model-viewer{width:100%;height:180px;border-radius:8px;background:#f7f9fc;display:block;overflow:hidden}
 
     #modelModal{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:1400}
     #modelModal .inner{width:92%;max-width:1100px;background:#fff;border-radius:12px;overflow:hidden}
     #modelModal .body{padding:14px}
 
-    .calc{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);margin-top:12px}
-    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .calc{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);margin-top:10px}
+    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     @media (max-width:720px){ .calc-grid{grid-template-columns:1fr} }
     .calc-row{display:flex;flex-direction:column;gap:6px}
-    .small{width:130px}
-    .map-box{height:300px;border-radius:10px;overflow:hidden;border:1px solid #e6e9ee}
+    .small{width:120px}
+    .map-box{height:260px;border-radius:10px;overflow:hidden;border:1px solid #e6e9ee}
 
-    .breakdown{background:#fbfdff;border-radius:10px;padding:12px;margin-top:12px;color:#0f172a;font-size:14px;white-space:pre-line}
-    .muted{color:var(--muted);font-size:13px}
+    .breakdown{background:#fbfdff;border-radius:10px;padding:10px;margin-top:10px;color:#0f172a;font-size:13px;white-space:pre-line}
+    .muted{color:var(--muted);font-size:12px}
 
     /* How we work */
-    #how-we-work { margin-top:16px; }
-    .hw-timeline { display:flex; gap:10px; align-items:stretch; overflow:auto; padding-bottom:8px; }
-    .hw-step { min-width:200px; background:var(--card); border-radius:10px; padding:12px; box-shadow:0 8px 20px rgba(11,18,32,0.04); }
-    .hw-step h3 { margin:0 0 6px; font-size:14px; }
-    .hw-step p { margin:0 0 10px; color:var(--muted); font-size:13px; }
-    .btn-small { background:#0b5ed7; color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:700; }
+    #how-we-work { margin-top:12px; }
+    .hw-timeline { display:flex; gap:8px; align-items:stretch; overflow:auto; padding-bottom:8px; }
+    .hw-step { min-width:180px; background:var(--card); border-radius:10px; padding:10px; box-shadow:0 8px 20px rgba(11,18,32,0.04); }
+    .hw-step h3 { margin:0 0 6px; font-size:13px; }
+    .hw-step p { margin:0 0 8px; color:var(--muted); font-size:12px; }
+    .btn-small { background:#0b5ed7; color:#fff; border:none; padding:7px 10px; border-radius:8px; cursor:pointer; font-weight:700; font-size:13px; }
 
-    footer{margin-top:20px;padding:14px 0;text-align:center;color:var(--muted);font-size:13px}
+    footer{margin-top:18px;padding:12px 0;text-align:center;color:var(--muted);font-size:12px}
   </style>
 </head>
 <body>
@@ -149,7 +149,7 @@
           <p class="muted">Inspekcje dachów, zdjęcia nieruchomości, mapowanie i modele 3D. Szybkie terminy, przejrzyste zasady wyceny.</p>
 
           <section id="services" aria-labelledby="services-heading">
-            <h2 style="margin-top:14px">Usługi</h2>
+            <h2 style="margin-top:12px">Usługi</h2>
             <div class="services" role="list">
               <article class="service" role="listitem">
                 <h3>Inspekcje dachów</h3>
@@ -166,7 +166,7 @@
             </div>
           </section>
 
-          <section id="models-3d" aria-labelledby="models-heading" style="margin-top:14px;">
+          <section id="models-3d" aria-labelledby="models-heading" style="margin-top:12px;">
             <h2>Przykładowe modele 3D</h2>
             <div class="models-grid" role="list">
               <article class="model-card" role="listitem">
@@ -207,19 +207,19 @@
             </div>
           </section>
 
-          <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:14px;">
+          <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:12px;">
             <h2 id="pricing-rules-heading">Zasady wyceny</h2>
             <p class="muted" style="margin-top:6px;">Opłata za dojazd + koszt pracy (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.</p>
 
-            <div style="display:grid;gap:10px;margin-top:10px">
-              <div style="background:var(--card);padding:12px;border-radius:10px;">
-                <h3 style="margin:0 0 6px 0;">Opłata za dojazd</h3>
-                <p style="margin:0;color:var(--muted);font-size:13px;">0–5 km = 10 zł; 5–10 km = 20 zł; 10–15 km = 30 zł; dalej co 5 km +10 zł. Dystans obliczany w linii prostej z Biskupic Wielkopolskich po wskazaniu lokalizacji na mapie.</p>
+            <div style="display:grid;gap:8px;margin-top:8px">
+              <div style="background:var(--card);padding:10px;border-radius:10px;">
+                <h3 style="margin:0 0 6px 0;font-size:14px">Opłata za dojazd</h3>
+                <p style="margin:0;color:var(--muted);font-size:12px">0–5 km = 10 zł; 5–10 km = 20 zł; 10–15 km = 30 zł; dalej co 5 km +10 zł. Dystans obliczany w linii prostej z Biskupic Wielkopolskich po wskazaniu lokalizacji na mapie.</p>
               </div>
 
-              <div style="background:var(--card);padding:12px;border-radius:10px;">
-                <h3 style="margin:0 0 6px 0;">Czynniki i stałe dopłaty</h3>
-                <ul style="margin:6px 0 0 16px;color:var(--muted);font-size:13px">
+              <div style="background:var(--card);padding:10px;border-radius:10px;">
+                <h3 style="margin:0 0 6px 0;font-size:14px">Czynniki i stałe dopłaty</h3>
+                <ul style="margin:6px 0 0 14px;color:var(--muted);font-size:12px">
                   <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong>.</li>
                   <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong>.</li>
                   <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie).</li>
@@ -227,13 +227,13 @@
               </div>
 
               <div class="calc" id="priceCalc">
-                <h3 style="margin-top:0;">Kalkulator orientacyjnej ceny</h3>
+                <h3 style="margin-top:0;font-size:14px">Kalkulator orientacyjnej ceny</h3>
 
                 <div class="calc-grid" style="margin-top:8px">
                   <div class="calc-row">
                     <label>Wskaż miejsce zlecenia na mapie</label>
                     <div id="map" class="map-box" aria-label="Mapa do wyboru lokalizacji"></div>
-                    <div class="muted" style="margin-top:8px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic Wielkopolskich zostanie obliczony automatycznie.</div>
+                    <div class="muted" style="margin-top:6px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic Wielkopolskich zostanie obliczony automatycznie.</div>
                   </div>
 
                   <div style="display:flex;flex-direction:column;gap:8px">
@@ -265,9 +265,9 @@
                     <div class="calc-row">
                       <label>Opcje dodatkowe</label>
                       <div style="display:flex;gap:8px;flex-wrap:wrap">
-                        <label style="font-weight:700"><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
-                        <label style="font-weight:700"><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
-                        <label style="font-weight:700"><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
+                        <label style="font-weight:700;font-size:13px"><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
+                        <label style="font-weight:700;font-size:13px"><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
+                        <label style="font-weight:700;font-size:13px"><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
                       </div>
                     </div>
 
@@ -290,8 +290,8 @@
           </section>
 
           <section id="how-we-work" aria-labelledby="how-we-work-title">
-            <h2 id="how-we-work-title" style="font-size:18px;margin:14px 0 8px;">Jak pracujemy</h2>
-            <p class="muted" style="margin:0 0 10px;">Proces w 6 krokach — od zgłoszenia do gotowych materiałów. Płatność: 50% po locie, 50% po dostawie; 14 dni na poprawki.</p>
+            <h2 id="how-we-work-title" style="font-size:16px;margin:12px 0 8px;">Jak pracujemy</h2>
+            <p class="muted" style="margin:0 0 8px;">Proces w 6 krokach — od zgłoszenia do gotowych materiałów. Płatność: 50% po locie, 50% po dostawie; 14 dni na poprawki.</p>
 
             <div class="hw-timeline" aria-hidden="false">
               <article class="hw-step" data-step="1">
@@ -345,12 +345,12 @@
             <label for="description" style="margin-top:10px">Opis zlecenia <span style="color:var(--danger)">*</span></label>
             <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz"></textarea>
 
-            <div style="display:flex;gap:10px;margin-top:10px">
+            <div style="display:flex;gap:8px;margin-top:10px">
               <div style="flex:1">
                 <label for="date">Preferowany termin</label>
                 <input id="date" name="date" type="date">
               </div>
-              <div style="width:140px">
+              <div style="width:120px">
                 <label for="budget">Budżet (PLN)</label>
                 <input id="budget" name="budget" type="text" inputmode="numeric" placeholder="PLN">
               </div>
@@ -366,7 +366,7 @@
             <input type="hidden" id="flights_estimated" name="flights_estimated" value="">
             <input type="hidden" id="extras_list" name="extras_list" value="">
 
-            <div style="margin-top:12px;display:flex;gap:8px">
+            <div style="margin-top:10px;display:flex;gap:8px">
               <button class="btn" type="submit" id="submitBtn">Wyślij zgłoszenie</button>
               <button type="button" class="btn secondary" onclick="document.getElementById('bspForm').reset()">Wyczyść</button>
             </div>
