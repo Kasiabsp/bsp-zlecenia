@@ -137,7 +137,7 @@
     </div>
 
     <aside class="form-card" id="form" aria-labelledby="form-title">
-    <!-- Sekcja: Zgłoś zlecenie -->
+   <!-- Sekcja: Zgłoś zlecenie -->
 <aside class="sidebar">
   <h3 id="form-title">Zgłoś zlecenie</h3>
 
@@ -248,45 +248,33 @@
   </div>
 </section>
 
-<h2 id="services-heading">Usługi</h2>
-<div class="services">
-  <article class="card">
-    <h3>Inspekcje dachów</h3>
-    <p>Dokumentacja zdjęciowa i wideo trudno dostępnych miejsc bez stawiania rusztowań.</p>
-  </article>
-  <article class="card">
-    <h3>Zdjęcia nieruchomości</h3>
-    <p>Materiały marketingowe dla biur nieruchomości, inwestorów i właścicieli obiektów.</p>
-  </article>
-  <article class="card">
-    <h3>Mapowanie terenu</h3>
-    <p>Przegląd działek i terenów inwestycyjnych przed rozpoczęciem prac projektowych.</p>
-  </article>
-</div>
-  <section aria-labelledby="model-heading">
-    <h2 id="model-heading">Podgląd modelu 3D</h2>
-    <div class="model-wrapper">
-      <model-viewer
-        src="assets/model.glb"
-        alt="Model 3D drona"
-        camera-controls
-        auto-rotate
-        ar
-        loading="lazy">
-      </model-viewer>
-    </div>
-  </section>
+<!-- Podgląd modelu 3D -->
+<section aria-labelledby="model-heading">
+  <h2 id="model-heading">Podgląd modelu 3D</h2>
+  <div class="model-wrapper">
+    <model-viewer
+      src="assets/model.glb"
+      alt="Model 3D drona"
+      camera-controls
+      auto-rotate
+      ar
+      loading="lazy">
+    </model-viewer>
+  </div>
+</section>
 
-  <section aria-labelledby="gallery-heading">
-    <h2 id="gallery-heading">Galeria realizacji</h2>
-    <div class="gallery">
-      <img src="assets/gallery1.jpg" alt="Zdjęcie realizacji 1" />
-      <img src="assets/gallery2.jpg" alt="Zdjęcie realizacji 2" />
-      <img src="assets/gallery3.jpg" alt="Zdjęcie realizacji 3" />
-    </div>
-  </section>
+<!-- Galeria -->
+<section aria-labelledby="gallery-heading">
+  <h2 id="gallery-heading">Galeria realizacji</h2>
+  <div class="gallery">
+    <img src="assets/gallery1.jpg" alt="Zdjęcie realizacji 1" />
+    <img src="assets/gallery2.jpg" alt="Zdjęcie realizacji 2" />
+    <img src="assets/gallery3.jpg" alt="Zdjęcie realizacji 3" />
+  </div>
+</section>
 
-  <section aria-labelledby="pricing-heading">
+<!-- Cennik -->
+<section aria-labelledby="pricing-heading">
   <h2 id="pricing-heading">Orientacyjny cennik</h2>
 
   <p style="color:var(--accent); font-weight:700; margin-top:6px; margin-bottom:12px;">
@@ -294,8 +282,6 @@
   </p>
 
   <div class="pricing">
-
-    <!-- INSPEKCJA DACHU -->
     <div class="price" role="region" aria-label="Inspekcja dachu — cena">
       <h3 style="margin:0 0 8px 0;">Inspekcja dachu</h3>
       <p style="margin:6px 0; color:var(--muted); font-size:14px;">
@@ -307,7 +293,6 @@
       </p>
     </div>
 
-    <!-- PAKIET ZDJĘĆ NIERUCHOMOŚCI -->
     <div class="price" role="region" aria-label="Pakiet zdjęć nieruchomości — cena">
       <h3 style="margin:0 0 8px 0;">Pakiet zdjęć nieruchomości</h3>
       <p style="margin:6px 0; color:var(--muted); font-size:14px;">
@@ -319,7 +304,6 @@
       </p>
     </div>
 
-    <!-- MAPOWANIE I DOKUMENTACJA TERENU -->
     <div class="price" role="region" aria-label="Mapowanie i dokumentacja terenu — cena">
       <h3 style="margin:0 0 8px 0;">Mapowanie i dokumentacja terenu</h3>
       <p style="margin:6px 0; color:var(--muted); font-size:14px;">
@@ -330,27 +314,32 @@
         Zależnie od powierzchni i zakresu prac; zapytaj o ofertę startową.
       </p>
     </div>
-
   </div>
 </section>
 
-  <section id="contact" aria-labelledby="contact-heading">
-    <h2 id="contact-heading">Kontakt</h2>
-    <div class="card">
-      <p><strong>E-mail:</strong> jakubsoperatorbsp@gmail.comr</p>
-      <p><strong>Obszar działania:</strong> Pobiedziska i okolice</p>
-      <p><a href="bsp-zlecenia-main/rodo.html">Polityka prywatności</a></p>
-    </div>
-  </section>
+<!-- Kontakt -->
+<section id="contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading">Kontakt</h2>
+  <div class="card">
+    <p><strong>E-mail:</strong> jakubsoperatorbsp@gmail.com</p>
+    <p><strong>Obszar działania:</strong> Pobiedziska i okolice</p>
+    <p><a href="bsp-zlecenia-main/rodo.html">Polityka prywatności</a></p>
+  </div>
+</section>
 
-  <footer>
-    © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
-  </footer>
-</div>
+<footer>
+  © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
+</footer>
 
 <div id="terms-consent-root"></div>
 
 <script>
+  // Ustaw aktualny rok w stopce
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script>
+  // Ładowanie banneru regulaminu (jeśli masz plik terms-consent.html)
   fetch('terms-consent.html')
     .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
     .then(html => {
@@ -368,7 +357,6 @@
         document.body.appendChild(ns);
       });
 
-      // obsługa przycisku "Akceptuj"
       const acceptBtn = root.querySelector('#terms-accept');
       const banner = root.querySelector('#terms-banner');
 
