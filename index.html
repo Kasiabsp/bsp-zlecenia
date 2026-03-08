@@ -19,7 +19,7 @@
       --success:#0a7a2a;
       --danger:#b91c1c;
       --radius:12px;
-      --max-width:700px; /* szerokość strony dopasowana do węższego layoutu */
+      --max-width:700px;
       --header-h:72px;
       --shadow: 0 8px 30px rgba(15,23,42,0.06);
       --mono: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -169,26 +169,26 @@
             <h2>Przykładowe modele 3D</h2>
             <div class="models-grid" role="list">
               <article class="model-card" role="listitem">
-                <h4>8.03.2026</h4>
-                <model-viewer src="assets/8.03.2026.glb" alt="Model 8.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
+                <h4>Budowa — inspekcja 08.03.2026</h4>
+                <model-viewer src="assets/8.03.2026.glb" alt="Model Budowa 08.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
                 <p class="muted">
-                  Fotogrametryczny model 3D częściowo zrujnowanego budynku murowanego z płaskim dachem betonowym. Wysoka szczegółowość tekstur cegły i betonu, widoczne ściany wewnętrzne i układ pomieszczeń. Idealny do analiz technicznych, dokumentacji stanu oraz planowania prac remontowych.
+                  Fotogrametryczny model 3D placu budowy z widoczną strukturą murową i elementami konstrukcyjnymi. Wysoka rozdzielczość tekstur oraz precyzyjna siatka geometryczna umożliwiają pomiary powierzchni i kubatury, kontrolę postępu prac oraz przygotowanie rzetelnych kosztorysów i dokumentacji wykonawczej.
                 </p>
                 <div style="display:flex;gap:8px">
-                  <button class="btn" data-src="assets/8.03.2026.glb" data-title="8.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
-                  <button class="btn secondary" onclick="selectModel('8.03.2026')">Poproś o wycenę</button>
+                  <button class="btn" data-src="assets/8.03.2026.glb" data-title="Budowa — 08.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
+                  <button class="btn secondary" onclick="selectModel('Budowa — 08.03.2026')">Poproś o wycenę</button>
                 </div>
               </article>
 
               <article class="model-card" role="listitem">
-                <h4>7.03.2026</h4>
-                <model-viewer src="assets/7.03.2026.glb" alt="Model 7.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
+                <h4>Urbex — inspekcja 07.03.2026</h4>
+                <model-viewer src="assets/7.03.2026.glb" alt="Model Urbex 07.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
                 <p class="muted">
-                  Model 3D opuszczonego budynku z widocznymi uszkodzeniami elewacji, graffiti i roślinnością na dachu. Dokładne odwzorowanie struktury ścian i otoczenia umożliwia ocenę stanu technicznego, przygotowanie kosztorysów oraz monitoring zmian w czasie.
+                  Dokumentacyjny model 3D obiektu opuszczonego z widocznymi uszkodzeniami elewacji, graffiti i roślinnością dachową. Model dostarcza szczegółowych danych do oceny stanu technicznego, planowania zabezpieczeń oraz archiwizacji historycznej obiektu w kontekście konserwacji i analiz ryzyka.
                 </p>
                 <div style="display:flex;gap:8px">
-                  <button class="btn" data-src="assets/7.03.2026.glb" data-title="7.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
-                  <button class="btn secondary" onclick="selectModel('7.03.2026')">Poproś o wycenę</button>
+                  <button class="btn" data-src="assets/7.03.2026.glb" data-title="Urbex — 07.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
+                  <button class="btn secondary" onclick="selectModel('Urbex — 07.03.2026')">Poproś o wycenę</button>
                 </div>
               </article>
 
@@ -200,7 +200,7 @@
                 </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/model.glb" data-title="Model hydrotechniczny" onclick="openModelModal(this)">Otwórz podgląd</button>
-                  <button class="btn secondary" onclick="selectModel('model')">Poproś o wycenę</button>
+                  <button class="btn secondary" onclick="selectModel('Model hydrotechniczny')">Poproś o wycenę</button>
                 </div>
               </article>
             </div>
