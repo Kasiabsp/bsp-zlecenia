@@ -2,56 +2,310 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>Panel admin — BSP</title>
+  <title>BSP Zlecenia — Strona główna</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="BSP Zlecenia — usługi dronowe, mapowanie, inspekcje i modele 3D. Aktualności, kontakt i formularz zgłoszeniowy.">
   <style>
-    body{font-family:system-ui,Arial;padding:28px;background:#f6f7fb}
-    .card{max-width:900px;margin:20px auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 8px 30px rgba(15,23,42,0.06)}
-    h2{margin-top:0}
-    textarea{width:100%;min-height:120px;padding:10px;border-radius:8px;border:1px solid #e6e9ee}
-    button{padding:10px 14px;border-radius:8px;border:none;background:#0b5ed7;color:#fff;font-weight:700;cursor:pointer}
-    .meta{color:#6b7280;font-size:13px;margin-top:10px}
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --muted:#475569;
+      --accent:#0b5ed7;
+      --accent-2:#0f62fe;
+      --radius:12px;
+      --max-width:1100px;
+      --shadow: 0 10px 30px rgba(15,23,42,0.06);
+      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      font-family:var(--font);
+      background:linear-gradient(180deg,var(--bg),#eef2ff 900px);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding-top:1cm;
+      padding-left:20px;
+      padding-right:20px;
+      padding-bottom:28px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+    }
+    @media (max-width:920px){ .grid{grid-template-columns:1fr} }
+
+    .main{padding:28px}
+    .aside{
+      background:linear-gradient(180deg,#fbfdff,#f7fbff);
+      padding:22px;
+      border-left:1px solid rgba(15,23,42,0.03);
+    }
+
+    header.site{display:flex;gap:14px;align-items:center;margin-bottom:8px}
+    .logo{width:64px;height:64px;border-radius:12px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;box-shadow:0 8px 24px rgba(11,18,32,0.08)}
+    h1{margin:0;font-size:22px}
+    .tagline{color:var(--muted);font-size:13px;margin-top:6px}
+
+    section{margin-top:18px}
+    h2{margin:0 0 8px;font-size:16px}
+    p{margin:8px 0;color:var(--muted);line-height:1.45}
+
+    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;color:#fff;background:var(--accent-2);box-shadow:0 8px 20px rgba(11,94,255,0.08)}
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(11,94,215,0.08);font-weight:700}
+    .small{font-size:13px;color:var(--muted)}
+
+    .news-list{display:grid;gap:10px;margin-top:8px}
+    .news-item{background:#fff;border-radius:10px;padding:12px;border:1px solid rgba(15,23,42,0.03);box-shadow:0 6px 18px rgba(11,18,32,0.03)}
+    .news-item time{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+    .news-item p{margin:0;color:#0f172a}
+
+    form{margin-top:12px;display:grid;gap:10px}
+    label{font-weight:700;font-size:13px}
+    input[type="text"], input[type="email"], textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ee;font-size:14px}
+    textarea{min-height:100px;resize:vertical}
+    .form-row{display:flex;gap:10px}
+    .form-row .col{flex:1}
+
+    footer.site{padding:14px 28px;background:#fbfdff;border-top:1px solid rgba(15,23,42,0.03);font-size:13px;color:var(--muted)}
+    .meta{font-size:13px;color:var(--muted);margin-top:8px}
+    .hint{font-size:13px;color:#6b7280}
+
+    /* Modal login */
+    #loginModal{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:9999}
+    #loginModal .box{background:#fff;padding:18px;border-radius:10px;max-width:380px;width:92%}
+    #loginModal input{width:100%;padding:8px;border-radius:6px;border:1px solid #e6e9ee;margin-top:6px}
+    #loginModal button{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
   </style>
 </head>
 <body>
-  <div class="card" id="card">
-    <h2>Panel administracyjny</h2>
-    <p id="who"></p>
+  <div class="container" role="main" aria-labelledby="siteTitle">
+    <div class="grid">
+      <div class="main">
+        <header class="site" aria-hidden="false">
+          <div class="logo" aria-hidden="true">BSP</div>
+          <div>
+            <h1 id="siteTitle">BSP Zlecenia</h1>
+            <div class="tagline">Usługi dronowe: mapowanie, inspekcje, modele 3D — szybkie i profesjonalne.</div>
+          </div>
+        </header>
 
-    <div id="formArea">
-      <label for="announcement">Nowy komunikat (krótko)</label>
-      <textarea id="announcement" placeholder="Np. 15.03.2026 — przerwa techniczna, usługi ograniczone..."></textarea>
-      <div style="margin-top:10px;display:flex;gap:8px">
-        <button id="publish">Zapisz (symulacja)</button>
-        <button id="logout" style="background:#eef2ff;color:#0b5ed7;border:1px solid rgba(11,94,215,0.06)">Wyloguj</button>
+        <section aria-labelledby="aktualnosciTitle">
+          <h2 id="aktualnosciTitle">Aktualności</h2>
+          <p class="small">Poniżej znajdują się najnowsze komunikaty operacyjne. Pełne archiwum dostępne jest w sekcji Aktualności.</p>
+
+          <div class="news-list" id="newsList" aria-live="polite">
+            <article class="news-item">
+              <time datetime="2026-03-15">15.03.2026</time>
+              <p>Przerwa techniczna — usługi modelowania 3D ograniczone z powodu prac serwisowych. Zlecenia przyjęte na ten dzień zostaną przełożone.</p>
+            </article>
+            <article class="news-item">
+              <time datetime="2026-03-22">22.03.2026</time>
+              <p>Zmiana godzin realizacji terenowych — prace terenowe możliwe w godzinach 10:00–16:00 z powodu wydarzenia lokalnego.</p>
+            </article>
+          </div>
+
+          <div class="actions" role="navigation" aria-label="Szybkie linki">
+            <a class="btn" href="#aktualnosci" id="jumpToNews">Przejdź do Aktualności</a>
+            <a class="btn ghost" href="./aboutinfo.html" id="aboutLink">Informacje i aktualności (skrót)</a>
+          </div>
+        </section>
+
+        <section aria-labelledby="contactTitle">
+          <h2 id="contactTitle">Formularz zgłoszeniowy</h2>
+          <p class="hint">Wypełnij formularz, aby zgłosić zlecenie. Możesz użyć przycisku „Wstaw przykładowe dane” do szybkiego testu.</p>
+
+          <form id="requestForm" action="#" method="post" onsubmit="return false;">
+            <div class="form-row">
+              <div class="col">
+                <label for="name">Imię i nazwisko</label>
+                <input id="name" name="name" type="text" placeholder="Jan Kowalski" />
+              </div>
+              <div class="col">
+                <label for="email">E‑mail</label>
+                <input id="email" name="email" type="email" placeholder="kontakt@firma.pl" />
+              </div>
+            </div>
+
+            <label for="service">Usługa</label>
+            <select id="service" name="service">
+              <option value="mapowanie">Mapowanie lotnicze</option>
+              <option value="inspekcja">Inspekcja obiektów</option>
+              <option value="model3d">Modelowanie 3D</option>
+              <option value="inne">Inne</option>
+            </select>
+
+            <label for="details">Szczegóły zlecenia</label>
+            <textarea id="details" name="details" placeholder="Krótki opis, lokalizacja, preferowany termin"></textarea>
+
+            <div style="display:flex;gap:10px;align-items:center;margin-top:6px">
+              <button class="btn" id="submitBtn" type="button">Wyślij zgłoszenie</button>
+              <button class="btn ghost" id="fillBtn" type="button">Wstaw przykładowe dane</button>
+              <div class="meta" style="margin-left:auto">Odpowiedź w ciągu 24–48h</div>
+            </div>
+          </form>
+        </section>
       </div>
-      <p class="meta">Uwaga: to jest panel symulacyjny. W produkcji zapisz komunikaty do bazy lub CMS.</p>
+
+      <aside class="aside" aria-labelledby="asideTitle">
+        <h3 id="asideTitle">Szybkie informacje</h3>
+        <p class="small">Panel administracyjny jest prywatny — dostęp mają tylko uprawnione osoby. Komunikaty publikowane są co tydzień; pilne ogłoszenia pojawiają się natychmiast.</p>
+
+        <div style="height:12px"></div>
+
+        <div style="background:#fff;border-radius:10px;padding:12px;border:1px solid rgba(15,23,42,0.03);box-shadow:0 6px 18px rgba(11,18,32,0.03)">
+          <strong>Kontakt</strong>
+          <p class="small">Formularz zgłoszeniowy powyżej; pełne dane kontaktowe dostępne na stronie głównej.</p>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div style="background:#fff;border-radius:10px;padding:12px;border:1px solid rgba(15,23,42,0.03);box-shadow:0 6px 18px rgba(11,18,32,0.03);margin-top:8px">
+          <strong>Harmonogram</strong>
+          <p class="small">Aktualizacje: co tydzień; pilne komunikaty: natychmiast.</p>
+        </div>
+
+        <!-- Widoczny przycisk logowania -->
+        <div style="margin-top:14px">
+          <a href="/admin-login.html" class="btn" style="display:inline-block;padding:10px 12px;border-radius:8px;color:#fff;text-decoration:none;font-weight:700">Panel administracyjny — logowanie</a>
+        </div>
+
+        <!-- Alternatywnie: przycisk otwierający modal logowania -->
+        <div style="margin-top:10px">
+          <button id="openModalBtn" class="btn ghost" style="padding:9px 12px;border-radius:8px">Zaloguj (modal)</button>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="site" role="contentinfo">
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:var(--max-width);margin:0 auto">
+        <div>© <span id="year"></span> BSP Zlecenia</div>
+        <div class="small">Polityka prywatności dostępna na stronie głównej</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- LOGIN MODAL (klientowa symulacja) -->
+  <div id="loginModal" aria-hidden="true">
+    <div class="box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <h3 id="loginTitle" style="margin-top:0">Logowanie administratora</h3>
+      <label for="modalLogin" style="font-weight:700">Login</label>
+      <input id="modalLogin" type="text" value="KASIA_rst" />
+      <label for="modalPass" style="font-weight:700;margin-top:8px">Hasło</label>
+      <input id="modalPass" type="password" />
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="modalSubmit" style="background:#0b5ed7;color:#fff;padding:8px 12px;border-radius:8px;border:none;font-weight:700">Zaloguj</button>
+        <button id="modalClose" style="background:#eef2ff;color:#0b5ed7;padding:8px 12px;border-radius:8px;border:none">Anuluj</button>
+      </div>
+      <div id="modalMsg" style="margin-top:10px;color:#b91c1c"></div>
     </div>
   </div>
 
   <script>
-    // Prosta ochrona klienta (symulacja)
-    if (sessionStorage.getItem('bsp_admin') !== '1') {
-      location.href = '/admin-login.html';
-    } else {
-      document.getElementById('who').textContent = 'Zalogowany: KASIA_rst (symulacja)';
-    }
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    document.getElementById('logout').addEventListener('click', function(){
-      sessionStorage.removeItem('bsp_admin');
-      location.href = '/admin-login.html';
+    // Formularz: wstawianie przykładowych danych
+    document.getElementById('fillBtn').addEventListener('click', function(){
+      document.getElementById('name').value = 'Jan Kowalski';
+      document.getElementById('email').value = 'jan.kowalski@example.com';
+      document.getElementById('service').value = 'mapowanie';
+      document.getElementById('details').value = 'Prośba o mapowanie terenu 2 ha, preferowany termin: 2026-04-10.';
+      this.textContent = 'Dane wstawione';
+      setTimeout(()=> this.textContent = 'Wstaw przykładowe dane', 1500);
     });
 
-    document.getElementById('publish').addEventListener('click', function(){
-      const text = document.getElementById('announcement').value.trim();
-      if (!text) { alert('Wpisz treść komunikatu.'); return; }
-      // Symulacja: zapis do localStorage jako archiwum komunikatów
-      const key = 'bsp_announcements';
+    // Symulacja wysyłki formularza (localStorage)
+    document.getElementById('submitBtn').addEventListener('click', function(){
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const details = document.getElementById('details').value.trim();
+      if (!name || !email || !details) { alert('Uzupełnij pola: Imię, E‑mail i Szczegóły zlecenia.'); return; }
+      const key = 'bsp_requests';
       const existing = JSON.parse(localStorage.getItem(key) || '[]');
-      existing.unshift({ text: text, date: new Date().toISOString() });
+      existing.unshift({ name, email, service: document.getElementById('service').value, details, date: new Date().toISOString() });
       localStorage.setItem(key, JSON.stringify(existing));
-      alert('Komunikat zapisany lokalnie (symulacja). Aby opublikować, wdroż backend lub CMS.');
-      document.getElementById('announcement').value = '';
+      alert('Zgłoszenie zapisane lokalnie (symulacja).');
+      document.getElementById('requestForm').reset();
+    });
+
+    // Załaduj komunikaty zapisane lokalnie przez symulacyjny panel admin
+    (function loadLocalAnnouncements(){
+      try {
+        const key = 'bsp_announcements';
+        const items = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!items.length) return;
+        const list = document.getElementById('newsList');
+        items.forEach(item => {
+          const art = document.createElement('article');
+          art.className = 'news-item';
+          const t = document.createElement('time');
+          t.dateTime = item.date;
+          t.textContent = new Date(item.date).toLocaleDateString();
+          const p = document.createElement('p');
+          p.textContent = item.text;
+          art.appendChild(t);
+          art.appendChild(p);
+          list.insertBefore(art, list.firstChild);
+        });
+      } catch (e) { console.warn('Błąd ładowania lokalnych komunikatów', e); }
+    })();
+
+    // Smooth scroll do aktualności
+    document.getElementById('jumpToNews').addEventListener('click', function(e){
+      e.preventDefault();
+      const el = document.getElementById('aktualnosciTitle');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', '#aktualnosci');
+    });
+
+    // --- Modal login logic (client-side simulation) ---
+    const storedLoginB64 = 'S0FTQ0lfcnN0';        // Base64("KASIA_rst")
+    const storedPassB64  = 'cnN0a2FzaWEuMjAyMA=='; // Base64("rstkasia.2020")
+
+    const loginModal = document.getElementById('loginModal');
+    const openModalBtn = document.getElementById('openModalBtn');
+    const modalClose = document.getElementById('modalClose');
+    const modalSubmit = document.getElementById('modalSubmit');
+
+    function openLoginModal(){ loginModal.style.display = 'flex'; loginModal.setAttribute('aria-hidden','false'); document.getElementById('modalLogin').focus(); }
+    function closeLoginModal(){ loginModal.style.display = 'none'; loginModal.setAttribute('aria-hidden','true'); document.getElementById('modalMsg').textContent=''; }
+
+    openModalBtn.addEventListener('click', openLoginModal);
+    modalClose.addEventListener('click', closeLoginModal);
+
+    modalSubmit.addEventListener('click', function(){
+      const l = (document.getElementById('modalLogin').value||'').trim();
+      const p = (document.getElementById('modalPass').value||'');
+      if (!l || !p) { document.getElementById('modalMsg').textContent = 'Wypełnij login i hasło.'; return; }
+      if (btoa(l) === storedLoginB64 && btoa(p) === storedPassB64) {
+        sessionStorage.setItem('bsp_admin','1');
+        document.getElementById('modalMsg').style.color = '#0a7a2a';
+        document.getElementById('modalMsg').textContent = 'Zalogowano. Przekierowanie...';
+        setTimeout(()=> location.href = '/admin/index.html', 600);
+      } else {
+        document.getElementById('modalMsg').style.color = '#b91c1c';
+        document.getElementById('modalMsg').textContent = 'Nieprawidłowy login lub hasło.';
+      }
+    });
+
+    // Zamknięcie modalu przy ESC
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && loginModal.style.display === 'flex') closeLoginModal();
     });
   </script>
 </body>
