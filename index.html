@@ -169,6 +169,43 @@
   <div class="status" id="status" role="status" aria-live="polite"></div>
 
 </form>
+      <script>
+  const form = document.getElementById("bspForm");
+  const status = document.getElementById("status");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      contact: form.contact.value,
+      description: form.description.value,
+      date: form.date.value,
+      budget: form.budget.value
+    };
+
+    status.innerText = "Wysyłanie...";
+
+    try {
+      const res = await fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const json = await res.json();
+
+      if (json.status === "ok") {
+        status.innerText = "Wysłano!";
+        form.reset();
+      } else {
+        status.innerText = "Błąd wysyłania.";
+      }
+    } catch (err) {
+      status.innerText = "Błąd połączenia.";
+      console.error(err);
+    }
+  });
+</script>
     <h2 id="services-heading">Usługi</h2>
     <div class="services">
       <article class="card">
