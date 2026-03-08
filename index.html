@@ -277,10 +277,9 @@
         <div style="background:var(--card); padding:14px; border-radius:10px;">
           <h3 style="margin:0 0 8px 0;">Nowa formuła kosztu pracy</h3>
           <p style="margin:0; color:var(--muted);">
-            **Koszt pracy** obliczany według formuły (zgodnie z Twoją prośbą):<br>
             <strong>Koszt pracy = (bazowy + opłata za hektar) + (dojazd × szacowane loty) + (koszt za model × liczba modeli)</strong>
           </p>
-          <p style="margin-top:8px; color:var(--muted);">Dla przejrzystości: opłata za hektar jest podana jako stawka za 1 ha (przeliczone z dotychczasowych stawek), loty są estymowane na podstawie powierzchni, a dojazd użyty w części lotów to opłata w zł obliczona co 5 km.</p>
+          <p style="margin-top:8px; color:var(--muted);">Opłata za hektar ustawiona na <strong>100 zł / ha</strong> (zmiana zgodnie z prośbą).</p>
         </div>
 
         <div class="calc" id="priceCalc">
@@ -310,10 +309,10 @@
           <div class="calc-row">
             <label for="service-type">Rodzaj usługi</label>
             <select id="service-type" class="calc-small">
-              <option value="mapping">Mapowanie (+150 zł / ar → przeliczone na 1 ha)</option>
-              <option value="photos">Zdjęcia (+50 zł / ar → przeliczone na 1 ha)</option>
-              <option value="video">Filmy (+100 zł / ar → przeliczone na 1 ha)</option>
-              <option value="model3d">Modele 3D (+200 zł / ar → przeliczone na 1 ha)</option>
+              <option value="mapping">Mapowanie</option>
+              <option value="photos">Zdjęcia</option>
+              <option value="video">Filmy</option>
+              <option value="model3d">Modele 3D</option>
             </select>
           </div>
 
@@ -363,25 +362,16 @@
   </script>
 
   <script>
-    // podstawowe stawki podane wcześniej (per ar) — przeliczamy na per hektar (1 ha = 100 ar)
-    const perArPrices = { mapping:150, photos:50, video:100, model3d:200 };
-    // per hectare = per ar * 100
-    const perHaPrices = {
-      mapping: perArPrices.mapping * 100,
-      photos: perArPrices.photos * 100,
-      video: perArPrices.video * 100,
-      model3d: perArPrices.model3d * 100
-    };
-    // bazowy koszt pracy za lot (używany jako "bazowy" w formule)
+    // ustawienie: opłata za hektar ustawiona na 100 zł zgodnie z prośbą
+    const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
+    // bazowy koszt pracy (pozostawione jako pomocnicze wartości)
     const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
-
     // punkt referencyjny: Biskupice Wielkopolskie
     const latRef = 52.4550;
     const lngRef = 17.3090;
   </script>
 
   <script>
-    // Formularz: wysyłka do /api/send (bez zmian)
     (function(){
       const form = document.getElementById("bspForm");
       const status = document.getElementById("status");
@@ -526,7 +516,7 @@
   </script>
 
   <script>
-    // Mapa, estymacja lotów i kalkulator z nową formułą (hektar, loty jako dojazd × loty)
+    // Mapa, estymacja lotów i kalkulator z nową formułą (hektar = 100 zł)
     (function(){
       const mapEl = document.getElementById('map');
       const map = L.map(mapEl).setView([latRef, lngRef], 12);
@@ -599,30 +589,30 @@
         const models = Math.max(1, Number(modelsEl.value) || 1);
         const service = serviceEl.value;
 
-        // per-hectare price (user wanted hektar zamiast ar)
-        const perHa = perHaPrices[service] || 0; // np. perAr*100
+        // per-hectare price set to 100 zł as requested
+        const perHa = perHaPrices[service] || 100;
         const basePerFlight = unitCosts[service] || 100;
 
         const flights = estimateFlights(area);
         const travel = travelFee(distance);
 
-        // **Nowa formuła zgodnie z Twoją prośbą**
         // loty_value = dojazd (travel) × szacowane loty
         const loty_value = travel * flights;
 
-        // koszt za model (używamy stawki per hektar jako koszt jednostkowy modelu)
-        const modelUnitCost = perHa; // stawka za 1 ha (przeliczona)
-        const modelsCost = modelUnitCost * models;
+        // koszt za modele: stawka per ha × liczba modeli × powierzchnia (ha)
+        // interpretacja: koszt za model = perHa * area (ha)
+        const modelUnitCost = perHa * area; // koszt za 1 model uwzględniający powierzchnię
+        const modelsCost = Math.round(modelUnitCost * models);
 
-        // Koszt pracy = (bazowy + opłata za hektar) + (dojazd × loty) + (koszt za model × liczba modeli)
-        const workCost = (basePerFlight + perHa) + loty_value + modelsCost;
+        // Koszt pracy = (bazowy + opłata za hektar) + (dojazd × loty) + (koszt za modele × liczba modeli)
+        const workCost = Math.round((basePerFlight + perHa) + loty_value + modelsCost);
 
         let extras = 0;
         if (linesEl.checked) extras += linesFee;
         if (treesEl.checked) extras += treesFee;
         if (rawEl.checked) extras += 100;
 
-        // subtotal: dodajemy też opłatę za dojazd (travel) — zostawiamy, żeby klient widział standardową opłatę
+        // subtotal includes travel so client sees standard travel fee separately
         const subtotal = travel + workCost + extras;
 
         const days = daysUntil(dateEl.value);
@@ -638,7 +628,7 @@
           `Loty wartość (dojazd × loty): ${travel} zł × ${flights} = ${loty_value} zł`,
           `Koszt bazowy za lot: ${basePerFlight} zł`,
           `Opłata za hektar (stawka): ${perHa} zł / ha`,
-          `Koszt za modele (stawka za ha × liczba modeli): ${perHa} zł × ${models} = ${modelsCost} zł`,
+          `Koszt za modele (per ha × powierzchnia × liczba modeli): ${perHa} × ${area} × ${models} = ${modelsCost} zł`,
           `Koszt pracy = (bazowy + opłata za hektar) + (dojazd × loty) + (koszt za modele) = ${workCost} zł`,
           `Dodatki: linie ${linesEl.checked ? linesFee : 0} zł, drzewa ${treesEl.checked ? treesFee : 0} zł, RAW ${rawEl.checked ? 100 : 0} zł => ${extras} zł`,
           `Dopłata za pilny termin (jeśli dotyczy): ${rush} zł`,
