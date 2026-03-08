@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <title>Informacje BSP Zlecenia</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Szybkie przekierowanie do sekcji Aktualności na stronie BSP Zlecenia.">
-  <meta http-equiv="refresh" content="0;url=./index.html#aktualnosci">
+  <meta name="description" content="Skrót do sekcji Aktualności na stronie BSP Zlecenia. Możliwość anulowania przekierowania.">
   <style>
     :root{
       --bg:#f6f7fb;
@@ -59,6 +58,9 @@
       border:1px solid rgba(11,94,215,0.06);
     }
     .note{margin-top:12px;font-size:13px;color:#6b7280}
+    .countdown{font-weight:700;color:var(--accent);margin-left:6px}
+    .controls{display:flex;gap:8px;margin-top:12px;align-items:center}
+    .link-cancel{background:#fff;border:1px solid #e6e9ee;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--muted)}
     @media (max-width:420px){
       .box{padding:14px}
       .btn{padding:8px 10px;font-size:13px}
@@ -68,15 +70,21 @@
 <body>
   <div class="box" role="status" aria-live="polite">
     <h1>Informacje i aktualności</h1>
-    <p>Ta strona jest skrótem prowadzącym do sekcji <strong>Aktualności</strong> na stronie głównej BSP Zlecenia. Jeśli przeglądarka obsługuje meta-refresh, nastąpi natychmiastowe przekierowanie.</p>
-    <p>Możesz też skorzystać z poniższych przycisków, aby przejść ręcznie.</p>
+    <p>Ta strona prowadzi do sekcji <strong>Aktualności</strong> na stronie głównej BSP Zlecenia. Za <span id="count" class="countdown">5</span> sekund nastąpi przekierowanie.</p>
+
+    <p>Możesz przejść ręcznie lub anulować przekierowanie, jeśli chcesz zostać na tej stronie.</p>
 
     <div class="actions" role="navigation" aria-label="Szybkie linki">
-      <a class="btn" href="./index.html#aktualnosci" rel="noopener">Przejdź do Aktualności</a>
-      <a class="btn secondary" href="./index.html" rel="noopener">Strona główna</a>
+      <a class="btn" id="goNow" href="./index.html#aktualnosci" rel="noopener">Przejdź do Aktualności</a>
+      <a class="btn secondary" id="goHome" href="./index.html" rel="noopener">Strona główna</a>
     </div>
 
-    <p class="note">Jeżeli przekierowanie nie zadziała automatycznie, kliknij jeden z powyższych linków. Można tu też dodać krótki opis firmy, kontakt lub FAQ — napisz, co chcesz umieścić.</p>
+    <div class="controls" aria-hidden="false">
+      <button id="cancelBtn" class="link-cancel" aria-pressed="false">Anuluj przekierowanie</button>
+      <div style="margin-left:auto;color:var(--muted);font-size:13px">Automatyczne przekierowanie za <span id="countText">5</span>s</div>
+    </div>
+
+    <p class="note">Jeśli przekierowanie nie nastąpi, użyj przycisku „Przejdź do Aktualności”. Można tu też dodać opis firmy, kontakt lub FAQ — napisz, co chcesz umieścić.</p>
   </div>
 
   <noscript>
@@ -87,16 +95,57 @@
 
   <script>
     (function(){
+      var delay = 5; // sekundy do przekierowania
       var target = './index.html#aktualnosci';
-      // Replace history entry to avoid creating an extra back entry
-      try {
-        history.replaceState({}, '', target);
-        // Use replace to avoid adding a new history entry
-        location.replace(target);
-      } catch (e) {
-        // Fallback: set href
-        location.href = target;
+      var countEl = document.getElementById('count');
+      var countText = document.getElementById('countText');
+      var cancelBtn = document.getElementById('cancelBtn');
+      var goNow = document.getElementById('goNow');
+
+      var cancelled = false;
+      var timerId = null;
+
+      function updateDisplay() {
+        if (countEl) countEl.textContent = delay;
+        if (countText) countText.textContent = delay;
       }
+
+      function startTimer() {
+        updateDisplay();
+        timerId = setInterval(function(){
+          delay -= 1;
+          updateDisplay();
+          if (delay <= 0) {
+            clearInterval(timerId);
+            if (!cancelled) {
+              // replaceState + replace to avoid extra history entry
+              try {
+                history.replaceState({}, '', target);
+                location.replace(target);
+              } catch (e) {
+                location.href = target;
+              }
+            }
+          }
+        }, 1000);
+      }
+
+      cancelBtn.addEventListener('click', function(){
+        cancelled = true;
+        if (timerId) clearInterval(timerId);
+        cancelBtn.textContent = 'Przekierowanie anulowane';
+        cancelBtn.setAttribute('aria-pressed','true');
+        cancelBtn.disabled = true;
+      });
+
+      // Jeśli użytk kliknie "Przejdź do Aktualności" ręcznie, zatrzymaj timer
+      goNow.addEventListener('click', function(){
+        cancelled = true;
+        if (timerId) clearInterval(timerId);
+      });
+
+      // Uruchom odliczanie
+      startTimer();
     })();
   </script>
 </body>
