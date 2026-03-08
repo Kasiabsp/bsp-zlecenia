@@ -176,7 +176,12 @@
                 </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/8.03.2026.glb" data-title="Budowa — 08.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
-                  <button class="btn secondary" onclick="selectModel('Budowa — 08.03.2026')">Poproś o wycenę</button>
+                  <button class="btn secondary"
+                          data-name="Budowa — 08.03.2026"
+                          data-area="0.50"
+                          data-models="1"
+                          data-service="model3d"
+                          onclick="requestQuote(this)">Poproś o wycenę</button>
                 </div>
               </article>
 
@@ -188,7 +193,12 @@
                 </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/7.03.2026.glb" data-title="Urbex — 07.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
-                  <button class="btn secondary" onclick="selectModel('Urbex — 07.03.2026')">Poproś o wycenę</button>
+                  <button class="btn secondary"
+                          data-name="Urbex — 07.03.2026"
+                          data-area="0.20"
+                          data-models="1"
+                          data-service="model3d"
+                          onclick="requestQuote(this)">Poproś o wycenę</button>
                 </div>
               </article>
 
@@ -200,7 +210,12 @@
                 </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/model.glb" data-title="Model hydrotechniczny" onclick="openModelModal(this)">Otwórz podgląd</button>
-                  <button class="btn secondary" onclick="selectModel('Model hydrotechniczny')">Poproś o wycenę</button>
+                  <button class="btn secondary"
+                          data-name="Model hydrotechniczny"
+                          data-area="0.30"
+                          data-models="1"
+                          data-service="model3d"
+                          onclick="requestQuote(this)">Poproś o wycenę</button>
                 </div>
               </article>
             </div>
@@ -424,6 +439,39 @@
       document.getElementById('selected_model').value = name;
       document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
       setTimeout(()=> document.getElementById('description').focus(), 600);
+    }
+
+    // New: requestQuote transfers model data into calculator and scrolls to it
+    function requestQuote(btn){
+      if (!btn) return;
+      const name = btn.dataset.name || '';
+      const area = Number(btn.dataset.area) || 0.1;
+      const models = Math.max(1, Number(btn.dataset.models) || 1);
+      const service = btn.dataset.service || 'model3d';
+
+      // set hidden selected model
+      const sel = document.getElementById('selected_model');
+      if (sel) sel.value = name;
+
+      // populate calculator fields
+      const areaEl = document.getElementById('calc-area');
+      const modelsEl = document.getElementById('calc-models');
+      const serviceEl = document.getElementById('service-type');
+
+      if (areaEl) areaEl.value = area;
+      if (modelsEl) modelsEl.value = models;
+      if (serviceEl) serviceEl.value = service;
+
+      // scroll to calculator and compute
+      const calc = document.getElementById('priceCalc');
+      if (calc) calc.scrollIntoView({behavior:'smooth', block:'start'});
+
+      // small delay to allow scroll, then compute and focus Oblicz
+      setTimeout(()=> {
+        if (typeof compute === 'function') compute();
+        const run = document.getElementById('calc-run');
+        if (run) run.focus();
+      }, 450);
     }
   </script>
 
