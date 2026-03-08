@@ -19,7 +19,7 @@
     <h2 id="t">Logowanie administratora</h2>
 
     <label for="login">Login</label>
-    <input id="login" type="text" autocomplete="username" value="KASIA_rst" />
+    <input id="login" type="text" autocomplete="username" value="" />
 
     <label for="pass">Hasło</label>
     <input id="pass" type="password" autocomplete="current-password" />
@@ -30,29 +30,28 @@
   </main>
 
   <script>
-    // Base64 obfuskacja (tylko do testów)
-    // login: KASIA_rst
-    // hasło: rstkasia.2020
-    const storedLoginB64 = 'S0FTQ0lfcnN0';
-    const storedPassB64  = 'cnN0a2FzaWEuMjAyMA==';
+    // Testowe wartości (tylko do testów)
+    const storedLoginB64 = 'S0FTQ0lfcnN0';        // "KASIA_rst"
+    const storedPassB64  = 'cnN0a2FzaWEuMjAyMA=='; // "rstkasia.2020"
 
-    function toB64(str){ try { return btoa(str); } catch(e){ return ''; } }
     function showMsg(text, ok=false){ const el=document.getElementById('msg'); el.textContent=text; el.style.color = ok ? '#0a7a2a' : '#b91c1c'; }
 
     document.getElementById('btn').addEventListener('click', function(){
       const login = (document.getElementById('login').value || '').trim();
       const pass  = (document.getElementById('pass').value || '');
       if (!login || !pass) { showMsg('Wypełnij login i hasło.'); return; }
-
-      const lB = toB64(login);
-      const pB = toB64(pass);
-
-      if (lB === storedLoginB64 && pB === storedPassB64) {
-        showMsg('Zalogowano. Przekierowanie...', true);
-        sessionStorage.setItem('bsp_admin', '1');
-        setTimeout(()=> location.href = '/admin/index.html', 600);
-      } else {
-        showMsg('Nieprawidłowy login lub hasło.');
+      try {
+        const lB = btoa(login);
+        const pB = btoa(pass);
+        if (lB === storedLoginB64 && pB === storedPassB64) {
+          showMsg('Zalogowano. Przekierowanie...', true);
+          sessionStorage.setItem('bsp_admin', '1');
+          setTimeout(()=> location.href = 'admin/index.html', 500);
+        } else {
+          showMsg('Nieprawidłowy login lub hasło.');
+        }
+      } catch (e) {
+        showMsg('Błąd kodowania danych.');
       }
     });
 
