@@ -6,8 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <script type="module" src="scripts/model-viewer.js"></script>
-
-  <!-- Leaflet (mapa) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -268,7 +266,7 @@
 
     <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:18px;">
       <h2 id="pricing-rules-heading">Zasady wyceny</h2>
-      <p style="color:var(--muted); margin-top:6px;">Opłata za dojazd + koszt pracy (loty × koszt/lot + opłata za ar) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.</p>
+      <p style="color:var(--muted); margin-top:6px;">Opłata za dojazd + koszt pracy (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.</p>
 
       <div style="display:grid; gap:12px; margin-top:12px;">
         <div style="background:var(--card); padding:14px; border-radius:10px;">
@@ -277,12 +275,12 @@
         </div>
 
         <div style="background:var(--card); padding:14px; border-radius:10px;">
-          <h3 style="margin:0 0 8px 0;">Czynniki i stałe dopłaty</h3>
-          <ul style="margin:0; padding-left:18px; color:var(--muted);">
-            <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong>.</li>
-            <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong>.</li>
-            <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie).</li>
-          </ul>
+          <h3 style="margin:0 0 8px 0;">Nowa formuła kosztu pracy</h3>
+          <p style="margin:0; color:var(--muted);">
+            **Koszt pracy** obliczany według formuły (zgodnie z Twoją prośbą):<br>
+            <strong>Koszt pracy = (bazowy + opłata za hektar) + (dojazd × szacowane loty) + (koszt za model × liczba modeli)</strong>
+          </p>
+          <p style="margin-top:8px; color:var(--muted);">Dla przejrzystości: opłata za hektar jest podana jako stawka za 1 ha (przeliczone z dotychczasowych stawek), loty są estymowane na podstawie powierzchni, a dojazd użyty w części lotów to opłata w zł obliczona co 5 km.</p>
         </div>
 
         <div class="calc" id="priceCalc">
@@ -312,10 +310,10 @@
           <div class="calc-row">
             <label for="service-type">Rodzaj usługi</label>
             <select id="service-type" class="calc-small">
-              <option value="mapping">Mapowanie (+150 zł / ar)</option>
-              <option value="photos">Zdjęcia (+50 zł / ar)</option>
-              <option value="video">Filmy (+100 zł / ar)</option>
-              <option value="model3d">Modele 3D (+200 zł / ar)</option>
+              <option value="mapping">Mapowanie (+150 zł / ar → przeliczone na 1 ha)</option>
+              <option value="photos">Zdjęcia (+50 zł / ar → przeliczone na 1 ha)</option>
+              <option value="video">Filmy (+100 zł / ar → przeliczone na 1 ha)</option>
+              <option value="model3d">Modele 3D (+200 zł / ar → przeliczone na 1 ha)</option>
             </select>
           </div>
 
@@ -365,16 +363,26 @@
   </script>
 
   <script>
-    // ceny per ar i domyślne koszty
+    // podstawowe stawki podane wcześniej (per ar) — przeliczamy na per hektar (1 ha = 100 ar)
     const perArPrices = { mapping:150, photos:50, video:100, model3d:200 };
+    // per hectare = per ar * 100
+    const perHaPrices = {
+      mapping: perArPrices.mapping * 100,
+      photos: perArPrices.photos * 100,
+      video: perArPrices.video * 100,
+      model3d: perArPrices.model3d * 100
+    };
+    // bazowy koszt pracy za lot (używany jako "bazowy" w formule)
     const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
-    const latRef = 52.4550; // Biskupice Wielkopolskie
+
+    // punkt referencyjny: Biskupice Wielkopolskie
+    const latRef = 52.4550;
     const lngRef = 17.3090;
   </script>
 
   <script>
+    // Formularz: wysyłka do /api/send (bez zmian)
     (function(){
-      // Formularz wysyłka
       const form = document.getElementById("bspForm");
       const status = document.getElementById("status");
       const submitBtn = document.getElementById("submitBtn");
@@ -518,7 +526,7 @@
   </script>
 
   <script>
-    // Mapa, estymacja lotów i kalkulator (live podliczenie)
+    // Mapa, estymacja lotów i kalkulator z nową formułą (hektar, loty jako dojazd × loty)
     (function(){
       const mapEl = document.getElementById('map');
       const map = L.map(mapEl).setView([latRef, lngRef], 12);
@@ -569,7 +577,6 @@
       const resultEl = document.getElementById('calc-result');
       const toFormBtn = document.getElementById('calc-to-form');
 
-      // fixed fees shown but not editable
       const linesFee = 50;
       const treesFee = 50;
 
@@ -591,25 +598,32 @@
         const area = Math.max(0, Number(areaEl.value) || 0.1);
         const models = Math.max(1, Number(modelsEl.value) || 1);
         const service = serviceEl.value;
-        const perAr = perArPrices[service] || 0;
+
+        // per-hectare price (user wanted hektar zamiast ar)
+        const perHa = perHaPrices[service] || 0; // np. perAr*100
         const basePerFlight = unitCosts[service] || 100;
 
-        const areaAr = Math.round(area * 100);
         const flights = estimateFlights(area);
         const travel = travelFee(distance);
 
-        // area charge per model (perAr * ar)
-        const areaChargePerModel = perAr * areaAr;
+        // **Nowa formuła zgodnie z Twoją prośbą**
+        // loty_value = dojazd (travel) × szacowane loty
+        const loty_value = travel * flights;
 
-        // work cost: (basePerFlight + areaChargePerModel) * flights * models
-        const workCost = (basePerFlight + areaChargePerModel) * flights * models;
+        // koszt za model (używamy stawki per hektar jako koszt jednostkowy modelu)
+        const modelUnitCost = perHa; // stawka za 1 ha (przeliczona)
+        const modelsCost = modelUnitCost * models;
+
+        // Koszt pracy = (bazowy + opłata za hektar) + (dojazd × loty) + (koszt za model × liczba modeli)
+        const workCost = (basePerFlight + perHa) + loty_value + modelsCost;
 
         let extras = 0;
         if (linesEl.checked) extras += linesFee;
         if (treesEl.checked) extras += treesFee;
         if (rawEl.checked) extras += 100;
 
-        let subtotal = travel + workCost + extras;
+        // subtotal: dodajemy też opłatę za dojazd (travel) — zostawiamy, żeby klient widział standardową opłatę
+        const subtotal = travel + workCost + extras;
 
         const days = daysUntil(dateEl.value);
         let rush = 0;
@@ -619,11 +633,13 @@
 
         const breakdownLines = [
           `Odległość: ${distance} km (opłata dojazd: ${travel} zł)`,
-          `Powierzchnia: ${area} ha (${areaAr} ar)`,
+          `Powierzchnia: ${area} ha`,
           `Szacowane loty: ${flights}`,
+          `Loty wartość (dojazd × loty): ${travel} zł × ${flights} = ${loty_value} zł`,
           `Koszt bazowy za lot: ${basePerFlight} zł`,
-          `Opłata za ar (usługa ${service}): ${perAr} zł × ${areaAr} ar = ${areaChargePerModel} zł (na model)`,
-          `Koszt pracy ( (bazowy + opłata za ar) × loty × modele ) = ${workCost} zł`,
+          `Opłata za hektar (stawka): ${perHa} zł / ha`,
+          `Koszt za modele (stawka za ha × liczba modeli): ${perHa} zł × ${models} = ${modelsCost} zł`,
+          `Koszt pracy = (bazowy + opłata za hektar) + (dojazd × loty) + (koszt za modele) = ${workCost} zł`,
           `Dodatki: linie ${linesEl.checked ? linesFee : 0} zł, drzewa ${treesEl.checked ? treesFee : 0} zł, RAW ${rawEl.checked ? 100 : 0} zł => ${extras} zł`,
           `Dopłata za pilny termin (jeśli dotyczy): ${rush} zł`,
           `—`,
@@ -632,7 +648,7 @@
 
         resultEl.textContent = breakdownLines.join('\n\n');
         resultEl.style.display = 'block';
-        resultEl._computed = { total, travel, flights, workCost, extras, rush, area, areaAr, models, service };
+        resultEl._computed = { total, travel, flights, workCost, extras, rush, area, models, service };
       }
 
       // live compute on input changes
