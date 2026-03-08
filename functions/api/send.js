@@ -23,10 +23,7 @@ Budżet: ${data.budget || "brak"}
     personalizations: [
       {
         to: [{ email: emailTo }],
-        // TU BYŁ PROBLEM – musi być obiekt, nie tablica
-        reply_to: {
-          email: data.contact || emailTo
-        }
+        reply_to: { email: data.contact || emailTo }
       }
     ],
     from: {
@@ -50,7 +47,6 @@ Budżet: ${data.budget || "brak"}
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("MailChannels error:", errorText);
     return new Response(
       JSON.stringify({ status: "error", details: errorText }),
       {
