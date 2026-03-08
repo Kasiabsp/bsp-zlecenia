@@ -2,13 +2,10 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>BSP Zlecenia — Kalkulator i modele 3D</title>
+  <title>BSP Zlecenia — kalkulator, modele 3D i proces</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- model-viewer (lokalny loader lub CDN) -->
   <script type="module" src="scripts/model-viewer.js"></script>
-
-  <!-- Leaflet (mapa) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -24,7 +21,6 @@
       --radius:12px;
       --max-width:1200px;
       --header-h:76px;
-      --glass: rgba(255,255,255,0.7);
       --shadow: 0 8px 30px rgba(15,23,42,0.06);
       --mono: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
@@ -39,10 +35,8 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.45;
-      -webkit-text-size-adjust:100%;
     }
 
-    /* Header */
     header{
       position:fixed;
       inset:0 0 auto 0;
@@ -52,7 +46,7 @@
       justify-content:space-between;
       gap:20px;
       padding:12px 24px;
-      background:rgba(255,255,255,0.9);
+      background:rgba(255,255,255,0.92);
       backdrop-filter: blur(6px);
       box-shadow:0 2px 8px rgba(2,6,23,0.06);
       z-index:1200;
@@ -69,22 +63,14 @@
     nav a{color:#0f172a;text-decoration:none;font-weight:600}
     .cta{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700;box-shadow:0 8px 20px rgba(11,94,255,0.12)}
 
-    /* Layout */
     .container{max-width:var(--max-width);margin:calc(var(--header-h) + 28px) auto;padding:28px}
     .grid-2{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start}
     @media (max-width:980px){ .grid-2{grid-template-columns:1fr} }
 
-    /* Hero */
-    .hero{
-      display:flex;gap:20px;align-items:stretch;
-    }
-    .hero-card{
-      background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);flex:1;
-    }
+    .hero-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);flex:1;}
     .hero-card h1{margin:0 0 8px;font-size:22px}
     .hero-card p{margin:0;color:var(--muted)}
 
-    /* Form */
     .form-card{background:linear-gradient(180deg,#fff,#fbfdff);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
     label{display:block;font-weight:700;margin-bottom:6px;color:#0f172a;font-size:13px}
     input[type="text"], input[type="date"], textarea, select, input[type="number"]{
@@ -95,26 +81,22 @@
     .btn.secondary{background:#eef2ff;color:var(--accent-2);font-weight:700}
     .status{margin-top:10px;font-weight:700;color:var(--muted);font-size:14px;text-align:center}
 
-    /* Services */
     .services{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
     @media (max-width:900px){ .services{grid-template-columns:repeat(2,1fr)} }
     .service{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
     .service h3{margin:0 0 6px;font-size:15px}
     .service p{margin:0;color:var(--muted);font-size:13px}
 
-    /* Models */
     .models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:18px}
     .model-card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 8px 24px rgba(11,18,32,0.04);display:flex;flex-direction:column;gap:10px}
     .model-card h4{margin:0;font-size:15px}
     .model-card p{margin:0;color:var(--muted);font-size:13px}
     model-viewer{width:100%;height:220px;border-radius:8px;background:#f7f9fc;display:block;overflow:hidden}
 
-    /* Modal */
     #modelModal{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:1400}
     #modelModal .inner{width:92%;max-width:1100px;background:#fff;border-radius:12px;overflow:hidden}
     #modelModal .body{padding:14px}
 
-    /* Calculator */
     .calc{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow);margin-top:12px}
     .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media (max-width:720px){ .calc-grid{grid-template-columns:1fr} }
@@ -124,6 +106,14 @@
 
     .breakdown{background:#fbfdff;border-radius:10px;padding:12px;margin-top:12px;color:#0f172a;font-size:14px;white-space:pre-line}
     .muted{color:var(--muted);font-size:13px}
+
+    /* How we work */
+    #how-we-work { margin-top:18px; }
+    .hw-timeline { display:flex; gap:12px; align-items:stretch; overflow:auto; padding-bottom:8px; }
+    .hw-step { min-width:220px; background:var(--card); border-radius:10px; padding:14px; box-shadow:0 8px 20px rgba(11,18,32,0.04); }
+    .hw-step h3 { margin:0 0 6px; font-size:15px; }
+    .hw-step p { margin:0 0 10px; color:var(--muted); font-size:14px; }
+    .btn-small { background:#0b5ed7; color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:700; }
 
     footer{margin-top:28px;padding:18px 0;text-align:center;color:var(--muted);font-size:13px}
   </style>
@@ -210,106 +200,142 @@
               </article>
             </div>
           </section>
-        </section>
 
-        <!-- Pricing rules & calculator -->
-        <section id="pricing-rules" style="margin-top:18px">
-          <div class="card calc" style="padding:18px">
-            <h2 style="margin:0 0 8px">Zasady wyceny</h2>
-            <p class="muted" style="margin:0 0 12px">
-              Struktura: <strong>opłata za dojazd</strong> + <strong>koszt pracy</strong> (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.
-            </p>
+          <!-- Pricing rules & calculator -->
+          <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:18px;">
+            <h2 id="pricing-rules-heading">Zasady wyceny</h2>
+            <p class="muted" style="margin-top:6px;">Opłata za dojazd + koszt pracy (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.</p>
 
-            <div style="display:grid;grid-template-columns:1fr 320px;gap:12px">
-              <div>
-                <div style="background:var(--card);padding:12px;border-radius:10px;margin-bottom:10px">
-                  <strong>Opłata za dojazd</strong>
-                  <div class="muted" style="margin-top:6px">0–5 km = 10 zł; 5–10 km = 20 zł; 10–15 km = 30 zł; dalej co 5 km +10 zł. Dystans liczony w linii prostej z Biskupic Wielkopolskich.</div>
-                </div>
-
-                <div style="background:var(--card);padding:12px;border-radius:10px">
-                  <strong>Nowa formuła kosztu pracy</strong>
-                  <div class="muted" style="margin-top:6px">
-                    <em>Koszt pracy = (bazowy + opłata za hektar) + (dojazd × szacowane loty) + (koszt za model × liczba modeli)</em><br>
-                    Opłata za hektar: <strong>100 zł / ha</strong>.
-                  </div>
-                </div>
+            <div style="display:grid;gap:12px;margin-top:12px">
+              <div style="background:var(--card);padding:14px;border-radius:10px;">
+                <h3 style="margin:0 0 8px 0;">Opłata za dojazd</h3>
+                <p style="margin:0;color:var(--muted);">0–5 km = 10 zł; 5–10 km = 20 zł; 10–15 km = 30 zł; dalej co 5 km +10 zł. Dystans obliczany w linii prostej z Biskupic Wielkopolskich po wskazaniu lokalizacji na mapie.</p>
               </div>
 
-              <div>
-                <div style="background:var(--card);padding:12px;border-radius:10px">
-                  <strong>Stałe dopłaty</strong>
-                  <ul style="margin:8px 0 0 16px;color:var(--muted)">
-                    <li>Linie energetyczne — 50 zł</li>
-                    <li>Drzewa / trudny dostęp — 50 zł</li>
-                    <li>Pliki RAW — 100 zł</li>
-                  </ul>
-                </div>
+              <div style="background:var(--card);padding:14px;border-radius:10px;">
+                <h3 style="margin:0 0 8px 0;">Czynniki i stałe dopłaty</h3>
+                <ul style="margin:0;padding-left:18px;color:var(--muted)">
+                  <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong>.</li>
+                  <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong>.</li>
+                  <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie).</li>
+                </ul>
               </div>
-            </div>
 
-            <!-- Kalkulator -->
-            <div class="calc" style="margin-top:14px">
-              <h3 style="margin:0 0 8px">Kalkulator orientacyjnej ceny</h3>
+              <div class="calc" id="priceCalc">
+                <h3 style="margin-top:0;">Kalkulator orientacyjnej ceny</h3>
 
-              <div class="calc-grid" style="margin-top:10px">
-                <div class="calc-row">
-                  <label>Wskaż miejsce zlecenia na mapie</label>
-                  <div id="map" class="map-box" aria-label="Mapa do wyboru lokalizacji"></div>
-                  <div class="muted" style="margin-top:8px">Kliknij na mapie, aby ustawić lokalizację; dystans zostanie obliczony automatycznie.</div>
-                </div>
-
-                <div style="display:flex;flex-direction:column;gap:10px">
+                <div class="calc-grid" style="margin-top:10px">
                   <div class="calc-row">
-                    <label for="calc-distance">Odległość (km)</label>
-                    <input id="calc-distance" class="small" type="number" readonly value="0">
+                    <label>Wskaż miejsce zlecenia na mapie</label>
+                    <div id="map" class="map-box" aria-label="Mapa do wyboru lokalizacji"></div>
+                    <div class="muted" style="margin-top:8px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic Wielkopolskich zostanie obliczony automatycznie.</div>
                   </div>
 
-                  <div class="calc-row">
-                    <label for="calc-area">Powierzchnia (ha)</label>
-                    <input id="calc-area" type="number" min="0" step="0.01" value="0.10" class="small">
-                  </div>
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <div class="calc-row">
+                      <label for="calc-distance">Odległość (km)</label>
+                      <input id="calc-distance" class="small" type="number" readonly value="0">
+                    </div>
 
-                  <div class="calc-row">
-                    <label for="calc-models">Liczba modeli</label>
-                    <input id="calc-models" type="number" min="1" step="1" value="1" class="small">
-                  </div>
+                    <div class="calc-row">
+                      <label for="calc-area">Powierzchnia (ha)</label>
+                      <input id="calc-area" type="number" min="0" step="0.01" value="0.10" class="small">
+                    </div>
 
-                  <div class="calc-row">
-                    <label for="service-type">Rodzaj usługi</label>
-                    <select id="service-type" class="small">
-                      <option value="mapping">Mapowanie</option>
-                      <option value="photos">Zdjęcia</option>
-                      <option value="video">Filmy</option>
-                      <option value="model3d">Modele 3D</option>
-                    </select>
-                  </div>
+                    <div class="calc-row">
+                      <label for="calc-models">Liczba modeli</label>
+                      <input id="calc-models" type="number" min="1" step="1" value="1" class="small">
+                    </div>
 
-                  <div class="calc-row">
-                    <label>Opcje dodatkowe</label>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap">
-                      <label style="font-weight:700"><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
-                      <label style="font-weight:700"><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
-                      <label style="font-weight:700"><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
+                    <div class="calc-row">
+                      <label for="service-type">Rodzaj usługi</label>
+                      <select id="service-type" class="small">
+                        <option value="mapping">Mapowanie</option>
+                        <option value="photos">Zdjęcia</option>
+                        <option value="video">Filmy</option>
+                        <option value="model3d">Modele 3D</option>
+                      </select>
+                    </div>
+
+                    <div class="calc-row">
+                      <label>Opcje dodatkowe</label>
+                      <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <label style="font-weight:700"><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
+                        <label style="font-weight:700"><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
+                        <label style="font-weight:700"><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
+                      </div>
+                    </div>
+
+                    <div class="calc-row">
+                      <label for="calc-date">Preferowany termin</label>
+                      <input id="calc-date" type="date" class="small">
+                    </div>
+
+                    <div style="display:flex;gap:8px;margin-top:6px">
+                      <button id="calc-run" class="btn">Oblicz</button>
+                      <button id="calc-reset" class="btn secondary">Reset</button>
+                      <button id="calc-to-form" class="btn" style="background:#0b5ed7">Wstaw do formularza</button>
                     </div>
                   </div>
-
-                  <div class="calc-row">
-                    <label for="calc-date">Preferowany termin</label>
-                    <input id="calc-date" type="date" class="small">
-                  </div>
-
-                  <div style="display:flex;gap:8px;margin-top:6px">
-                    <button id="calc-run" class="btn">Oblicz</button>
-                    <button id="calc-reset" class="btn secondary">Reset</button>
-                    <button id="calc-to-form" class="btn" style="background:#0b5ed7">Wstaw do formularza</button>
-                  </div>
                 </div>
-              </div>
 
-              <div id="calc-result" class="breakdown" style="display:none;margin-top:12px"></div>
+                <div id="calc-result" class="breakdown" aria-live="polite" style="display:none"></div>
+              </div>
             </div>
-          </div>
+          </section>
+
+          <!-- How we work section inserted here -->
+          <section id="how-we-work" aria-labelledby="how-we-work-title">
+            <h2 id="how-we-work-title" style="font-size:20px;margin:18px 0 8px;">Jak pracujemy</h2>
+            <p class="muted" style="margin:0 0 12px;">Proces w 6 krokach — od zgłoszenia do gotowych materiałów. Płatność: 50% po locie, 50% po dostawie; 14 dni na poprawki.</p>
+
+            <div class="hw-timeline" aria-hidden="false">
+              <article class="hw-step" data-step="1">
+                <h3>1. Odebranie zlecenia</h3>
+                <p>Przyjmujemy zgłoszenie przez formularz lub telefon; potwierdzamy podstawowe dane i termin w ciągu 24 godzin.</p>
+                <button class="btn-small hw-use" data-area="0.10" data-models="1">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="2">
+                <h3>2. Analiza terenu</h3>
+                <p>Sprawdzamy mapę, ryzyka (linie, drzewa) i szacujemy liczbę lotów.</p>
+                <button class="btn-small hw-use" data-area="0.50" data-models="1">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="3">
+                <h3>3. Kontakt z zleceniodawcą</h3>
+                <p>Potwierdzamy szczegóły, dostęp do posesji i ewentualne wymagania.</p>
+                <button class="btn-small hw-use" data-area="0.20" data-models="1">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="4">
+                <h3>4. Realizacja zlecenia</h3>
+                <p>Przyjazd na miejsce, zabezpieczenie strefy i wykonanie zaplanowanych lotów. 1 lot = 1 dzień pracy w terenie.</p>
+                <button class="btn-small hw-use" data-area="1.00" data-models="1">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="5">
+                <h3>5. Przygotowanie materiałów</h3>
+                <p>Selekcja i obróbka: JPG, RAW, model GLB; czas obróbki zwykle 2–7 dni roboczych.</p>
+                <button class="btn-small hw-use" data-area="0.50" data-models="1">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="6">
+                <h3>6. Dostarczenie materiałów</h3>
+                <p>Pliki udostępniamy w chmurze; druga połowa płatności po dostawie. 14 dni na zgłoszenie poprawek.</p>
+                <button class="btn-small hw-use" data-area="0.10" data-models="1">Użyj w wycenie</button>
+              </article>
+            </div>
+
+            <div style="margin-top:12px;background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(11,18,32,0.04);">
+              <strong style="display:block;margin-bottom:6px;">Szybkie informacje</strong>
+              <div class="muted" style="font-size:14px;line-height:1.5;">
+                - Formaty dostawy: <strong>JPG, RAW, GLB</strong>.<br>
+                - Płatność: <strong>50% po locie</strong>, <strong>50% po dostawie</strong> materiałów.<br>
+                - Poprawki: <strong>14 dni</strong> od dostawy; poprawki drobne w cenie.
+              </div>
+            </div>
+          </section>
         </section>
       </div>
 
@@ -373,20 +399,22 @@
   </div>
 
   <script>
-    // Utility: format PLN
-    const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 
-    // Pricing settings
-    // per-hectare price set to 100 zł / ha (user requested)
+  <script>
+    // Pricing settings: per-hectare price set to 100 zł / ha
     const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
-    // base cost (helper)
     const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
-
-    // Reference point: Biskupice Wielkopolskie
     const latRef = 52.4550;
     const lngRef = 17.3090;
 
-    // Model modal
+    // Utility: format PLN
+    const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
+  </script>
+
+  <script>
+    // Model modal functions
     function openModelModal(btn){
       const src = btn.getAttribute('data-src');
       const title = btn.getAttribute('data-title') || '';
@@ -410,15 +438,15 @@
       document.getElementById('modalBody').innerHTML = '';
       document.getElementById('modelModal').setAttribute('aria-hidden','true');
     }
-
-    // Select model quick action
     function selectModel(name){
       document.getElementById('selected_model').value = name;
       document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
       setTimeout(()=> document.getElementById('description').focus(), 600);
     }
+  </script>
 
-    // Form submission (keeps existing /api/send)
+  <script>
+    // Form submission
     (function(){
       const form = document.getElementById('bspForm');
       const status = document.getElementById('status');
@@ -480,8 +508,10 @@
         }
       });
     })();
+  </script>
 
-    // Map + calculator logic
+  <script>
+    // Map + calculator + how-we-work integration
     (function(){
       const map = L.map('map').setView([latRef, lngRef], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
@@ -550,19 +580,14 @@
         const models = Math.max(1, Number(modelsEl.value) || 1);
         const service = serviceEl.value;
 
-        const perHa = perHaPrices[service] || 100; // 100 zł/ha
+        const perHa = perHaPrices[service] || 100;
         const basePerFlight = unitCosts[service] || 100;
 
         const flights = estimateFlights(area);
         const travel = travelFee(distance);
 
-        // loty_value = dojazd (travel) × szacowane loty
         const loty_value = travel * flights;
-
-        // koszt za modele: perHa * area (ha) * liczba modeli
         const modelsCost = Math.round(perHa * area * models);
-
-        // Koszt pracy = (bazowy + opłata za hektar) + (dojazd × loty) + (koszt za modele)
         const workCost = Math.round((basePerFlight + perHa) + loty_value + modelsCost);
 
         let extras = 0;
@@ -598,7 +623,6 @@
         resultEl._computed = { total, travel, flights, workCost, extras, rush, area, models, service };
       }
 
-      // events
       [areaEl, modelsEl, serviceEl, linesEl, treesEl, rawEl, dateEl].forEach(el => {
         el.addEventListener('change', compute);
         el.addEventListener('input', compute);
@@ -648,12 +672,46 @@
         }, 600);
       });
 
+      // How-we-work buttons: fill calculator and scroll
+      document.querySelectorAll('.hw-use').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const area = Number(this.dataset.area) || 0.1;
+          const models = Math.max(1, Number(this.dataset.models) || 1);
+          const areaElLocal = document.getElementById('calc-area');
+          const modelsElLocal = document.getElementById('calc-models');
+          if (areaElLocal) areaElLocal.value = area;
+          if (modelsElLocal) modelsElLocal.value = models;
+          const calc = document.getElementById('priceCalc');
+          if (calc) calc.scrollIntoView({behavior:'smooth', block:'start'});
+          setTimeout(()=> { if (typeof compute === 'function') compute(); const run = document.getElementById('calc-run'); if (run) run.focus(); }, 500);
+        });
+      });
+
       // initial compute
       compute();
     })();
-
-    // set year
-    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+
+  <script>
+    // Load optional terms banner if present
+    fetch('terms-consent.html')
+      .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
+      .then(html => {
+        const root = document.getElementById('terms-consent-root');
+        if (!root) return;
+        root.innerHTML = html;
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
+        const scripts = temp.querySelectorAll('script');
+        scripts.forEach(s => {
+          const ns = document.createElement('script');
+          if (s.src) ns.src = s.src; else ns.textContent = s.textContent;
+          document.body.appendChild(ns);
+        });
+      })
+      .catch(() => {});
+  </script>
+
+  <div id="terms-consent-root" style="display:none;"></div>
 </body>
 </html>
