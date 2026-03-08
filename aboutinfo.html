@@ -12,8 +12,6 @@
       --muted:#6b7280;
       --accent:#0b5ed7;
       --accent-2:#0f62fe;
-      --success:#0a7a2a;
-      --danger:#b91c1c;
       --radius:12px;
       --max-width:900px;
       --shadow: 0 10px 30px rgba(15,23,42,0.06);
@@ -28,209 +26,98 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       padding-top:1cm; /* 1 cm wolnej przestrzeni od góry */
-      padding-left:28px;
-      padding-right:28px;
+      padding-left:20px;
+      padding-right:20px;
       padding-bottom:28px;
       display:flex;
       align-items:flex-start;
       justify-content:center;
     }
 
-    .wrap{
+    .box{
       width:100%;
       max-width:var(--max-width);
       background:var(--card);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       overflow:hidden;
-      display:grid;
-      grid-template-columns:1fr 360px;
-    }
-    @media (max-width:920px){ .wrap{grid-template-columns:1fr} }
-
-    .main{
-      padding:28px;
-    }
-    .aside{
-      background:linear-gradient(180deg,#fbfdff,#f7fbff);
       padding:22px;
-      border-left:1px solid rgba(15,23,42,0.03);
     }
 
-    header.top{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      margin-bottom:8px;
-    }
-    .logo{
-      width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;
-      box-shadow:0 8px 24px rgba(11,18,32,0.08);
-    }
+    header{display:flex;gap:14px;align-items:center;margin-bottom:6px}
+    .logo{width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;box-shadow:0 8px 24px rgba(11,18,32,0.08)}
     h1{margin:0;font-size:20px}
     .subtitle{color:var(--muted);font-size:13px;margin-top:6px}
 
-    section{margin-top:18px}
-    h2{margin:0 0 8px;font-size:16px}
+    h2{margin:18px 0 8px;font-size:16px}
     p{margin:8px 0;color:var(--muted);line-height:1.45}
+    .lead{color:#0f172a;font-weight:700;margin-top:6px}
 
-    .list{display:grid;gap:8px;margin-top:8px}
-    .item{
-      background:#fff;border-radius:10px;padding:12px;border:1px solid rgba(15,23,42,0.03);
-      box-shadow:0 6px 18px rgba(11,18,32,0.03);
-    }
-    .item strong{display:block;color:#0f172a;margin-bottom:6px}
-
-    .cta-row{display:flex;gap:10px;align-items:center;margin-top:14px}
+    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
     .btn{
       display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;color:#fff;background:var(--accent-2);
       box-shadow:0 8px 20px rgba(11,94,255,0.08);
     }
-    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(11,94,215,0.08);font-weight:700}
-    .small{font-size:13px;color:var(--muted)}
+    .btn.secondary{background:#eef2ff;color:var(--accent);border:1px solid rgba(11,94,215,0.06);font-weight:700}
 
-    .meta{font-size:13px;color:var(--muted);margin-top:6px}
+    .note{margin-top:12px;font-size:13px;color:#6b7280}
+    .meta{font-size:13px;color:var(--muted);margin-top:8px}
 
-    /* Aside */
-    .aside h3{margin:0 0 8px;font-size:15px}
-    .aside p{margin:0 0 12px;color:var(--muted)}
-    .aside .panel{
-      background:#fff;border-radius:10px;padding:12px;border:1px solid rgba(15,23,42,0.03);
-      box-shadow:0 6px 18px rgba(11,18,32,0.03);
+    @media (max-width:520px){
+      .box{padding:16px}
+      .logo{width:48px;height:48px;font-size:16px}
+      .btn{padding:9px 12px}
     }
-    .field{margin-bottom:10px}
-    label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}
-    input[type="password"], input[type="text"]{width:100%;padding:9px;border-radius:8px;border:1px solid #e6e9ee}
-    .muted-note{font-size:13px;color:var(--muted);margin-top:8px}
-
-    footer.note{padding:14px 28px;background:#fbfdff;border-top:1px solid rgba(15,23,42,0.03);font-size:13px;color:var(--muted)}
   </style>
 </head>
 <body>
-  <div class="wrap" role="main" aria-labelledby="pageTitle">
-    <div class="main">
-      <header class="top" aria-hidden="false">
-        <div class="logo" aria-hidden="true">BSP</div>
-        <div>
-          <h1 id="pageTitle">Informacje i aktualności</h1>
-          <div class="subtitle">Komunikaty o zmianach w realizacji usług, przerwach i ważne ogłoszenia</div>
-        </div>
-      </header>
+  <main class="box" role="main" aria-labelledby="pageTitle">
+    <header>
+      <div class="logo" aria-hidden="true">BSP</div>
+      <div>
+        <h1 id="pageTitle">Informacje i aktualności</h1>
+        <div class="subtitle">Komunikaty o zmianach w realizacji usług, przerwach i ważne ogłoszenia</div>
+      </div>
+    </header>
 
-      <section aria-labelledby="purposeTitle">
-        <h2 id="purposeTitle">Cel tej strony</h2>
-        <p>Strona zawiera oficjalne komunikaty dotyczące realizacji usług BSP Zlecenia — w tym informacje o przerwach w świadczeniu usług, zmianach terminów, planowanych pracach i innych ważnych zdarzeniach. Treści publikowane są regularnie, a najnowsze komunikaty znajdziesz w sekcji <strong>Aktualności</strong> na stronie głównej.</p>
-      </section>
+    <p class="lead">BSP Zlecenia — dokumentacja i inspekcje dronem. Świadczymy usługi mapowania, inspekcji i tworzenia modeli 3D dla klientów komercyjnych i samorządowych.</p>
 
-      <section aria-labelledby="whatToExpect">
-        <h2 id="whatToExpect">Czego możesz oczekiwać</h2>
-        <div class="list">
-          <div class="item">
-            <strong>Harmonogram publikacji</strong>
-            <div class="small">Aktualizacje będą publikowane co tydzień; pilne komunikaty pojawią się natychmiast.</div>
-          </div>
+    <h2>Aktualności i komunikaty</h2>
+    <p>Na tej stronie publikujemy oficjalne komunikaty dotyczące przerw w realizacji usług, zmian terminów i innych ważnych informacji operacyjnych. Najnowsze komunikaty i archiwum znajdują się w sekcji <strong>Aktualności</strong> na stronie głównej.</p>
 
-          <div class="item">
-            <strong>Zakres komunikatów</strong>
-            <div class="small">Informacje o przerwach w realizacji usług, zmianach terminów, ograniczeniach operacyjnych (np. warunki pogodowe, prace serwisowe) oraz inne ważne ogłoszenia.</div>
-          </div>
+    <h2>Co publikujemy</h2>
+    <p>- Przerwy w realizacji usług i planowane prace serwisowe.<br>- Zmiany godzin i terminów realizacji zleceń.<br>- Komunikaty dotyczące warunków operacyjnych (np. ograniczenia z powodu pogody).<br>- Pilne ogłoszenia wpływające na harmonogramy klientów.</p>
 
-          <div class="item">
-            <strong>Panel administracyjny (prywatny)</strong>
-            <div class="small">Wpisy dodawane są przez uprawnione osoby w prywatnym panelu administracyjnym. Tylko zatwierdzone komunikaty trafiają do sekcji Aktualności.</div>
-          </div>
+    <h2>Harmonogram publikacji</h2>
+    <p>Aktualizacje będą publikowane co tydzień; pilne komunikaty pojawią się natychmiast po zatwierdzeniu przez zespół administracyjny.</p>
 
-          <div class="item">
-            <strong>Transparentność</strong>
-            <div class="small">Każdy komunikat zawiera datę publikacji i krótką notę o zakresie zmian, aby ułatwić planowanie współpracy z nami.</div>
-          </div>
-        </div>
-      </section>
+    <h2>Panel administracyjny</h2>
+    <p>Panel administracyjny jest prywatny i dostępny wyłącznie dla uprawnionych osób. Treści dodawane są przez administratorów i po zatwierdzeniu trafiają do sekcji Aktualności.</p>
 
-      <section aria-labelledby="examples">
-        <h2 id="examples">Przykładowe komunikaty</h2>
-        <div class="list">
-          <div class="item">
-            <strong>Przerwa techniczna — 15.03.2026</strong>
-            <div class="small">W dniu 15.03.2026 usługi modelowania 3D będą ograniczone z powodu prac serwisowych. Zlecenia przyjęte na ten dzień zostaną przełożone.</div>
-          </div>
+    <h2>Kontakt</h2>
+    <p>Formularz kontaktowy i pełne dane kontaktowe dostępne są na stronie głównej. W pilnych sprawach prosimy o wiadomość przez formularz — odpowiadamy zwykle w ciągu 24–48 godzin roboczych.</p>
 
-          <div class="item">
-            <strong>Zmiana godzin pracy — 22.03.2026</strong>
-            <div class="small">W związku z wydarzeniem lokalnym realizacje terenowe będą możliwe tylko w godzinach 10:00–16:00.</div>
-          </div>
-        </div>
-      </section>
+    <h2>Ochrona danych (RODO)</h2>
+    <p>Przetwarzamy dane osobowe wyłącznie w celu realizacji zgłoszeń i kontaktu w sprawie zleceń. Szczegółowa polityka prywatności oraz informacje o prawach osób, których dane dotyczą, dostępne są na stronie głównej.</p>
 
-      <section aria-labelledby="privacy">
-        <h2 id="privacy">Ochrona danych i RODO</h2>
-        <p>Wszystkie dane osobowe przekazywane w formularzach kontaktowych przetwarzane są zgodnie z obowiązującymi przepisami o ochronie danych osobowych. Dane wykorzystywane są wyłącznie do realizacji zleceń i kontaktu w sprawie zgłoszeń. Szczegółowa polityka prywatności dostępna jest na stronie głównej.</p>
-      </section>
-
-      <section aria-labelledby="cta">
-        <h2 id="cta">Przejdź do aktualności</h2>
-        <p>Przycisk poniżej przeniesie Cię bezpośrednio do sekcji Aktualności na stronie głównej, gdzie znajdziesz pełną listę komunikatów i archiwum.</p>
-        <div class="cta-row">
-          <a class="btn" href="./index.html#aktualnosci" id="goNews">Przejdź do Aktualności</a>
-          <a class="btn ghost" href="./index.html" id="goHome">Strona główna</a>
-          <div class="meta">Aktualizacje publikowane co tydzień; panel administracyjny prywatny.</div>
-        </div>
-      </section>
+    <div class="actions" role="navigation" aria-label="Szybkie linki">
+      <a class="btn" href="./index.html#aktualnosci" rel="noopener">Przejdź do Aktualności</a>
+      <a class="btn secondary" href="./index.html" rel="noopener">Strona główna</a>
     </div>
 
-    <aside class="aside" aria-labelledby="asideTitle">
-      <h3 id="asideTitle">Szybkie informacje</h3>
-      <p>Ten panel zawiera krótkie wskazówki i dostęp do prywatnego panelu administracyjnego (tylko dla uprawnionych).</p>
+    <p class="note">Komunikaty publikowane są przez uprawnione osoby; w razie wątpliwości sprawdź datę publikacji przy komunikacie. Nie udostępniamy publicznie linku do panelu administracyjnego.</p>
 
-      <div class="panel" role="region" aria-label="Panel administracyjny">
-        <div class="field">
-          <label for="adminUser">Login (dla adminów)</label>
-          <input id="adminUser" type="text" placeholder="Nazwa użytkownika" aria-label="Login administratora">
-        </div>
-        <div class="field">
-          <label for="adminPass">Hasło</label>
-          <input id="adminPass" type="password" placeholder="Hasło" aria-label="Hasło administratora">
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn" id="adminLogin">Zaloguj</button>
-          <button class="btn ghost" id="adminHelp">Pomoc</button>
-        </div>
-        <div class="muted-note">Panel administracyjny jest prywatny — dostęp mają tylko upoważnione osoby. Wpisy publikowane są raz w tygodniu, z możliwością natychmiastowego ogłoszenia w sytuacjach kryzysowych.</div>
-      </div>
+    <p class="meta">© <span id="year"></span> BSP Zlecenia</p>
+  </main>
 
-      <div style="height:12px"></div>
-
-      <div class="panel">
-        <strong>Kontakt</strong>
-        <p class="small">Szczegóły kontaktowe i formularz zgłoszeniowy dostępne są na stronie głównej.</p>
-      </div>
-    </aside>
-  </div>
-
-  <footer class="note" role="contentinfo">
-    © <span id="year"></span> BSP Zlecenia — oficjalne komunikaty. Treści publikowane przez uprawnione osoby; w razie wątpliwości sprawdź datę publikacji przy komunikacie.
-  </footer>
+  <noscript>
+    <div style="position:fixed;left:0;right:0;bottom:12px;display:flex;justify-content:center">
+      <a href="./index.html#aktualnosci" style="background:#0b5ed7;color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700">Przejdź do Aktualności (JavaScript wyłączony)</a>
+    </div>
+  </noscript>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Prostą obsługę przycisków admin (lokalna symulacja; bez rzeczywistego logowania)
-    document.getElementById('adminLogin').addEventListener('click', function(e){
-      e.preventDefault();
-      const user = document.getElementById('adminUser').value.trim();
-      const pass = document.getElementById('adminPass').value.trim();
-      if (!user || !pass) {
-        alert('Wprowadź login i hasło (panel prywatny).');
-        return;
-      }
-      // Symulacja: przekierowanie do panelu administracyjnego (w rzeczywistej implementacji tu nastąpi walidacja)
-      window.location.href = './admin/index.html';
-    });
-
-    document.getElementById('adminHelp').addEventListener('click', function(e){
-      e.preventDefault();
-      alert('Panel administracyjny jest prywatny. Skontaktuj się z administratorem strony w celu uzyskania dostępu.');
-    });
   </script>
 </body>
 </html>
