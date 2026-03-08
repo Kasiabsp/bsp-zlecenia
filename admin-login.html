@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>Logowanie admin</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Arial;background:#f6f7fb;padding:28px;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+    .card{background:#fff;padding:18px;border-radius:10px;box-shadow:0 8px 30px rgba(15,23,42,0.06);width:360px}
+    label{display:block;font-weight:700;margin:8px 0 6px}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ee}
+    button{margin-top:12px;padding:10px 14px;border-radius:8px;border:none;background:#0b5ed7;color:#fff;font-weight:700;cursor:pointer}
+    .msg{margin-top:10px;color:#b91c1c;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="t">
+    <h2 id="t">Logowanie administratora</h2>
+
+    <label for="login">Login</label>
+    <input id="login" type="text" autocomplete="username" value="KASIA_rst">
+
+    <label for="pass">Hasło</label>
+    <input id="pass" type="password" autocomplete="current-password">
+
+    <button id="btn">Zaloguj</button>
+    <div id="msg" class="msg" role="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    // --- TUTAJ ZMIENIASZ ZAKODOWANE DANE (Base64) ---
+    // login: KASIA_rst
+    // hasło: rstkasia.2020
+    const storedLoginB64 = 'S0FTQ0lfcnN0';        // Base64("KASIA_rst")
+    const storedPassB64  = 'cnN0a2FzaWEuMjAyMA=='; // Base64("rstkasia.2020")
+    // -------------------------------------------------
+
+    function toB64(str){ try { return btoa(str); } catch(e){ return ''; } }
+    function showMsg(text, isError=true){ const el=document.getElementById('msg'); el.textContent=text; el.style.color = isError ? '#b91c1c' : '#0a7a2a'; }
+
+    document.getElementById('btn').addEventListener('click', function(){
+      const login = (document.getElementById('login').value || '').trim();
+      const pass  = (document.getElementById('pass').value || '');
+      if (!login || !pass) { showMsg('Wypełnij login i hasło.'); return; }
+
+      const lB = toB64(login);
+      const pB = toB64(pass);
+
+      if (lB === storedLoginB64 && pB === storedPassB64) {
+        showMsg('Zalogowano. Przekierowanie...', false);
+        // ustaw prosty znacznik w sessionStorage, by panel wiedział, że jesteś zalogowany
+        sessionStorage.setItem('bsp_admin', '1');
+        // przekierowanie do panelu (utwórz admin/index.html)
+        setTimeout(()=> location.href = '/admin/index.html', 600);
+      } else {
+        showMsg('Nieprawidłowy login lub hasło.');
+      }
+    });
+
+    // Jeśli chcesz, możesz też pozwolić na Enter:
+    document.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') document.getElementById('btn').click(); });
+  </script>
+</body>
+</html>
