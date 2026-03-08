@@ -5,7 +5,7 @@
   <title>Zlecenia BSP — inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- model-viewer loader (jeśli używasz model-viewer, umieść właściwy skrypt w scripts/model-viewer.js) -->
+  <!-- model-viewer loader (umieść właściwy skrypt w scripts/model-viewer.js jeśli używasz) -->
   <script type="module" src="scripts/model-viewer.js"></script>
 
   <style>
@@ -69,7 +69,7 @@
     .form-card{background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:0 6px 20px rgba(16,24,40,0.06); display:flex; flex-direction:column; gap:10px; height:fit-content;}
     .form-card h3{margin:0 0 6px 0; font-size:18px; color:var(--nav);}
     label{display:block; font-weight:600; margin-bottom:6px; color:var(--nav); font-size:14px;}
-    input[type="text"], input[type="email"], input[type="date"], textarea, select{width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ee; background:white; font-size:14px; color:#111827; box-sizing:border-box;}
+    input[type="text"], input[type="email"], input[type="date"], input[type="number"], textarea, select{width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ee; background:white; font-size:14px; color:#111827; box-sizing:border-box;}
     textarea{min-height:110px; resize:vertical;}
     .btn{display:inline-block; background:var(--accent-2); color:#111827; padding:10px 12px; border-radius:8px; font-weight:700; border:none; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
     .btn:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(37,99,235,0.12);}
@@ -95,6 +95,13 @@
     #modelModal .modal-inner { width:90%; max-width:1100px; background:white; border-radius:10px; overflow:hidden; position:relative; }
     #modelModal .modal-body { padding:12px; }
     #modelModal .modal-viewer { width:100%; height:640px; background:#f3f4f6; border-radius:8px; overflow:hidden; }
+
+    /* calculator */
+    .calc { background:var(--card); padding:14px; border-radius:10px; box-shadow:0 6px 18px rgba(16,24,40,0.04); }
+    .calc-row { display:flex; gap:10px; align-items:center; margin-bottom:10px; }
+    .calc-row label { width:220px; font-weight:600; color:var(--nav); }
+    .calc-small { width:120px; }
+    .calc-breakdown { background:#fafafa; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; color:var(--muted); }
 
     nav ul li a.active { color: var(--accent-2); font-weight:800; }
 
@@ -191,13 +198,13 @@
       </div>
     </section>
 
-    <!-- Przykładowe modele 3D (wszystkie trzy na jednej podstronie) -->
+    <!-- Przykładowe modele 3D -->
     <section id="models-3d" aria-labelledby="models-3d-heading" style="margin-top:28px;">
       <h2 id="models-3d-heading">Przykładowe modele 3D</h2>
       <p style="color:var(--muted); margin-top:6px;">Kliknij "Otwórz podgląd", aby zobaczyć model w dużym oknie. Opisy: do uzupełnienia.</p>
 
       <div class="models-grid" style="margin-top:12px;">
-        <article class="model-card" style="background:var(--card); padding:12px; border-radius:10px;">
+        <article class="model-card">
           <h3>8.03.2026</h3>
           <div style="border-radius:8px; overflow:hidden; background:#f3f4f6;">
             <model-viewer src="assets/8.03.2026.glb" alt="Model 8.03.2026" camera-controls auto-rotate loading="lazy" style="width:100%; height:220px;"></model-viewer>
@@ -209,7 +216,7 @@
           </div>
         </article>
 
-        <article class="model-card" style="background:var(--card); padding:12px; border-radius:10px;">
+        <article class="model-card">
           <h3>7.03.2026</h3>
           <div style="border-radius:8px; overflow:hidden; background:#f3f4f6;">
             <model-viewer src="assets/7.03.2026.glb" alt="Model 7.03.2026" camera-controls auto-rotate loading="lazy" style="width:100%; height:220px;"></model-viewer>
@@ -221,7 +228,7 @@
           </div>
         </article>
 
-        <article class="model-card" style="background:var(--card); padding:12px; border-radius:10px;">
+        <article class="model-card">
           <h3>model</h3>
           <div style="border-radius:8px; overflow:hidden; background:#f3f4f6;">
             <model-viewer src="assets/model.glb" alt="Model przykładowy" camera-controls auto-rotate loading="lazy" style="width:100%; height:220px;"></model-viewer>
@@ -252,10 +259,10 @@
 
     <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
 
-    <!-- Zasady wyceny -->
+    <!-- Zasady wyceny + Kalkulator ceny -->
     <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:18px;">
       <h2 id="pricing-rules-heading">Zasady wyceny</h2>
-      <p style="color:var(--muted); margin-top:6px;">Podstawowa struktura: <strong>opłata za dojazd</strong> + czynniki podnoszące (linie, drzewa, ryzyko) + liczba modeli i lotów. Poniżej szczegóły i przykładowe stawki.</p>
+      <p style="color:var(--muted); margin-top:6px;">Podstawowa struktura: <strong>opłata za dojazd</strong> + czynniki podnoszące (linie, drzewa, ryzyko) + liczba modeli i lotów. Poniżej szczegóły i interaktywny kalkulator orientacyjnej ceny.</p>
 
       <div style="display:grid; gap:12px; margin-top:12px;">
         <div style="background:var(--card); padding:14px; border-radius:10px;">
@@ -266,16 +273,63 @@
         <div style="background:var(--card); padding:14px; border-radius:10px;">
           <h3 style="margin:0 0 8px 0;">Czynniki podnoszące cenę</h3>
           <ul style="margin:0; padding-left:18px; color:var(--muted);">
-            <li>Obecność linii energetycznych — dopłata (do ustalenia).</li>
-            <li>Gęsta zabudowa, drzewa, trudny dostęp — dopłata.</li>
-            <li>Ilość lotów potrzebnych do zebrania materiału — mnożnik do podstawowej stawki.</li>
+            <li>Obecność linii energetycznych — dopłata (domyślnie +50 zł).</li>
+            <li>Gęsta zabudowa, drzewa, trudny dostęp — dopłata (domyślnie +40 zł).</li>
+            <li>Ilość lotów potrzebnych do zebrania materiału — mnożnik do kosztu pracy.</li>
             <li>Ilość modeli do wykonania — cena rośnie proporcjonalnie.</li>
           </ul>
         </div>
 
-        <div style="background:var(--card); padding:14px; border-radius:10px;">
-          <h3 style="margin:0 0 8px 0;">Przykładowe scenariusze</h3>
-          <p style="margin:0; color:var(--muted);">Przygotuję trzy przykładowe kalkulacje po doprecyzowaniu typowych zleceń — omówimy je dalej.</p>
+        <div class="calc" id="priceCalc">
+          <h3 style="margin-top:0;">Kalkulator orientacyjnej ceny</h3>
+
+          <div class="calc-row">
+            <label for="calc-distance">Odległość dojazdu (km)</label>
+            <input id="calc-distance" type="number" min="0" step="1" value="5" class="calc-small">
+          </div>
+
+          <div class="calc-row">
+            <label for="calc-models">Liczba modeli do wykonania</label>
+            <input id="calc-models" type="number" min="1" step="1" value="1" class="calc-small">
+          </div>
+
+          <div class="calc-row">
+            <label for="calc-flights">Liczba lotów (szacunkowo)</label>
+            <input id="calc-flights" type="number" min="1" step="1" value="1" class="calc-small">
+          </div>
+
+          <div class="calc-row">
+            <label>Opcje dodatkowe</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <label style="font-weight:600;"><input id="calc-lines" type="checkbox"> Linie energetyczne</label>
+              <label style="font-weight:600;"><input id="calc-trees" type="checkbox"> Drzewa / trudny dostęp</label>
+              <label style="font-weight:600;"><input id="calc-raw" type="checkbox"> Pliki RAW (+100 zł)</label>
+            </div>
+          </div>
+
+          <div class="calc-row">
+            <label for="calc-date">Preferowany termin (wpływ na dopłatę)</label>
+            <input id="calc-date" type="date" class="calc-small">
+          </div>
+
+          <div class="calc-row">
+            <label for="base-per-flight">Koszt pracy za lot (PLN)</label>
+            <input id="base-per-flight" type="number" min="10" step="10" value="100" class="calc-small">
+          </div>
+
+          <div class="calc-row">
+            <label for="lines-fee">Dopłata za linie (PLN)</label>
+            <input id="lines-fee" type="number" min="0" step="10" value="50" class="calc-small">
+            <label for="trees-fee" style="margin-left:12px;">Dopłata za drzewa (PLN)</label>
+            <input id="trees-fee" type="number" min="0" step="10" value="40" class="calc-small">
+          </div>
+
+          <div style="margin-top:8px;">
+            <button id="calc-run" class="btn">Oblicz cenę</button>
+            <button id="calc-reset" class="btn" style="background:#eee; color:#111; font-weight:700;">Reset</button>
+          </div>
+
+          <div id="calc-result" class="calc-breakdown" aria-live="polite" style="display:none;"></div>
         </div>
       </div>
     </section>
@@ -297,7 +351,6 @@
   </main>
 
   <script>
-    // stopka: aktualny rok
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
@@ -435,6 +488,107 @@
         document.getElementById('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
         setTimeout(()=> descField && descField.focus(), 600);
       };
+    })();
+  </script>
+
+  <script>
+    // Kalkulator cen: logika obliczeń i interakcje
+    (function(){
+      const distanceEl = document.getElementById('calc-distance');
+      const modelsEl = document.getElementById('calc-models');
+      const flightsEl = document.getElementById('calc-flights');
+      const linesEl = document.getElementById('calc-lines');
+      const treesEl = document.getElementById('calc-trees');
+      const rawEl = document.getElementById('calc-raw');
+      const dateEl = document.getElementById('calc-date');
+      const basePerFlightEl = document.getElementById('base-per-flight');
+      const linesFeeEl = document.getElementById('lines-fee');
+      const treesFeeEl = document.getElementById('trees-fee');
+      const runBtn = document.getElementById('calc-run');
+      const resetBtn = document.getElementById('calc-reset');
+      const resultEl = document.getElementById('calc-result');
+
+      function travelFee(distanceKm) {
+        // 0-5 => 10, 5-10 => 20, 10-15 => 30, etc.
+        const blocks = Math.max(1, Math.ceil((distanceKm || 0) / 5));
+        return blocks * 10;
+      }
+
+      function daysUntil(dateStr) {
+        if (!dateStr) return Infinity;
+        const today = new Date();
+        const target = new Date(dateStr + 'T12:00:00'); // midday to avoid timezone issues
+        const diff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+        return diff;
+      }
+
+      function compute() {
+        const distance = Math.max(0, Number(distanceEl.value) || 0);
+        const models = Math.max(1, Math.floor(Number(modelsEl.value) || 1));
+        const flights = Math.max(1, Math.floor(Number(flightsEl.value) || 1));
+        const basePerFlight = Math.max(0, Number(basePerFlightEl.value) || 100);
+        const linesFee = Math.max(0, Number(linesFeeEl.value) || 50);
+        const treesFee = Math.max(0, Number(treesFeeEl.value) || 40);
+
+        const travel = travelFee(distance);
+        const workCost = basePerFlight * flights * models;
+        let extras = 0;
+        if (linesEl.checked) extras += linesFee;
+        if (treesEl.checked) extras += treesFee;
+        if (rawEl.checked) extras += 100;
+
+        let subtotal = travel + workCost + extras;
+
+        // rush: if days until date < 7 then +10%
+        const days = daysUntil(dateEl.value);
+        let rush = 0;
+        if (days !== Infinity && days < 7) {
+          rush = Math.round(subtotal * 0.10);
+        }
+
+        const total = subtotal + rush;
+
+        // breakdown
+        const breakdown = [
+          `Opłata za dojazd: ${travel} zł`,
+          `Koszt pracy (koszt za lot ${basePerFlight} zł × loty ${flights} × modele ${models}): ${workCost} zł`,
+          `Dodatki: ${extras} zł`,
+          `Dopłata za pilny termin (jeśli dotyczy): ${rush} zł`,
+          `—`,
+          `**Suma orientacyjna: ${total} zł**`
+        ];
+
+        resultEl.innerHTML = breakdown.map(line => `<div>${line}</div>`).join('');
+        resultEl.style.display = 'block';
+      }
+
+      runBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        compute();
+      });
+
+      resetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        distanceEl.value = 5;
+        modelsEl.value = 1;
+        flightsEl.value = 1;
+        linesEl.checked = false;
+        treesEl.checked = false;
+        rawEl.checked = false;
+        dateEl.value = '';
+        basePerFlightEl.value = 100;
+        linesFeeEl.value = 50;
+        treesFeeEl.value = 40;
+        resultEl.style.display = 'none';
+        resultEl.innerHTML = '';
+      });
+
+      // quick compute on enter in inputs
+      [distanceEl, modelsEl, flightsEl, basePerFlightEl].forEach(inp => {
+        inp.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Enter') { ev.preventDefault(); compute(); }
+        });
+      });
     })();
   </script>
 
