@@ -4,284 +4,169 @@
   <meta charset="utf-8" />
   <title>Informacje — BSP Zlecenia</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Aktualności i komunikaty BSP Zlecenia — informacje o zmianach w realizacji usług, przerwach i ogłoszeniach.">
   <style>
-    :root{
-      --bg:#f4f6fb; --card:#ffffff; --muted:#6b7280; --accent:#0b5ed7;
-      --radius:12px; --max-width:980px; --shadow: 0 10px 30px rgba(15,23,42,0.06);
-      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{
-      font-family:var(--font);
-      background:linear-gradient(180deg,var(--bg),#eef2ff 800px);
-      color:#0f172a;padding:28px;display:flex;align-items:flex-start;justify-content:center;
-    }
-    .box{width:100%;max-width:var(--max-width);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;padding:22px}
-    header{display:flex;gap:14px;align-items:center;margin-bottom:6px}
-    .logo{width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+    :root{--bg:#f4f6fb;--card:#fff;--muted:#6b7280;--accent:#0b5ed7;--radius:12px;--maxw:980px}
+    *{box-sizing:border-box}html,body{height:100%;margin:0}
+    body{font-family:system-ui,Arial;background:linear-gradient(180deg,var(--bg),#eef2ff);padding:28px;display:flex;justify-content:center}
+    .wrap{width:100%;max-width:var(--maxw);background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:0 10px 30px rgba(15,23,42,0.06)}
+    header{display:flex;gap:12px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
     h1{margin:0;font-size:20px}
-    .subtitle{color:var(--muted);font-size:13px;margin-top:6px}
-    h2{margin:18px 0 8px;font-size:16px}
-    p{margin:8px 0;color:var(--muted);line-height:1.45}
-    .lead{color:#0f172a;font-weight:700;margin-top:6px}
-    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;color:#fff;background:var(--accent)}
-    .btn.secondary{background:#eef2ff;color:var(--accent);border:1px solid rgba(11,94,215,0.06);font-weight:700}
-    .note{margin-top:12px;font-size:13px;color:#6b7280}
-    .meta{font-size:13px;color:var(--muted);margin-top:8px}
-
-    /* Login panel */
-    .login-panel{margin-top:18px;background:#fbfdff;border-radius:10px;padding:14px;border:1px solid rgba(15,23,42,0.03);box-shadow:0 6px 18px rgba(11,18,32,0.03)}
-    .login-panel h3{margin:0 0 8px;font-size:15px}
-    .login-row{display:flex;gap:8px;align-items:center;margin-top:8px}
-    .login-row input{flex:1;padding:8px;border-radius:8px;border:1px solid #e6e9ee}
-    .login-row button{padding:8px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
-    .login-hint{font-size:13px;color:var(--muted);margin-top:8px}
-    .login-msg{margin-top:8px;font-size:14px}
-
-    /* Admin editor (hidden until login) */
-    .admin-area{margin-top:18px;background:#fff9f0;border-radius:10px;padding:14px;border:1px solid rgba(15,23,42,0.03);box-shadow:0 6px 18px rgba(11,18,32,0.03);display:none}
-    .admin-area h3{margin:0 0 8px;font-size:15px}
-    .admin-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px}
-    .admin-row textarea{flex:1;padding:10px;border-radius:8px;border:1px solid #e6e9ee;min-height:100px}
-    .admin-controls{display:flex;gap:8px;margin-top:10px;align-items:center}
-    .admin-controls button{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
-    .publish-btn{background:#0b5ed7;color:#fff;font-weight:700}
-    .logout-btn{background:#eef2ff;color:#0b5ed7;border:1px solid rgba(11,94,215,0.06);font-weight:700}
-    .admin-msg{margin-top:8px;font-size:14px}
-
-    /* News list */
-    .news-list{margin-top:14px;display:grid;gap:10px}
-    .news-item{background:#fff;border-radius:10px;padding:12px;border:1px solid rgba(15,23,42,0.03);box-shadow:0 6px 18px rgba(11,18,32,0.03)}
+    .subtitle{color:var(--muted);font-size:13px}
+    .news-list{margin-top:18px;display:grid;gap:10px}
+    .news-item{padding:12px;border-radius:10px;border:1px solid rgba(15,23,42,0.03);background:#fff}
     .news-item time{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
-    .news-item p{margin:0;color:#0f172a}
-
-    @media (max-width:520px){
-      .login-row{flex-direction:column;align-items:stretch}
-      .admin-row{flex-direction:column}
-    }
+    .login-panel{margin-top:18px;padding:12px;border-radius:10px;background:#fbfdff;border:1px solid rgba(15,23,42,0.03)}
+    .login-row{display:flex;gap:8px;align-items:center}
+    input[type="text"],input[type="password"],textarea{padding:8px;border-radius:8px;border:1px solid #e6e9ee;font-size:14px}
+    .btn{padding:10px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+    .btn.secondary{background:#eef2ff;color:var(--accent);border:1px solid rgba(11,94,215,0.06)}
+    .admin-area{margin-top:14px;padding:12px;border-radius:10px;background:#fff9f0;border:1px solid rgba(15,23,42,0.03);display:none}
+    .admin-controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .meta{color:var(--muted);font-size:13px;margin-top:10px}
   </style>
 </head>
 <body>
-  <main class="box" role="main" aria-labelledby="pageTitle">
+  <main class="wrap" role="main" aria-labelledby="title">
     <header>
       <div class="logo" aria-hidden="true">BSP</div>
       <div>
-        <h1 id="pageTitle">Informacje i aktualności</h1>
+        <h1 id="title">Informacje i aktualności</h1>
         <div class="subtitle">Komunikaty o zmianach w realizacji usług, przerwach i ważne ogłoszenia</div>
       </div>
     </header>
 
-    <p class="lead">BSP Zlecenia — dokumentacja i inspekcje dronem. Świadczymy usługi mapowania, inspekcji i tworzenia modeli 3D dla klientów komercyjnych i samorządowych.</p>
-
-    <h2>Aktualności i komunikaty</h2>
-    <p>Na tej stronie publikujemy oficjalne komunikaty dotyczące przerw w realizacji usług, zmian terminów i innych ważnych informacji operacyjnych. Najnowsze komunikaty i archiwum znajdują się poniżej.</p>
-
-    <div id="newsList" class="news-list" aria-live="polite"></div>
-
-    <h2>Panel administracyjny (logowanie)</h2>
-    <p class="login-hint">Panel logowania jest widoczny poniżej. To klientowa symulacja — mechanizm testowy, nie używaj go do ochrony wrażliwych danych.</p>
+    <section id="news" class="news-list" aria-live="polite"></section>
 
     <section class="login-panel" aria-labelledby="loginTitle">
-      <h3 id="loginTitle">Logowanie administratora</h3>
+      <h2 id="loginTitle" style="font-size:15px;margin:0 0 8px">Panel administracyjny (logowanie)</h2>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Zaloguj, aby dodać komunikat. Konto testowe: <strong>KASIA_rst</strong> / <strong>rstkasia.2020</strong></div>
 
-      <form id="loginForm" onsubmit="return false;" autocomplete="off" aria-describedby="loginDesc">
-        <div id="loginDesc" class="login-hint">Wprowadź login i hasło, a następnie kliknij Zaloguj. Po poprawnym logowaniu pojawi się edytor aktualności.</div>
+      <div class="login-row" style="gap:6px">
+        <input id="login" type="text" placeholder="Login" autocomplete="username" style="flex:1" />
+        <input id="password" type="password" placeholder="Hasło" autocomplete="current-password" />
+        <button id="loginBtn" class="btn">Zaloguj</button>
+      </div>
 
-        <div class="login-row" style="margin-top:10px">
-          <input id="aboutLogin" name="login" type="text" autocomplete="username" placeholder="Login" aria-label="Login administratora" value="" />
-          <input id="aboutPass" name="password" type="password" autocomplete="current-password" placeholder="Hasło" aria-label="Hasło administratora" value="" />
-          <button id="aboutBtn" aria-label="Zaloguj">Zaloguj</button>
-        </div>
-
-        <div id="aboutMsg" class="login-msg" role="status" aria-live="polite"></div>
-
-        <div style="margin-top:10px">
-          <a class="btn secondary" href="./admin-login.html" style="text-decoration:none">Pełny formularz logowania</a>
-        </div>
-      </form>
+      <div id="loginMsg" class="meta" style="margin-top:8px;color:var(--muted)"></div>
     </section>
 
     <section id="adminArea" class="admin-area" aria-hidden="true">
-      <h3>Edytor aktualności (panel administracyjny)</h3>
-
-      <div class="admin-row">
-        <textarea id="announcement" placeholder="Np. 15.03.2026 — przerwa techniczna, usługi ograniczone..."></textarea>
-      </div>
-
+      <h3 style="margin:0 0 8px">Edytor aktualności</h3>
+      <textarea id="announcement" placeholder="Treść komunikatu..." style="width:100%;min-height:100px"></textarea>
       <div class="admin-controls">
-        <button id="publish" class="publish-btn">Opublikuj</button>
-        <button id="logout" class="logout-btn">Wyloguj</button>
-        <div class="meta" style="margin-left:auto">Publikacje zapisywane lokalnie (symulacja)</div>
+        <button id="publishBtn" class="btn">Opublikuj</button>
+        <button id="logoutBtn" class="btn secondary">Wyloguj</button>
+        <div id="adminMsg" class="meta" style="margin-left:auto"></div>
       </div>
-
-      <div id="adminMsg" class="admin-msg" role="status" aria-live="polite"></div>
     </section>
-
-    <h2>Kontakt</h2>
-    <p>Formularz kontaktowy i pełne dane kontaktowe dostępne są na stronie głównej. W pilnych sprawach prosimy o wiadomość przez formularz — odpowiadamy zwykle w ciągu 24–48 godzin roboczych.</p>
-
-    <h2>Ochrona danych (RODO)</h2>
-    <p>Przetwarzamy dane osobowe wyłącznie w celu realizacji zgłoszeń i kontaktu w sprawie zleceń. Szczegółowa polityka prywatności oraz informacje o prawach osób, których dane dotyczą, dostępne są na stronie głównej.</p>
-
-    <div class="actions" role="navigation" aria-label="Szybkie linki">
-      <a class="btn" href="./index.html#aktualnosci" rel="noopener">Przejdź do Aktualności</a>
-      <a class="btn secondary" href="./index.html" rel="noopener">Strona główna</a>
-    </div>
-
-    <p class="note">Komunikaty publikowane są przez uprawnione osoby; w razie wątpliwości sprawdź datę publikacji przy komunikacie. Nie udostępniamy publicznie linku do panelu administracyjnego.</p>
 
     <p class="meta">© <span id="year"></span> BSP Zlecenia</p>
   </main>
 
   <script>
+    const API = '/api';
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Testowe dane (zakodowane) — tylko do testów lokalnych
-    const storedLoginB64 = 'S0FTQ0lfcnN0';        // "KASIA_rst"
-    const storedPassB64  = 'cnN0a2FzaWEuMjAyMA=='; // "rstkasia.2020"
-
-    // Render news from localStorage
-    function renderNewsList() {
-      const key = 'bsp_announcements';
-      const list = document.getElementById('newsList');
-      list.innerHTML = '';
-      const items = JSON.parse(localStorage.getItem(key) || '[]');
-      if (!items.length) {
-        const empty = document.createElement('div');
-        empty.className = 'news-item';
-        empty.innerHTML = '<p class="small" style="color:var(--muted)">Brak komunikatów.</p>';
-        list.appendChild(empty);
-        return;
-      }
-      items.forEach(item => {
-        const art = document.createElement('article');
-        art.className = 'news-item';
-        const t = document.createElement('time');
-        t.dateTime = item.date;
-        t.textContent = new Date(item.date).toLocaleDateString();
-        const p = document.createElement('p');
-        p.textContent = item.text;
-        art.appendChild(t);
-        art.appendChild(p);
-        list.appendChild(art);
-      });
-    }
-
-    // Show/hide admin area
-    function showAdminArea(show) {
-      const area = document.getElementById('adminArea');
-      const aboutMsg = document.getElementById('aboutMsg');
-      if (show) {
-        area.style.display = 'block';
-        area.setAttribute('aria-hidden', 'false');
-        if (aboutMsg) { aboutMsg.textContent = ''; }
-      } else {
-        area.style.display = 'none';
-        area.setAttribute('aria-hidden', 'true');
-      }
-    }
-
-    // On load: clear autofill, render news, and show admin if already logged
-    window.addEventListener('load', () => {
-      const loginEl = document.getElementById('aboutLogin');
-      const passEl = document.getElementById('aboutPass');
-      if (loginEl) loginEl.value = '';
-      if (passEl) passEl.value = '';
-      renderNewsList();
-      if (sessionStorage.getItem('bsp_admin') === '1') {
-        showAdminArea(true);
-      }
-    });
-
-    // Listen for storage events (other tabs)
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'bsp_admin') {
-        if (e.newValue === '1') {
-          showAdminArea(true);
-        } else {
-          showAdminArea(false);
-        }
-      }
-      if (e.key === 'bsp_announcements') {
-        renderNewsList();
-      }
-    });
-
-    // Login handler
-    document.getElementById('aboutBtn').addEventListener('click', function(){
-      const login = (document.getElementById('aboutLogin').value || '').trim();
-      const pass  = (document.getElementById('aboutPass').value || '');
-      const msgEl = document.getElementById('aboutMsg');
-      msgEl.textContent = '';
-      if (!login || !pass) { msgEl.textContent = 'Wypełnij login i hasło.'; msgEl.style.color = '#b91c1c'; return; }
+    // Render list
+    async function loadAnnouncements(){
       try {
-        const lB = btoa(login);
-        const pB = btoa(pass);
-        if (lB === storedLoginB64 && pB === storedPassB64) {
-          sessionStorage.setItem('bsp_admin', '1');
-          msgEl.style.color = '#0a7a2a';
-          msgEl.textContent = 'Zalogowano. Edytor dostępny poniżej.';
+        const res = await fetch(API + '/announcements');
+        const j = await res.json();
+        const list = document.getElementById('news');
+        list.innerHTML = '';
+        if (!j.ok || !Array.isArray(j.items) || j.items.length === 0) {
+          const el = document.createElement('div'); el.className='news-item'; el.textContent='Brak komunikatów.'; list.appendChild(el); return;
+        }
+        j.items.forEach(it => {
+          const el = document.createElement('article'); el.className='news-item';
+          const t = document.createElement('time'); t.dateTime = it.date; t.textContent = new Date(it.date).toLocaleString();
+          const p = document.createElement('p'); p.textContent = it.text;
+          el.appendChild(t); el.appendChild(p); list.appendChild(el);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Auth helpers
+    function setToken(token){ sessionStorage.setItem('bsp_token', token); }
+    function getToken(){ return sessionStorage.getItem('bsp_token'); }
+    function clearToken(){ sessionStorage.removeItem('bsp_token'); }
+
+    function showAdminArea(show){
+      const area = document.getElementById('adminArea');
+      area.style.display = show ? 'block' : 'none';
+      area.setAttribute('aria-hidden', show ? 'false' : 'true');
+      document.getElementById('loginMsg').textContent = show ? 'Zalogowano.' : '';
+    }
+
+    // Login
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const u = document.getElementById('login').value.trim();
+      const p = document.getElementById('password').value;
+      const msg = document.getElementById('loginMsg');
+      msg.textContent = '';
+      if (!u || !p) { msg.textContent = 'Wypełnij login i hasło.'; return; }
+      try {
+        const res = await fetch(API + '/login', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ username: u, password: p })
+        });
+        const j = await res.json();
+        if (res.ok && j.token) {
+          setToken(j.token);
           showAdminArea(true);
-          document.getElementById('aboutLogin').value = '';
-          document.getElementById('aboutPass').value = '';
-          setTimeout(()=> document.getElementById('announcement').focus(), 200);
+          document.getElementById('login').value=''; document.getElementById('password').value='';
         } else {
-          msgEl.style.color = '#b91c1c';
-          msgEl.textContent = 'Nieprawidłowy login lub hasło.';
+          msg.textContent = j.error || 'Błąd logowania.';
         }
       } catch (e) {
-        msgEl.style.color = '#b91c1c';
-        msgEl.textContent = 'Błąd kodowania danych.';
+        msg.textContent = 'Błąd sieci.';
+        console.error(e);
       }
     });
 
-    // Publish announcement
-    document.getElementById('publish').addEventListener('click', function(){
-      if (sessionStorage.getItem('bsp_admin') !== '1') {
-        const am = document.getElementById('adminMsg');
-        am.style.color = '#b91c1c';
-        am.textContent = 'Brak uprawnień. Zaloguj się.';
-        return;
-      }
+    // Publish
+    document.getElementById('publishBtn').addEventListener('click', async () => {
       const text = document.getElementById('announcement').value.trim();
-      if (!text) {
-        const am = document.getElementById('adminMsg');
-        am.style.color = '#b91c1c';
-        am.textContent = 'Wpisz treść komunikatu.';
-        return;
+      const adminMsg = document.getElementById('adminMsg');
+      adminMsg.textContent = '';
+      if (!text) { adminMsg.textContent = 'Wpisz treść komunikatu.'; return; }
+      const token = getToken();
+      if (!token) { adminMsg.textContent = 'Brak uprawnień. Zaloguj się.'; return; }
+      try {
+        const res = await fetch(API + '/announcements', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
+          body: JSON.stringify({ text })
+        });
+        const j = await res.json();
+        if (res.ok && j.ok) {
+          adminMsg.textContent = 'Opublikowano.';
+          document.getElementById('announcement').value = '';
+          loadAnnouncements();
+          setTimeout(()=> adminMsg.textContent = '', 2000);
+        } else {
+          adminMsg.textContent = j.error || 'Błąd publikacji.';
+          if (res.status === 401) { clearToken(); showAdminArea(false); }
+        }
+      } catch (e) {
+        adminMsg.textContent = 'Błąd sieci.';
+        console.error(e);
       }
-      const key = 'bsp_announcements';
-      const existing = JSON.parse(localStorage.getItem(key) || '[]');
-      existing.unshift({ text: text, date: new Date().toISOString() });
-      localStorage.setItem(key, JSON.stringify(existing));
-      // trigger storage event for other tabs (some browsers don't fire storage on same tab)
-      try { localStorage.setItem('bsp_announcements_sync', Date.now().toString()); } catch(e){}
-      document.getElementById('announcement').value = '';
-      const am = document.getElementById('adminMsg');
-      am.style.color = '#0a7a2a';
-      am.textContent = 'Komunikat zapisany lokalnie.';
-      renderNewsList();
-      setTimeout(()=> am.textContent = '', 2000);
     });
 
     // Logout
-    document.getElementById('logout').addEventListener('click', function(){
-      sessionStorage.removeItem('bsp_admin');
-      showAdminArea(false);
-      const aboutMsg = document.getElementById('aboutMsg');
-      aboutMsg.style.color = '#6b7280';
-      aboutMsg.textContent = 'Wylogowano.';
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      clearToken(); showAdminArea(false);
     });
 
-    // Ctrl/Cmd+Enter to publish
-    document.getElementById('announcement').addEventListener('keydown', function(e){
-      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        document.getElementById('publish').click();
-      }
+    // Init
+    window.addEventListener('load', () => {
+      loadAnnouncements();
+      if (getToken()) showAdminArea(true);
     });
   </script>
 </body>
