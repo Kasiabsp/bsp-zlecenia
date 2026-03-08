@@ -27,7 +27,7 @@ Budżet: ${data.budget || "brak"}
       }
     ],
     from: {
-      email: "no-reply@bsp-zlecenia.pages.dev",
+      email: "jakubsoperatorbsp@gmail.com",
       name: "Formularz BSP"
     },
     subject: "Nowe zgłoszenie BSP",
