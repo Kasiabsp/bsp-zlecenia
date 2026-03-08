@@ -2,62 +2,40 @@ export async function onRequestPost(context) {
   const { request } = context;
 
   let data;
-  try {
-    data = await request.json();
-  } catch (e) {
-    return new Response("Invalid JSON", { status: 400 });
+  try { data = await request.json(); } catch {
+    return new Response(JSON.stringify({ status: "error", details: "Invalid JSON" }), { status: 400, headers: { "Content-Type": "application/json" } });
   }
 
-  const emailTo = "jakubsoperatorbsp@gmail.com";
+  const contact = (data.contact || "").trim();
+  const description = (data.description || "").trim();
+  if (!contact || !description) {
+    return new Response(JSON.stringify({ status: "error", details: "Brak wymaganych pól" }), { status: 400, headers: { "Content-Type": "application/json" } });
+  }
 
-  const message = `
-Nowe zgłoszenie BSP:
-
-Kontakt: ${data.contact || "brak"}
-Opis: ${data.description || "brak"}
-Termin: ${data.date || "brak"}
-Budżet: ${data.budget || "brak"}
-  `;
+  const formspreeEndpoint = "https://formspree.io/f/xqebvvow"; // <-- zamień na swój endpoint
 
   const payload = {
-    personalizations: [
-      {
-        to: [{ email: emailTo }],
-        reply_to: { email: data.contact || emailTo }
-      }
-    ],
-    from: {
-      email: "jakubsoperatorbsp@gmail.com",
-      name: "Formularz BSP"
-    },
-    subject: "Nowe zgłoszenie BSP",
-    content: [
-      {
-        type: "text/plain",
-        value: message
-      }
-    ]
+    contact,
+    description,
+    date: data.date || "",
+    budget: data.budget || ""
   };
 
-  const response = await fetch("https://api.mailchannels.net/tx/v1/send", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(formspreeEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    return new Response(
-      JSON.stringify({ status: "error", details: errorText }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
-      }
-    );
+    const json = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      return new Response(JSON.stringify({ status: "error", httpStatus: res.status, details: json || await res.text() }), { status: 500, headers: { "Content-Type": "application/json" } });
+    }
+
+    return new Response(JSON.stringify({ status: "ok" }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (err) {
+    return new Response(JSON.stringify({ status: "error", details: String(err) }), { status: 502, headers: { "Content-Type": "application/json" } });
   }
-
-  return new Response(JSON.stringify({ status: "ok" }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" }
-  });
 }
