@@ -5,7 +5,7 @@
   <title>Zlecenia BSP — inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Lokalny loader model-viewer (importuje oficjalny moduł z CDN) -->
+  <!-- Opcjonalny loader model-viewer (jeśli używasz) -->
   <script type="module" src="scripts/model-viewer.js"></script>
 
   <style>
@@ -127,7 +127,6 @@
         </div>
       </div>
 
-      <!-- JEDEN, SPÓJNY formularz (id="form" dla anchorów) -->
       <aside class="form-card" id="form" aria-labelledby="form-title">
         <h3 id="form-title">Zgłoś zlecenie</h3>
 
@@ -162,7 +161,6 @@
       </aside>
     </section>
 
-    <!-- Usługi (jeden, spójny blok) -->
     <section id="services" aria-labelledby="services-heading">
       <h2 id="services-heading" style="margin-top:18px;">Usługi</h2>
       <div class="services" role="list">
@@ -181,7 +179,6 @@
       </div>
     </section>
 
-    <!-- Podgląd modelu 3D -->
     <section aria-labelledby="model-heading">
       <h2 id="model-heading">Podgląd modelu 3D</h2>
       <div class="model-wrapper">
@@ -196,7 +193,6 @@
       </div>
     </section>
 
-    <!-- Galeria -->
     <section aria-labelledby="gallery-heading">
       <h2 id="gallery-heading">Galeria realizacji</h2>
       <div class="gallery">
@@ -206,7 +202,6 @@
       </div>
     </section>
 
-    <!-- Cennik -->
     <section aria-labelledby="pricing-heading">
       <h2 id="pricing-heading">Orientacyjny cennik</h2>
 
@@ -250,7 +245,6 @@
       </div>
     </section>
 
-    <!-- Kontakt -->
     <section id="contact" aria-labelledby="contact-heading">
       <h2 id="contact-heading">Kontakt</h2>
       <div class="card">
@@ -268,12 +262,10 @@
   </div>
 
   <script>
-    // stopka: aktualny rok
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
   <script>
-    // Obsługa formularza (skrypt umieszczony po formularzu)
     (function(){
       const form = document.getElementById("bspForm");
       const status = document.getElementById("status");
@@ -335,14 +327,11 @@
   </script>
 
   <script>
-    // Ładowanie banneru regulaminu (jeśli masz plik terms-consent.html)
     fetch('terms-consent.html')
       .then(r => r.ok ? r.text() : Promise.reject('Nie znaleziono pliku'))
       .then(html => {
         const root = document.getElementById('terms-consent-root');
         root.innerHTML = html;
-
-        // aktywacja skryptów z załadowanego HTML
         const temp = document.createElement('div');
         temp.innerHTML = html;
         const scripts = temp.querySelectorAll('script');
@@ -351,7 +340,6 @@
           if (s.src) ns.src = s.src; else ns.textContent = s.textContent;
           document.body.appendChild(ns);
         });
-
         const acceptBtn = root.querySelector('#terms-accept');
         const banner = root.querySelector('#terms-banner');
         if (acceptBtn && banner) acceptBtn.addEventListener('click', () => { banner.style.display = 'none'; });
