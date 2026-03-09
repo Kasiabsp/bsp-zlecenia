@@ -39,7 +39,7 @@
     <section id="news" class="news-list" aria-live="polite"></section>
 
     <section class="login-panel" aria-labelledby="loginTitle">
-      <h2 id="loginTitle" style="font-size:15px;margin:0 0 8px">Panel administracyjny (logowanie)</h2>
+     <h2 id="loginTitle" style="font-size:15px;margin:0 0 8px">Panel administracyjny (logowanie)</h2>
 
       <div class="login-row" style="gap:6px">
         <input id="login" type="text" placeholder="Login" autocomplete="username" style="flex:1" />
@@ -64,13 +64,13 @@
   </main>
 
   <script>
-    const API = '/api';
+    const API = (window.BSP_API_BASE || '').replace(/\/$/, '') + '/api';
     document.getElementById('year').textContent = new Date().getFullYear();
 
     async function loadAnnouncements(){
       try {
         const res = await fetch(API + '/announcements');
-        const j = await res.json();
+        const j = await res.json().catch(() => ({}));
         const list = document.getElementById('news');
         list.innerHTML = '';
         if (!j.ok || !Array.isArray(j.items) || j.items.length === 0) {
@@ -108,7 +108,7 @@
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ username: u, password: p })
         });
-        const j = await res.json();
+        const j = await res.json().catch(() => ({}));
         if (res.ok && j.token) {
           setToken(j.token);
           showAdminArea(true);
@@ -136,7 +136,7 @@
           headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
           body: JSON.stringify({ text })
         });
-        const j = await res.json();
+        const j = await res.json().catch(() => ({}));
         if (res.ok && j.ok) {
           adminMsg.textContent = 'Opublikowano.';
           document.getElementById('announcement').value = '';
@@ -162,4 +162,3 @@
     });
   </script>
 </body>
-</html>
