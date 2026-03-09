@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret';
 const ADMIN_USER = process.env.ADMIN_USER || 'KASIA_rst';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'rstkasia.2020';
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'https://bsp-zlecenia.pages.dev';
 
 const DATA_DIR = path.join(__dirname, 'data');
 const ANN_FILE = path.join(DATA_DIR, 'announcements.json');
