@@ -30,7 +30,7 @@
   </main>
 
   <script>
-    const API = '/api';
+    const API = (window.BSP_API_BASE || '').replace(/\/$/, '') + '/api';
     function showMsg(t, ok=false){ const el=document.getElementById('msg'); el.textContent=t; el.style.color = ok ? '#0a7a2a' : '#b91c1c'; }
     document.getElementById('btn').addEventListener('click', async () => {
       const u = document.getElementById('login').value.trim();
@@ -38,7 +38,7 @@
       if (!u || !p) { showMsg('Wypełnij login i hasło.'); return; }
       try {
         const res = await fetch(API + '/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username: u, password: p }) });
-        const j = await res.json();
+        const j = await res.json().catch(() => ({}));
         if (res.ok && j.token) {
           sessionStorage.setItem('bsp_token', j.token);
           showMsg('Zalogowano. Przekierowanie...', true);
