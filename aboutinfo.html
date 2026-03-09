@@ -39,7 +39,7 @@
     <section id="news" class="news-list" aria-live="polite"></section>
 
     <section class="login-panel" aria-labelledby="loginTitle">
-    <h2 id="loginTitle" style="font-size:15px;margin:0 0 8px">Panel administracyjny (logowanie)</h2>
+     <h2 id="loginTitle" style="font-size:15px;margin:0 0 8px">Panel administracyjny (logowanie)</h2>
 
       <div class="login-row" style="gap:6px">
         <input id="login" type="text" placeholder="Login" autocomplete="username" style="flex:1" />
@@ -64,7 +64,16 @@
   </main>
 
   <script>
-    const API = (window.BSP_API_BASE || '').replace(/\/$/, '') + '/api';
+    function resolveApiBase(){
+      const explicit = (window.BSP_API_BASE || '').trim();
+      if (explicit) return explicit.replace(/\/$/, '');
+      const metaBase = (document.querySelector('meta[name="bsp-api-base"]')?.content || '').trim();
+      if (metaBase) return metaBase.replace(/\/$/, '');
+      if (location.hostname.endsWith('pages.dev')) return 'https://bsp-zlecenia.onrender.com';
+      if (['localhost', '127.0.0.1'].includes(location.hostname)) return 'http://127.0.0.1:3000';
+      return '';
+    }
+    const API = resolveApiBase() + '/api';
     document.getElementById('year').textContent = new Date().getFullYear();
 
     async function loadAnnouncements(){
