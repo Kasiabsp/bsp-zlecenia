@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cors = require('cors');
 
@@ -19,11 +18,15 @@ if (!fs.existsSync(ANN_FILE)) fs.writeFileSync(ANN_FILE, JSON.stringify([]), 'ut
 
 const app = express();
 app.use(helmet());
-app.use(bodyParser.json());
+app.use(express.json({ limit: '100kb' }));
 
-// Allow requests from your frontend origin (replace with your Pages domain)
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || '*';
-app.use(cors({ origin: FRONTEND_ORIGIN, methods: ['GET','POST','OPTIONS'], allowedHeaders: ['Content-Type','Authorization'] }));
+app.use(
+  cors({
+    origin: FRONTEND_ORIGIN,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  })
+);
 
 function readAnnouncements(){
   try { return JSON.parse(fs.readFileSync(ANN_FILE, 'utf8') || '[]'); }
@@ -49,24 +52,3 @@ app.post('/api/login', (req, res) => {
 
 function requireAuth(req, res, next){
   const auth = req.headers.authorization || '';
-  const m = auth.match(/^Bearer (.+)$/);
-  if (!m) return res.status(401).json({ error: 'Missing token' });
-  try {
-    req.user = jwt.verify(m[1], JWT_SECRET);
-    return next();
-  } catch(e){
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-}
-
-app.post('/api/announcements', requireAuth, (req, res) => {
-  const text = (req.body && req.body.text) ? String(req.body.text).trim() : '';
-  if (!text) return res.status(400).json({ error: 'Empty text' });
-  const items = readAnnouncements();
-  const item = { text, date: new Date().toISOString(), author: req.user.u || 'admin' };
-  items.unshift(item);
-  writeAnnouncements(items);
-  res.json({ ok: true, item });
-});
-
-app.listen(PORT, () => console.log(`API listening on port ${PORT}`));
