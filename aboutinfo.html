@@ -40,7 +40,6 @@
 
     <section class="login-panel" aria-labelledby="loginTitle">
       <h2 id="loginTitle" style="font-size:15px;margin:0 0 8px">Panel administracyjny (logowanie)</h2>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Zaloguj, aby dodać komunikat. Konto testowe: <strong>KASIA_rst</strong> / <strong>rstkasia.2020</strong></div>
 
       <div class="login-row" style="gap:6px">
         <input id="login" type="text" placeholder="Login" autocomplete="username" style="flex:1" />
@@ -68,7 +67,6 @@
     const API = '/api';
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Render list
     async function loadAnnouncements(){
       try {
         const res = await fetch(API + '/announcements');
@@ -84,12 +82,9 @@
           const p = document.createElement('p'); p.textContent = it.text;
           el.appendChild(t); el.appendChild(p); list.appendChild(el);
         });
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) { console.error(e); }
     }
 
-    // Auth helpers
     function setToken(token){ sessionStorage.setItem('bsp_token', token); }
     function getToken(){ return sessionStorage.getItem('bsp_token'); }
     function clearToken(){ sessionStorage.removeItem('bsp_token'); }
@@ -101,7 +96,6 @@
       document.getElementById('loginMsg').textContent = show ? 'Zalogowano.' : '';
     }
 
-    // Login
     document.getElementById('loginBtn').addEventListener('click', async () => {
       const u = document.getElementById('login').value.trim();
       const p = document.getElementById('password').value;
@@ -118,7 +112,8 @@
         if (res.ok && j.token) {
           setToken(j.token);
           showAdminArea(true);
-          document.getElementById('login').value=''; document.getElementById('password').value='';
+          document.getElementById('login').value=''; 
+          document.getElementById('password').value='';
         } else {
           msg.textContent = j.error || 'Błąd logowania.';
         }
@@ -128,7 +123,6 @@
       }
     });
 
-    // Publish
     document.getElementById('publishBtn').addEventListener('click', async () => {
       const text = document.getElementById('announcement').value.trim();
       const adminMsg = document.getElementById('adminMsg');
@@ -158,12 +152,10 @@
       }
     });
 
-    // Logout
     document.getElementById('logoutBtn').addEventListener('click', () => {
       clearToken(); showAdminArea(false);
     });
 
-    // Init
     window.addEventListener('load', () => {
       loadAnnouncements();
       if (getToken()) showAdminArea(true);
