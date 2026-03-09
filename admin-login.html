@@ -30,7 +30,16 @@
   </main>
 
   <script>
-    const API = (window.BSP_API_BASE || '').replace(/\/$/, '') + '/api';
+    function resolveApiBase(){
+      const explicit = (window.BSP_API_BASE || '').trim();
+      if (explicit) return explicit.replace(/\/$/, '');
+      const metaBase = (document.querySelector('meta[name="bsp-api-base"]')?.content || '').trim();
+      if (metaBase) return metaBase.replace(/\/$/, '');
+      if (location.hostname.endsWith('pages.dev')) return 'https://bsp-zlecenia.onrender.com';
+      if (['localhost', '127.0.0.1'].includes(location.hostname)) return 'http://127.0.0.1:3000';
+      return '';
+    }
+    const API = resolveApiBase() + '/api';
     function showMsg(t, ok=false){ const el=document.getElementById('msg'); el.textContent=t; el.style.color = ok ? '#0a7a2a' : '#b91c1c'; }
     document.getElementById('btn').addEventListener('click', async () => {
       const u = document.getElementById('login').value.trim();
