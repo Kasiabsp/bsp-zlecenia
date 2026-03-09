@@ -358,7 +358,7 @@
             <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon">
 
             <label for="description" style="margin-top:10px">Opis zlecenia <span style="color:var(--danger)">*</span></label>
-             <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz"></textarea>
+           <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz"></textarea>
 
             <div style="display:flex;gap:8px;margin-top:10px">
               <div style="flex:1">
@@ -416,7 +416,16 @@
     const latRef = 52.4550;
     const lngRef = 17.3090;
     const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
-    const API_BASE = (window.BSP_API_BASE || '').replace(/\/$/, '');
+    function resolveApiBase(){
+      const explicit = (window.BSP_API_BASE || '').trim();
+      if (explicit) return explicit.replace(/\/$/, '');
+      const metaBase = (document.querySelector('meta[name="bsp-api-base"]')?.content || '').trim();
+      if (metaBase) return metaBase.replace(/\/$/, '');
+      if (location.hostname.endsWith('pages.dev')) return 'https://bsp-zlecenia.onrender.com';
+      if (['localhost', '127.0.0.1'].includes(location.hostname)) return 'http://127.0.0.1:3000';
+      return '';
+    }
+    const API_BASE = resolveApiBase();
     const SEND_ENDPOINT = API_BASE + '/api/send';
   </script>
 
@@ -527,6 +536,14 @@
 
   <script>
     (function(){
+      if (typeof L === 'undefined') {
+        const mapEl = document.getElementById('map');
+        if (mapEl) {
+          mapEl.innerHTML = '<p style="padding:12px;margin:0;color:#b91c1c;font-size:13px">Nie udało się załadować mapy (Leaflet). Sprawdź połączenie z internetem lub CDN.</p>';
+        }
+        return;
+      }
+
       const map = L.map('map').setView([latRef, lngRef], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
 
@@ -534,40 +551,24 @@
       map.on('click', function(e){
         const {lat,lng} = e.latlng;
         if (marker) marker.setLatLng([lat,lng]); else marker = L.marker([lat,lng]).addTo(map);
+        const km = haversineKm(latRef, lngRef, lat, lng);
+        document.getElementById('calc-distance').value = Math.round(km*10)/10;
+        document.getElementById('location_lat').value = lat;
+        document.getElementById('location_lng').value = lng;
+        compute();
+      });
 
+      function toRad(v){ return v * Math.PI / 180; }
+      function haversineKm(lat1, lon1, lat2, lon2){
+        const R = 6371;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
         const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2)**2;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
       }
 
       function estimateFlights(areaHa){
-        if (areaHa <= 0.01) return 1;
-        if (areaHa <= 0.1) return 1;
-        if (areaHa <= 0.5) return 2;
-        if (areaHa <= 2) return Math.min(5, Math.max(2, Math.round(areaHa * 2)));
-        return Math.ceil(areaHa * 2);
-      }
-
-      const distanceEl = document.getElementById('calc-distance');
-      const areaEl = document.getElementById('calc-area');
-      const modelsEl = document.getElementById('calc-models');
-      const serviceEl = document.getElementById('service-type');
-      const linesEl = document.getElementById('calc-lines');
-      const treesEl = document.getElementById('calc-trees');
-      const rawEl = document.getElementById('calc-raw');
-      const dateEl = document.getElementById('calc-date');
-      const runBtn = document.getElementById('calc-run');
-      const resetBtn = document.getElementById('calc-reset');
-      const resultEl = document.getElementById('calc-result');
-      const toFormBtn = document.getElementById('calc-to-form');
-
-      const linesFee = 50;
-      const treesFee = 50;
-
-      function travelFee(distanceKm){
-        const blocks = Math.max(1, Math.ceil((distanceKm || 0) / 5));
-        return blocks * 10;
-      }
 
       function daysUntil(dateStr){
         if (!dateStr) return Infinity;
