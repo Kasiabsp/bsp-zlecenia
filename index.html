@@ -358,7 +358,7 @@
             <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon">
 
             <label for="description" style="margin-top:10px">Opis zlecenia <span style="color:var(--danger)">*</span></label>
-            <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz"></textarea>
+             <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz"></textarea>
 
             <div style="display:flex;gap:8px;margin-top:10px">
               <div style="flex:1">
@@ -383,7 +383,7 @@
 
             <div style="margin-top:10px;display:flex;gap:8px">
               <button class="btn" type="submit" id="submitBtn">Wyślij zgłoszenie</button>
-              <button type="button" class="btn secondary" onclick="document.getElementById('bspForm').reset()">Wyczyść</button>
+              <button type="button" class="btn secondary" id="clearBtn">Wyczyść</button>
             </div>
 
             <div id="status" class="status" role="status" aria-live="polite"></div>
@@ -416,6 +416,8 @@
     const latRef = 52.4550;
     const lngRef = 17.3090;
     const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
+    const API_BASE = (window.BSP_API_BASE || '').replace(/\/$/, '');
+    const SEND_ENDPOINT = API_BASE + '/api/send';
   </script>
 
   <script>
@@ -460,6 +462,17 @@
         status.style.color = isError ? 'var(--danger)' : 'var(--success)';
       }
 
+      const hiddenFields = ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'];
+      const clearBtn = document.getElementById('clearBtn');
+
+      function clearForm(){
+        form.reset();
+        hiddenFields.forEach(id => document.getElementById(id).value = '');
+        showStatus('');
+      }
+
+      clearBtn.addEventListener('click', clearForm);
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const contact = form.contact.value.trim();
@@ -486,17 +499,16 @@
         showStatus('Wysyłanie...');
 
         try {
-          const res = await fetch('/api/send', {
+          const res = await fetch(SEND_ENDPOINT, {
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify(payload)
           });
           let json = null;
-          try { json = await res.json(); } catch {}
+          try { json = await res.json(); } catch { json = {}; }
           if (res.ok && json && json.status === 'ok') {
             showStatus('Wysłano poprawnie.');
-            form.reset();
-            ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'].forEach(id => document.getElementById(id).value = '');
+            clearForm();
           } else {
             const details = json && json.details ? ` (${json.details})` : '';
             showStatus('Błąd wysyłki.' + details, true);
@@ -522,18 +534,7 @@
       map.on('click', function(e){
         const {lat,lng} = e.latlng;
         if (marker) marker.setLatLng([lat,lng]); else marker = L.marker([lat,lng]).addTo(map);
-        const km = haversineKm(latRef, lngRef, lat, lng);
-        document.getElementById('calc-distance').value = Math.round(km*10)/10;
-        document.getElementById('location_lat').value = lat;
-        document.getElementById('location_lng').value = lng;
-        compute();
-      });
 
-      function toRad(v){ return v * Math.PI / 180; }
-      function haversineKm(lat1, lon1, lat2, lon2){
-        const R = 6371;
-        const dLat = toRad(lat2 - lat1);
-        const dLon = toRad(lon2 - lon1);
         const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2)**2;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
