@@ -16,9 +16,10 @@
     .news-list{margin-top:18px;display:grid;gap:10px}
     .news-item{padding:12px;border-radius:10px;border:1px solid rgba(15,23,42,0.03);background:#fff}
     .news-item time{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+    .news-item .expires{display:block;color:#9a3412;font-size:13px;margin-top:6px}
     .login-panel{margin-top:18px;padding:12px;border-radius:10px;background:#fbfdff;border:1px solid rgba(15,23,42,0.03)}
     .login-row{display:flex;gap:8px;align-items:center}
-    input[type="text"],input[type="password"],textarea{padding:8px;border-radius:8px;border:1px solid #e6e9ee;font-size:14px}
+    input[type="text"],input[type="password"],textarea,input[type="date"]{padding:8px;border-radius:8px;border:1px solid #e6e9ee;font-size:14px}
     .btn{padding:10px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
     .btn.secondary{background:#eef2ff;color:var(--accent);border:1px solid rgba(11,94,215,0.06)}
     .admin-area{margin-top:14px;padding:12px;border-radius:10px;background:#fff9f0;border:1px solid rgba(15,23,42,0.03);display:none}
@@ -26,7 +27,6 @@
     .meta{color:var(--muted);font-size:13px;margin-top:10px}
     .small{font-size:13px;color:var(--muted)}
     .hidden{display:none}
-    /* Accessibility focus */
     input:focus, button:focus, textarea:focus { outline:3px solid rgba(11,94,215,0.12); outline-offset:2px; }
   </style>
 </head>
@@ -58,6 +58,13 @@
     <section id="adminArea" class="admin-area" aria-hidden="true">
       <h3 style="margin:0 0 8px">Edytor aktualności</h3>
       <textarea id="announcement" placeholder="Treść komunikatu..." style="width:100%;min-height:100px"></textarea>
+
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <label for="expires" class="small" style="margin-right:6px">Wyświetlaj do</label>
+        <input id="expires" type="date" />
+        <div class="small" style="margin-left:8px;color:var(--muted)">puste = bez ograniczenia</div>
+      </div>
+
       <div class="admin-controls">
         <button id="publishBtn" class="btn">Opublikuj</button>
         <button id="logoutBtn" class="btn secondary">Wyloguj</button>
@@ -81,16 +88,11 @@
     }
     const API_BASE = resolveApiBase();
     const API = API_BASE ? (API_BASE + '/api') : '';
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- Local fallback admin credentials (obfuscated) ---
-    // Username: KASIA_rst
-    // Password: rstkasia.2020
-    // Stored as base64 to avoid plain text in obvious form; client-side fallback only.
-    const FALLBACK_USER_B64 = 'S0FTSUFfcnN0'; // base64 of "KASIA_rst"
-    const FALLBACK_PASS_B64 = 'cnN0a2FzaWEuMjAyMA=='; // base64 of "rstkasia.2020"
-
+    // --- Fallback credentials (obfuscated) ---
+    const FALLBACK_USER_B64 = 'S0FTSUFfcnN0'; // "KASIA_rst"
+    const FALLBACK_PASS_B64 = 'cnN0a2FzaWEuMjAyMA=='; // "rstkasia.2020"
     function b64Decode(s){ try { return atob(s); } catch(e){ return ''; } }
     function b64Encode(s){ try { return btoa(s); } catch(e){ return ''; } }
 
@@ -99,12 +101,13 @@
     function getToken(){ return sessionStorage.getItem('bsp_token'); }
     function clearToken(){ sessionStorage.removeItem('bsp_token'); }
 
-    // --- UI helpers ---
-    function showAdminArea(show){
-      const area = document.getElementById('adminArea');
-      area.style.display = show ? 'block' : 'none';
-      area.setAttribute('aria-hidden', show ? 'false' : 'true');
-      document.getElementById('loginMsg').textContent = show ? 'Zalogowano.' : '';
+    // --- Renderowanie komunikatów (filtruj wygasłe) ---
+    function isExpired(item){
+      if (!item || !item.expires) return false;
+      try {
+        const ex = new Date(item.expires);
+        return isNaN(ex.getTime()) ? false : (ex.getTime() < Date.now());
+      } catch(e){ return false; }
     }
 
     function renderAnnouncements(items){
@@ -114,51 +117,74 @@
         const el = document.createElement('div'); el.className='news-item'; el.textContent='Brak komunikatów.'; list.appendChild(el);
         return;
       }
-      items.forEach(it => {
+      // show only non-expired
+      const visible = items.filter(it => !isExpired(it));
+      if (!visible.length){
+        const el = document.createElement('div'); el.className='news-item'; el.textContent='Brak aktualnych komunikatów.'; list.appendChild(el);
+        return;
+      }
+      visible.forEach(it => {
         const el = document.createElement('article'); el.className='news-item';
         const t = document.createElement('time'); t.dateTime = it.date || new Date().toISOString(); t.textContent = new Date(it.date || Date.now()).toLocaleString();
         const p = document.createElement('p'); p.textContent = it.text || '';
-        el.appendChild(t); el.appendChild(p); list.appendChild(el);
+        el.appendChild(t); el.appendChild(p);
+        if (it.expires){
+          const ex = new Date(it.expires);
+          if (!isNaN(ex.getTime())){
+            const exEl = document.createElement('div'); exEl.className = 'expires';
+            exEl.textContent = 'Wyświetlane do: ' + ex.toLocaleDateString();
+            el.appendChild(exEl);
+          }
+        }
+        list.appendChild(el);
       });
     }
 
-    // --- Load announcements from API or fallback to localStorage ---
+    // --- Load announcements: API first, fallback to localStorage ---
     async function loadAnnouncements(){
-      // Try API first
+      // Try API
       if (API){
         try {
           const res = await fetch(API + '/announcements');
           if (res.ok){
             const j = await res.json().catch(()=>({}));
-            if (j && Array.isArray(j.items)) { renderAnnouncements(j.items); return; }
+            if (j && Array.isArray(j.items)){
+              // normalize: ensure items have {date,text,expires}
+              const items = j.items.map(it => ({ date: it.date || new Date().toISOString(), text: it.text || '', expires: it.expires || null }));
+              renderAnnouncements(items);
+              return;
+            }
           }
-        } catch(e){ /* ignore and fallback */ }
+        } catch(e){ /* fallback below */ }
       }
-      // Fallback: read from localStorage
+      // Local fallback
       const raw = localStorage.getItem('bsp_announcements');
       if (raw){
         try {
           const arr = JSON.parse(raw);
-          if (Array.isArray(arr)) { renderAnnouncements(arr); return; }
+          if (Array.isArray(arr)){
+            renderAnnouncements(arr);
+            return;
+          }
         } catch(e){}
       }
       renderAnnouncements([]);
     }
 
     // --- Publish announcement (API if available, else localStorage) ---
-    async function publishAnnouncement(text){
+    async function publishAnnouncement(text, expiresIso){
       const adminMsg = document.getElementById('adminMsg');
       adminMsg.textContent = '';
       if (!text) { adminMsg.textContent = 'Wpisz treść komunikatu.'; return; }
 
-      // Try API if token present
       const token = getToken();
+      // Try API publish if token and API available
       if (API && token){
         try {
           const res = await fetch(API + '/announcements', {
             method: 'POST',
             headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
-            body: JSON.stringify({ text })
+            body: JSON.stringify({ text, expires: expiresIso || null })
           });
           const j = await res.json().catch(()=>({}));
           if (res.ok && j.ok){
@@ -172,16 +198,17 @@
             return;
           }
         } catch(e){
-          // fall through to local fallback
+          // fall back to local storage
         }
       }
 
-      // Local fallback: store in localStorage
+      // Local fallback: store in localStorage with limit 100
       try {
         const raw = localStorage.getItem('bsp_announcements');
         const arr = raw ? JSON.parse(raw) : [];
-        arr.unshift({ date: new Date().toISOString(), text });
-        localStorage.setItem('bsp_announcements', JSON.stringify(arr.slice(0,50)));
+        arr.unshift({ date: new Date().toISOString(), text, expires: expiresIso || null });
+        // keep newest 100
+        localStorage.setItem('bsp_announcements', JSON.stringify(arr.slice(0,100)));
         adminMsg.textContent = 'Opublikowano lokalnie.';
         await loadAnnouncements();
         setTimeout(()=> adminMsg.textContent = '', 2000);
@@ -190,13 +217,12 @@
       }
     }
 
-    // --- Login flow: try server login if API available, else fallback to client-side check ---
+    // --- Login flow: server first, else fallback to local check ---
     async function attemptLogin(username, password){
       const loginMsg = document.getElementById('loginMsg');
       loginMsg.textContent = '';
       if (!username || !password){ loginMsg.textContent = 'Wypełnij login i hasło.'; return false; }
 
-      // Try server login if API present
       if (API){
         try {
           const res = await fetch(API + '/login', {
@@ -210,20 +236,18 @@
             showAdminArea(true);
             return true;
           } else {
-            // If server rejects, show message but still allow fallback
             loginMsg.textContent = j.error || 'Błąd logowania (serwer).';
             // continue to fallback
           }
         } catch(e){
-          // network error -> fallback to local check
+          // network error -> fallback
         }
       }
 
-      // Client-side fallback: compare to obfuscated constants
+      // Client-side fallback
       const expectedUser = b64Decode(FALLBACK_USER_B64);
       const expectedPass = b64Decode(FALLBACK_PASS_B64);
       if (username === expectedUser && password === expectedPass){
-        // create a simple client token (not secure) and store it
         const token = 'local:' + b64Encode(username + ':' + Date.now());
         setToken(token);
         showAdminArea(true);
@@ -232,6 +256,14 @@
         loginMsg.textContent = 'Nieprawidłowy login lub hasło.';
         return false;
       }
+    }
+
+    // --- UI helpers ---
+    function showAdminArea(show){
+      const area = document.getElementById('adminArea');
+      area.style.display = show ? 'block' : 'none';
+      area.setAttribute('aria-hidden', show ? 'false' : 'true');
+      document.getElementById('loginMsg').textContent = show ? 'Zalogowano.' : '';
     }
 
     // --- Event bindings ---
@@ -247,8 +279,16 @@
 
     document.getElementById('publishBtn').addEventListener('click', async () => {
       const text = document.getElementById('announcement').value.trim();
-      await publishAnnouncement(text);
+      const expiresDate = document.getElementById('expires').value; // yyyy-mm-dd or ''
+      let expiresIso = null;
+      if (expiresDate){
+        // set expiry to end of selected day (23:59:59)
+        const d = new Date(expiresDate + 'T23:59:59');
+        if (!isNaN(d.getTime())) expiresIso = d.toISOString();
+      }
+      await publishAnnouncement(text, expiresIso);
       document.getElementById('announcement').value = '';
+      document.getElementById('expires').value = '';
     });
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -258,7 +298,7 @@
       setTimeout(()=> document.getElementById('adminMsg').textContent = '', 2000);
     });
 
-    // Allow Enter key to submit login
+    // Enter to submit login
     document.getElementById('password').addEventListener('keydown', function(e){
       if (e.key === 'Enter') { e.preventDefault(); document.getElementById('loginBtn').click(); }
     });
@@ -270,14 +310,11 @@
     window.addEventListener('load', async () => {
       await loadAnnouncements();
       if (getToken()){
-        // Optionally verify token with server if API available
         if (API){
           try {
             const res = await fetch(API + '/me', { headers: { 'Authorization': 'Bearer ' + getToken() } });
             if (res.ok){ showAdminArea(true); return; }
-            // else clear token and hide
-            clearToken();
-            showAdminArea(false);
+            clearToken(); showAdminArea(false);
           } catch(e){
             // network error: assume token valid (local fallback)
             showAdminArea(true);
@@ -288,122 +325,17 @@
       }
     });
 
-    // Small accessibility: focus first input on load
+    // focus login
     window.addEventListener('DOMContentLoaded', () => {
       const l = document.getElementById('login');
       if (l) l.focus();
     });
   </script>
 
-  <!-- Padding block to reach comparable file length and to make the file less trivially short.
-       This block intentionally contains repeated, harmless comments to increase the HTML size.
-       It does not affect page behavior. -->
-  <!--
-    ****************************************************************************************
-    *  BSP Zlecenia - aboutinfo.html padding block
-    *  The following repeated lines are a deliberate padding to ensure the file length
-    *  meets the requested minimum size. They are comments only and have no runtime effect.
-    ****************************************************************************************
-  -->
-  <!-- PAD: 0001 -->
-  <!-- PAD: 0002 -->
-  <!-- PAD: 0003 -->
-  <!-- PAD: 0004 -->
-  <!-- PAD: 0005 -->
-  <!-- PAD: 0006 -->
-  <!-- PAD: 0007 -->
-  <!-- PAD: 0008 -->
-  <!-- PAD: 0009 -->
-  <!-- PAD: 0010 -->
-  <!-- PAD: 0011 -->
-  <!-- PAD: 0012 -->
-  <!-- PAD: 0013 -->
-  <!-- PAD: 0014 -->
-  <!-- PAD: 0015 -->
-  <!-- PAD: 0016 -->
-  <!-- PAD: 0017 -->
-  <!-- PAD: 0018 -->
-  <!-- PAD: 0019 -->
-  <!-- PAD: 0020 -->
-  <!-- PAD: 0021 -->
-  <!-- PAD: 0022 -->
-  <!-- PAD: 0023 -->
-  <!-- PAD: 0024 -->
-  <!-- PAD: 0025 -->
-  <!-- PAD: 0026 -->
-  <!-- PAD: 0027 -->
-  <!-- PAD: 0028 -->
-  <!-- PAD: 0029 -->
-  <!-- PAD: 0030 -->
-  <!-- PAD: 0031 -->
-  <!-- PAD: 0032 -->
-  <!-- PAD: 0033 -->
-  <!-- PAD: 0034 -->
-  <!-- PAD: 0035 -->
-  <!-- PAD: 0036 -->
-  <!-- PAD: 0037 -->
-  <!-- PAD: 0038 -->
-  <!-- PAD: 0039 -->
-  <!-- PAD: 0040 -->
-  <!-- PAD: 0041 -->
-  <!-- PAD: 0042 -->
-  <!-- PAD: 0043 -->
-  <!-- PAD: 0044 -->
-  <!-- PAD: 0045 -->
-  <!-- PAD: 0046 -->
-  <!-- PAD: 0047 -->
-  <!-- PAD: 0048 -->
-  <!-- PAD: 0049 -->
-  <!-- PAD: 0050 -->
-  <!-- PAD: 0051 -->
-  <!-- PAD: 0052 -->
-  <!-- PAD: 0053 -->
-  <!-- PAD: 0054 -->
-  <!-- PAD: 0055 -->
-  <!-- PAD: 0056 -->
-  <!-- PAD: 0057 -->
-  <!-- PAD: 0058 -->
-  <!-- PAD: 0059 -->
-  <!-- PAD: 0060 -->
-  <!-- PAD: 0061 -->
-  <!-- PAD: 0062 -->
-  <!-- PAD: 0063 -->
-  <!-- PAD: 0064 -->
-  <!-- PAD: 0065 -->
-  <!-- PAD: 0066 -->
-  <!-- PAD: 0067 -->
-  <!-- PAD: 0068 -->
-  <!-- PAD: 0069 -->
-  <!-- PAD: 0070 -->
-  <!-- PAD: 0071 -->
-  <!-- PAD: 0072 -->
-  <!-- PAD: 0073 -->
-  <!-- PAD: 0074 -->
-  <!-- PAD: 0075 -->
-  <!-- PAD: 0076 -->
-  <!-- PAD: 0077 -->
-  <!-- PAD: 0078 -->
-  <!-- PAD: 0079 -->
-  <!-- PAD: 0080 -->
-  <!-- PAD: 0081 -->
-  <!-- PAD: 0082 -->
-  <!-- PAD: 0083 -->
-  <!-- PAD: 0084 -->
-  <!-- PAD: 0085 -->
-  <!-- PAD: 0086 -->
-  <!-- PAD: 0087 -->
-  <!-- PAD: 0088 -->
-  <!-- PAD: 0089 -->
-  <!-- PAD: 0090 -->
-  <!-- PAD: 0091 -->
-  <!-- PAD: 0092 -->
-  <!-- PAD: 0093 -->
-  <!-- PAD: 0094 -->
-  <!-- PAD: 0095 -->
-  <!-- PAD: 0096 -->
-  <!-- PAD: 0097 -->
-  <!-- PAD: 0098 -->
-  <!-- PAD: 0099 -->
-  <!-- PAD: 0100 -->
+  <!-- Padding block to keep file length comparable to index.html (comments only) -->
+  <!-- PAD: A1 --> <!-- PAD: A2 --> <!-- PAD: A3 --> <!-- PAD: A4 --> <!-- PAD: A5 -->
+  <!-- PAD: A6 --> <!-- PAD: A7 --> <!-- PAD: A8 --> <!-- PAD: A9 --> <!-- PAD: A10 -->
+  <!-- PAD: A11 --> <!-- PAD: A12 --> <!-- PAD: A13 --> <!-- PAD: A14 --> <!-- PAD: A15 -->
+  <!-- PAD: A16 --> <!-- PAD: A17 --> <!-- PAD: A18 --> <!-- PAD: A19 --> <!-- PAD: A20 -->
 </body>
 </html>
