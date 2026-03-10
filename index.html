@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pl">
 <head>
@@ -235,7 +236,7 @@
               <div class="card" style="padding:10px;border-radius:10px;">
                 <h3 style="margin:0 0 6px 0;font-size:14px">Opłata za dojazd</h3>
                 <p style="margin:0;color:var(--muted);font-size:12px">
-                  0–5 km — 10 zł; 5–10 km — 20 zł; 10–15 km — 30 zł; dalej co 5 km +10 zł. Dystans obliczany w linii prostej z Biskupic Wielkopolskich po wskazaniu lokalizacji na mapie.
+                  0–5 km — 10 zł; 5–10 km — 20 zł; 10–15 km — 30 zł; 15–30 km — 50 zł; dalej >30 km — 10 zł za każde rozpoczęte 5 km.
                 </p>
               </div>
 
@@ -255,7 +256,7 @@
                   <div>
                     <label id="mapLabel">Wskaż miejsce zlecenia na mapie</label>
                     <div id="map" class="map-box" role="application" aria-label="Mapa do wyboru lokalizacji" tabindex="0"></div>
-                    <div class="muted" style="margin-top:6px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic Wielkopolskich zostanie obliczony automatycznie.</div>
+                    <div class="muted" style="margin-top:6px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic zostanie obliczony automatycznie.</div>
                   </div>
 
                   <div style="display:flex;flex-direction:column;gap:8px">
@@ -433,8 +434,8 @@
     const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
     const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
     // Punkt referencyjny: Biskupice (Biskupice Wielkopolskie) — 52°28'46"N, 17°08'49"E
-    const latRef = 52.479444;
-    const lngRef = 17.146944;
+    const latRef = 52.479444;   // 52 + 28/60 + 46/3600
+    const lngRef = 17.146944;   // 17 + 8/60 + 49/3600
     const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
 
     function resolveApiBase(){
@@ -539,7 +540,7 @@
           return;
         }
 
-        map = L.map('map', { attributionControl: false }).setView([latRef, lngRef], 12);
+        map = L.map('map', { attributionControl: false }).setView([latRef, lngRef], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '&copy; OpenStreetMap contributors'
@@ -576,7 +577,7 @@
         if (!skipPan) map.panTo([lat, lng]);
 
         const distKm = haversineDistance(latRef, lngRef, lat, lng);
-        const distRounded = Math.round(distKm * 100) / 100;
+        const distRounded = Math.round(distKm * 100) / 100; // two decimals
         if (distanceEl) distanceEl.value = distRounded;
         document.getElementById('location_lat').value = lat;
         document.getElementById('location_lng').value = lng;
@@ -587,7 +588,8 @@
         if (distance <= 5) return 10;
         if (distance <= 10) return 20;
         if (distance <= 15) return 30;
-        return 30 + Math.ceil((distance - 15)/5) * 10;
+        if (distance <= 30) return 50;
+        return 50 + Math.ceil((distance - 30) / 5) * 10;
       }
 
       function runCalc(){
