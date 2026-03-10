@@ -432,8 +432,9 @@
     // --- Konfiguracja i pomocnicze wartości ---
     const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
     const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
-    const latRef = 52.4550;   // Biskupice Wielkopolskie (referencyjny punkt)
-    const lngRef = 17.3090;
+    // Punkt referencyjny: Biskupice (Biskupice Wielkopolskie) — 52°28'46"N, 17°08'49"E
+    const latRef = 52.479444;
+    const lngRef = 17.146944;
     const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
 
     function resolveApiBase(){
@@ -544,8 +545,9 @@
           attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        L.circleMarker([latRef, lngRef], { radius:6, color:'#0b5ed7', fillColor:'#0b5ed7', fillOpacity:0.9 }).addTo(map)
-          .bindPopup('Biskupice Wielkopolskie (punkt referencyjny)');
+        // reference marker for Biskupice
+        window._bspRefMarker = L.circleMarker([latRef, lngRef], { radius:6, color:'#0b5ed7', fillColor:'#0b5ed7', fillOpacity:0.9 }).addTo(map)
+          .bindPopup('Biskupice (punkt referencyjny)').openPopup();
 
         map.on('click', function(e){
           const { lat, lng } = e.latlng;
