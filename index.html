@@ -176,7 +176,7 @@
                 <h4>Budowa — inspekcja 08.03.2026</h4>
                 <model-viewer src="assets/8.03.2026.glb" alt="Model Budowa 08.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
                 <p class="muted">
-                  Fotogrametryczny model 3D placu budowy z widoczną strukturą murową i elementami konstrukcyjnymi. Wysoka rozdzielczość tekstur oraz precyzyjna siatka geometryczna umożliwiają pomiary powierzchni i kubatury, kontrolę postępu prac oraz przygotowanie rzetelnych kosztorysów i dokumentacji wykonawczej.
+                  Fotogrametryczny model 3D placu budowy z widoczną strukturą murową i elementami konstrukcyjnymi.
                 </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/8.03.2026.glb" data-title="Budowa — 08.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
@@ -193,7 +193,7 @@
                 <h4>Urbex — inspekcja 07.03.2026</h4>
                 <model-viewer src="assets/7.03.2026.glb" alt="Model Urbex 07.03.2026" camera-controls auto-rotate loading="lazy"></model-viewer>
                 <p class="muted">
-                  Dokumentacyjny model 3D obiektu opuszczonego z widocznymi uszkodzeniami elewacji, graffiti i roślinnością dachową. Model dostarcza szczegółowych danych do oceny stanu technicznego, planowania zabezpieczeń oraz archiwizacji historycznej obiektu w kontekście konserwacji i analiz ryzyka.
+                  Dokumentacyjny model 3D obiektu opuszczonego z widocznymi uszkodzeniami elewacji.
                 </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/7.03.2026.glb" data-title="Urbex — 07.03.2026" onclick="openModelModal(this)">Otwórz podgląd</button>
@@ -210,7 +210,7 @@
                 <h4>Model hydrotechniczny</h4>
                 <model-viewer src="assets/model.glb" alt="Model hydrotechniczny" camera-controls auto-rotate loading="lazy"></model-viewer>
                 <p class="muted">
-                  Fotogrametryczny model 3D konstrukcji hydrotechnicznej z betonową komorą, schodami i elementami technicznymi. Wysoka dokładność geometrii i tekstur pozwala na inspekcję infrastruktury, analizę uszkodzeń oraz planowanie prac konserwacyjnych.
+                  Fotogrametryczny model 3D konstrukcji hydrotechnicznej.
                 </p>
                 <div style="display:flex;gap:8px">
                   <button class="btn" data-src="assets/model.glb" data-title="Model hydrotechniczny" onclick="openModelModal(this)">Otwórz podgląd</button>
@@ -226,189 +226,191 @@
           </section>
 
           <section id="pricing-rules" aria-labelledby="pricing-rules-heading" style="margin-top:12px;">
-         <section aria-labelledby="pricing-rules-heading">
-  <h2 id="pricing-rules-heading">Zasady wyceny</h2>
-  <p class="muted" style="margin-top:6px;">
-    Opłata za dojazd + koszt pracy (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.
-  </p>
+            <h2 id="pricing-rules-heading">Zasady wyceny</h2>
+            <p class="muted" style="margin-top:6px;">
+              Opłata za dojazd + koszt pracy (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.
+            </p>
 
-  <div class="grid" style="display:grid;gap:8px;margin-top:8px">
-    <div class="card" style="padding:10px;border-radius:10px;">
-      <h3 style="margin:0 0 6px 0;font-size:14px">Opłata za dojazd</h3>
-      <p style="margin:0;color:var(--muted);font-size:12px">
-        0–5 km — 10 zł; 5–10 km — 20 zł; 10–15 km — 30 zł; dalej co 5 km +10 zł. Dystans obliczany w linii prostej z Biskupic po wskazaniu lokalizacji na mapie.
-      </p>
-    </div>
+            <div class="grid" style="display:grid;gap:8px;margin-top:8px">
+              <div class="card" style="padding:10px;border-radius:10px;">
+                <h3 style="margin:0 0 6px 0;font-size:14px">Opłata za dojazd</h3>
+                <p style="margin:0;color:var(--muted);font-size:12px">
+                  0–5 km — 10 zł; 5–10 km — 20 zł; 10–15 km — 30 zł; 15–30 km — 50 zł; dalej >30 km — 10 zł za każde rozpoczęte 5 km.
+                </p>
+              </div>
 
-    <div class="card" style="padding:10px;border-radius:10px;">
-      <h3 style="margin:0 0 6px 0;font-size:14px">Czynniki i stałe dopłaty</h3>
-      <ul style="margin:6px 0 0 14px;color:var(--muted);font-size:12px">
-        <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong>.</li>
-        <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong>.</li>
-        <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie).</li>
-      </ul>
-    </div>
+              <div class="card" style="padding:10px;border-radius:10px;">
+                <h3 style="margin:0 0 6px 0;font-size:14px">Czynniki i stałe dopłaty</h3>
+                <ul style="margin:6px 0 0 14px;color:var(--muted);font-size:12px">
+                  <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong>.</li>
+                  <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong>.</li>
+                  <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie).</li>
+                </ul>
+              </div>
 
-    <div class="calc" id="priceCalc" aria-labelledby="priceCalcTitle">
-      <h3 id="priceCalcTitle" style="margin-top:0;font-size:14px">Kalkulator orientacyjnej ceny</h3>
+              <div class="calc" id="priceCalc" aria-labelledby="priceCalcTitle">
+                <h3 id="priceCalcTitle" style="margin-top:0;font-size:14px">Kalkulator orientacyjnej ceny</h3>
 
-      <div class="calc-grid" style="margin-top:8px;display:grid;grid-template-columns:1fr 320px;gap:12px">
-        <div>
-          <label id="mapLabel">Wskaż miejsce zlecenia na mapie</label>
-          <div id="map" class="map-box" role="application" aria-label="Mapa do wyboru lokalizacji" tabindex="0" style="height:220px;background:#eef"></div>
-          <div class="muted" style="margin-top:6px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od Biskupic zostanie obliczony automatycznie.</div>
-        </div>
+                <div class="calc-grid" style="margin-top:8px;display:grid;grid-template-columns:1fr 320px;gap:12px">
+                  <div>
+                    <label id="mapLabel">Wskaż miejsce zlecenia na mapie</label>
+                    <div id="map" class="map-box" role="application" aria-label="Mapa do wyboru lokalizacji" tabindex="0"></div>
+                    <div class="muted" style="margin-top:6px">Kliknij na mapie, aby ustawić lokalizację; dystans w linii prostej od punktu referencyjnego zostanie obliczony automatycznie.</div>
+                  </div>
 
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div class="calc-row">
-            <label for="calc-distance">Odległość (km)</label>
-            <input id="calc-distance" class="small" type="number" readonly value="0" aria-describedby="distanceDesc">
-            <div id="distanceDesc" class="muted" style="font-size:12px">Dystans w linii prostej</div>
-          </div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <div class="calc-row">
+                      <label for="calc-distance">Odległość (km)</label>
+                      <input id="calc-distance" class="small" type="number" readonly value="0" aria-describedby="distanceDesc">
+                      <div id="distanceDesc" class="muted" style="font-size:12px">Dystans w linii prostej</div>
+                    </div>
 
-          <div class="calc-row">
-            <label for="calc-area">Powierzchnia (ha)</label>
-            <input id="calc-area" name="calc-area" type="number" min="0" step="0.01" value="0.10" class="small" aria-label="Powierzchnia w hektarach">
-          </div>
+                    <div class="calc-row">
+                      <label for="calc-area">Powierzchnia (ha)</label>
+                      <input id="calc-area" name="calc-area" type="number" min="0" step="0.01" value="0.10" class="small" aria-label="Powierzchnia w hektarach">
+                    </div>
 
-          <div class="calc-row">
-            <label for="calc-models">Liczba modeli</label>
-            <input id="calc-models" name="calc-models" type="number" min="1" step="1" value="1" class="small">
-          </div>
+                    <div class="calc-row">
+                      <label for="calc-models">Liczba modeli</label>
+                      <input id="calc-models" name="calc-models" type="number" min="1" step="1" value="1" class="small">
+                    </div>
 
-          <div class="calc-row">
-            <label for="service-type">Rodzaj usługi</label>
-            <select id="service-type" name="service-type" class="small" aria-label="Wybierz rodzaj usługi">
-              <option value="mapping">Mapowanie</option>
-              <option value="photos">Zdjęcia</option>
-              <option value="video">Filmy</option>
-              <option value="model3d">Modele 3D</option>
-            </select>
-          </div>
+                    <div class="calc-row">
+                      <label for="service-type">Rodzaj usługi</label>
+                      <select id="service-type" name="service-type" class="small" aria-label="Wybierz rodzaj usługi">
+                        <option value="mapping">Mapowanie</option>
+                        <option value="photos">Zdjęcia</option>
+                        <option value="video">Filmy</option>
+                        <option value="model3d">Modele 3D</option>
+                      </select>
+                    </div>
 
-          <fieldset style="border:0;padding:0;margin:0">
-            <legend style="font-weight:700">Opcje dodatkowe</legend>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <label style="font-weight:700;font-size:13px">
-                <input id="calc-lines" name="extras" type="checkbox" value="lines"> Linie (50 zł)
-              </label>
-              <label style="font-weight:700;font-size:13px">
-                <input id="calc-trees" name="extras" type="checkbox" value="trees"> Drzewa (50 zł)
-              </label>
-              <label style="font-weight:700;font-size:13px">
-                <input id="calc-raw" name="extras" type="checkbox" value="raw"> RAW (100 zł)
-              </label>
+                    <fieldset style="border:0;padding:0;margin:0">
+                      <legend style="font-weight:700">Opcje dodatkowe</legend>
+                      <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <label style="font-weight:700;font-size:13px">
+                          <input id="calc-lines" name="extras" type="checkbox" value="lines"> Linie (50 zł)
+                        </label>
+                        <label style="font-weight:700;font-size:13px">
+                          <input id="calc-trees" name="extras" type="checkbox" value="trees"> Drzewa (50 zł)
+                        </label>
+                        <label style="font-weight:700;font-size:13px">
+                          <input id="calc-raw" name="extras" type="checkbox" value="raw"> RAW (100 zł)
+                        </label>
+                      </div>
+                    </fieldset>
+
+                    <div class="calc-row">
+                      <label for="calc-date">Preferowany termin</label>
+                      <input id="calc-date" name="calc-date" type="date" class="small" aria-label="Preferowany termin realizacji">
+                    </div>
+
+                    <div style="display:flex;gap:8px;margin-top:6px">
+                      <button id="calc-run" class="btn" type="button">Oblicz</button>
+                      <button id="calc-reset" class="btn secondary" type="button">Reset</button>
+                      <button id="calc-to-form" class="btn" type="button" style="background:#0b5ed7;color:#fff">Wstaw do formularza</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="calc-result" class="breakdown" aria-live="polite" style="display:none;margin-top:10px"></div>
+              </div>
             </div>
-          </fieldset>
+          </section>
 
-          <div class="calc-row">
-            <label for="calc-date">Preferowany termin</label>
-            <input id="calc-date" name="calc-date" type="date" class="small" aria-label="Preferowany termin realizacji">
-          </div>
+          <section id="how-we-work" aria-labelledby="how-we-work-title" style="margin-top:12px;">
+            <h2 id="how-we-work-title" style="font-size:16px;margin:12px 0 8px;">Jak pracujemy</h2>
+            <p class="muted" style="margin:0 0 8px;">
+              Proces w 6 krokach — od zgłoszenia do gotowych materiałów. Płatność: 50% po locie, 50% po dostawie; 14 dni na poprawki.
+            </p>
 
-          <div style="display:flex;gap:8px;margin-top:6px">
-            <button id="calc-run" class="btn" type="button">Oblicz</button>
-            <button id="calc-reset" class="btn secondary" type="button">Reset</button>
-            <button id="calc-to-form" class="btn" type="button" style="background:#0b5ed7;color:#fff">Wstaw do formularza</button>
-          </div>
-        </div>
+            <div class="hw-timeline" aria-hidden="false">
+              <article class="hw-step" data-step="1">
+                <h3>1. Odebranie zlecenia</h3>
+                <p>Przyjmujemy zgłoszenie przez formularz lub telefon; potwierdzamy podstawowe dane i termin w ciągu 24 godzin.</p>
+                <button class="btn-small hw-use" data-area="0.10" data-models="1" type="button">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="2">
+                <h3>2. Analiza terenu</h3>
+                <p>Sprawdzamy mapę, ryzyka (linie, drzewa) i szacujemy liczbę lotów.</p>
+                <button class="btn-small hw-use" data-area="0.50" data-models="1" type="button">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="3">
+                <h3>3. Kontakt z zleceniodawcą</h3>
+                <p>Potwierdzamy szczegóły, dostęp do posesji i ewentualne wymagania.</p>
+                <button class="btn-small hw-use" data-area="0.20" data-models="1" type="button">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="4">
+                <h3>4. Realizacja zlecenia</h3>
+                <p>Przyjazd na miejsce, zabezpieczenie strefy i wykonanie zaplanowanych lotów. 1 lot = 1 dzień pracy w terenie.</p>
+                <button class="btn-small hw-use" data-area="1.00" data-models="1" type="button">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="5">
+                <h3>5. Przygotowanie materiałów</h3>
+                <p>Selekcja i obróbka: JPG, RAW, model GLB; czas obróbki zwykle 2–7 dni roboczych.</p>
+                <button class="btn-small hw-use" data-area="0.50" data-models="1" type="button">Użyj w wycenie</button>
+              </article>
+
+              <article class="hw-step" data-step="6">
+                <h3>6. Dostarczenie materiałów</h3>
+                <p>Pliki udostępniamy w chmurze; druga połowa płatności po dostawie. 14 dni na zgłoszenie poprawek.</p>
+                <button class="btn-small hw-use" data-area="0.10" data-models="1" type="button">Użyj w wycenie</button>
+              </article>
+            </div>
+          </section>
+        </section>
       </div>
 
-      <div id="calc-result" class="breakdown" aria-live="polite" style="display:none;margin-top:10px"></div>
+      <aside>
+        <div class="form-card" id="form" aria-labelledby="form-title">
+          <h3 id="form-title" style="margin:0 0 8px">Zgłoś zlecenie</h3>
+
+          <form id="bspForm" novalidate>
+            <div>
+              <label for="contact">E-mail lub telefon <span style="color:var(--danger)">*</span></label>
+              <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon" aria-required="true" autocomplete="email tel">
+            </div>
+
+            <div style="margin-top:10px">
+              <label for="description">Opis zlecenia <span style="color:var(--danger)">*</span></label>
+              <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz" aria-required="true"></textarea>
+            </div>
+
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <div style="flex:1">
+                <label for="date">Preferowany termin</label>
+                <input id="date" name="date" type="date">
+              </div>
+              <div style="width:120px">
+                <label for="budget">Budżet (PLN)</label>
+                <input id="budget" name="budget" type="text" inputmode="numeric" placeholder="PLN" pattern="[0-9]*">
+              </div>
+            </div>
+
+            <!-- ukryte pola -->
+            <input type="hidden" id="selected_model" name="selected_model" value="">
+            <input type="hidden" id="estimated_price" name="estimated_price" value="">
+            <input type="hidden" id="location_lat" name="location_lat" value="">
+            <input type="hidden" id="location_lng" name="location_lng" value="">
+            <input type="hidden" id="service_type" name="service_type" value="">
+            <input type="hidden" id="area_ha" name="area_ha" value="">
+            <input type="hidden" id="flights_estimated" name="flights_estimated" value="">
+            <input type="hidden" id="extras_list" name="extras_list" value="">
+
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn" type="submit" id="submitBtn">Wyślij zgłoszenie</button>
+              <button type="button" class="btn secondary" id="clearBtn">Wyczyść</button>
+            </div>
+
+            <div id="status" class="status" role="status" aria-live="polite" style="margin-top:8px"></div>
+          </form>
+        </div>
+      </aside>
     </div>
-  </div>
-</section>
-
-<section id="how-we-work" aria-labelledby="how-we-work-title">
-  <h2 id="how-we-work-title" style="font-size:16px;margin:12px 0 8px;">Jak pracujemy</h2>
-  <p class="muted" style="margin:0 0 8px;">
-    Proces w 6 krokach — od zgłoszenia do gotowych materiałów. Płatność: 50% po locie, 50% po dostawie; 14 dni na poprawki.
-  </p>
-
-  <div class="hw-timeline" aria-hidden="false">
-    <article class="hw-step" data-step="1">
-      <h3>1. Odebranie zlecenia</h3>
-      <p>Przyjmujemy zgłoszenie przez formularz lub telefon; potwierdzamy podstawowe dane i termin w ciągu 24 godzin.</p>
-      <button class="btn-small hw-use" data-area="0.10" data-models="1" type="button">Użyj w wycenie</button>
-    </article>
-
-    <article class="hw-step" data-step="2">
-      <h3>2. Analiza terenu</h3>
-      <p>Sprawdzamy mapę, ryzyka (linie, drzewa) i szacujemy liczbę lotów.</p>
-      <button class="btn-small hw-use" data-area="0.50" data-models="1" type="button">Użyj w wycenie</button>
-    </article>
-
-    <article class="hw-step" data-step="3">
-      <h3>3. Kontakt z zleceniodawcą</h3>
-      <p>Potwierdzamy szczegóły, dostęp do posesji i ewentualne wymagania.</p>
-      <button class="btn-small hw-use" data-area="0.20" data-models="1" type="button">Użyj w wycenie</button>
-    </article>
-
-    <article class="hw-step" data-step="4">
-      <h3>4. Realizacja zlecenia</h3>
-      <p>Przyjazd na miejsce, zabezpieczenie strefy i wykonanie zaplanowanych lotów. 1 lot = 1 dzień pracy w terenie.</p>
-      <button class="btn-small hw-use" data-area="1.00" data-models="1" type="button">Użyj w wycenie</button>
-    </article>
-
-    <article class="hw-step" data-step="5">
-      <h3>5. Przygotowanie materiałów</h3>
-      <p>Selekcja i obróbka: JPG, RAW, model GLB; czas obróbki zwykle 2–7 dni roboczych.</p>
-      <button class="btn-small hw-use" data-area="0.50" data-models="1" type="button">Użyj w wycenie</button>
-    </article>
-
-    <article class="hw-step" data-step="6">
-      <h3>6. Dostarczenie materiałów</h3>
-      <p>Pliki udostępniamy w chmurze; druga połowa płatności po dostawie. 14 dni na zgłoszenie poprawek.</p>
-      <button class="btn-small hw-use" data-area="0.10" data-models="1" type="button">Użyj w wycenie</button>
-    </article>
-  </div>
-</section>
-
-<aside>
-  <div class="form-card" id="form" aria-labelledby="form-title">
-    <h3 id="form-title" style="margin:0 0 8px">Zgłoś zlecenie</h3>
-
-    <form id="bspForm" novalidate>
-      <div>
-        <label for="contact">E-mail lub telefon <span style="color:var(--danger)">*</span></label>
-        <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon" aria-required="true" autocomplete="email tel">
-      </div>
-
-      <div style="margin-top:10px">
-        <label for="description">Opis zlecenia <span style="color:var(--danger)">*</span></label>
-        <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz" aria-required="true"></textarea>
-      </div>
-
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <div style="flex:1">
-          <label for="date">Preferowany termin</label>
-          <input id="date" name="date" type="date">
-        </div>
-        <div style="width:120px">
-          <label for="budget">Budżet (PLN)</label>
-          <input id="budget" name="budget" type="text" inputmode="numeric" placeholder="PLN" pattern="[0-9]*">
-        </div>
-      </div>
-
-      <!-- ukryte pola -->
-      <input type="hidden" id="selected_model" name="selected_model" value="">
-      <input type="hidden" id="estimated_price" name="estimated_price" value="">
-      <input type="hidden" id="location_lat" name="location_lat" value="">
-      <input type="hidden" id="location_lng" name="location_lng" value="">
-      <input type="hidden" id="service_type" name="service_type" value="">
-      <input type="hidden" id="area_ha" name="area_ha" value="">
-      <input type="hidden" id="flights_estimated" name="flights_estimated" value="">
-      <input type="hidden" id="extras_list" name="extras_list" value="">
-
-      <div style="margin-top:10px;display:flex;gap:8px">
-        <button class="btn" type="submit" id="submitBtn">Wyślij zgłoszenie</button>
-        <button type="button" class="btn secondary" id="clearBtn">Wyczyść</button>
-      </div>
-
-      <div id="status" class="status" role="status" aria-live="polite" style="margin-top:8px"></div>
-    </form>
-  </div>
-</aside>
 
     <footer>
       © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
@@ -424,17 +426,20 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <script>
+    // --- Konfiguracja i pomocnicze wartości ---
     const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
     const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
-    // Punkt referencyjny ustawiony na: 52°28′01″N, 17°10′12″E
-    const latRef = 52.46694444444444; // 52 + 28/60 + 1/3600
-    const lngRef = 17.17;              // 17 + 10/60 + 12/3600 = 17.17
+
+    // Punkt referencyjny (już poprawiony): 52°28′01″N, 17°10′12″E
+    // dokładne wartości dziesiętne:
+    const latRef = 52 + 28/60 + 1/3600;   // 52.46694444444444
+    const lngRef = 17 + 10/60 + 12/3600;  // 17.17
+
     const fmt = (v) => new Intl.NumberFormat('pl-PL').format(Math.round(v));
+
     function resolveApiBase(){
       const explicit = (window.BSP_API_BASE || '').trim();
       if (explicit) return explicit.replace(/\/$/, '');
@@ -449,6 +454,7 @@
   </script>
 
   <script>
+    // --- Modal helpers ---
     function openModelModal(btn){
       const src = btn.getAttribute('data-src');
       const title = btn.getAttribute('data-title') || '';
@@ -484,26 +490,39 @@
       const form = document.getElementById('bspForm');
       const status = document.getElementById('status');
       const submitBtn = document.getElementById('submitBtn');
+      const clearBtn = document.getElementById('clearBtn');
+
+      const distanceEl = document.getElementById('calc-distance');
+      const areaEl = document.getElementById('calc-area');
+      const modelsEl = document.getElementById('calc-models');
+      const serviceEl = document.getElementById('service-type');
+      const linesEl = document.getElementById('calc-lines');
+      const treesEl = document.getElementById('calc-trees');
+      const rawEl = document.getElementById('calc-raw');
+      const dateEl = document.getElementById('calc-date');
+      const runBtn = document.getElementById('calc-run');
+      const resetBtn = document.getElementById('calc-reset');
+      const toFormBtn = document.getElementById('calc-to-form');
+      const resultEl = document.getElementById('calc-result');
 
       function showStatus(text, isError=false){
         status.textContent = text;
         status.style.color = isError ? 'var(--danger)' : 'var(--success)';
       }
 
-      const hiddenFields = ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'];
-      const clearBtn = document.getElementById('clearBtn');
-
-      function clearForm(){
+      clearBtn.addEventListener('click', function(){
         form.reset();
-        hiddenFields.forEach(id => document.getElementById(id).value = '');
+        ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
         showStatus('');
-      }
+      });
 
-      clearBtn.addEventListener('click', clearForm);
-
+      // Haversine
+      function toRad(v){ return v * Math.PI / 180; }
       function haversineDistance(lat1, lon1, lat2, lon2){
-        const toRad = v => v * Math.PI / 180;
-        const R = 6371;
+        const R = 6371; // km
         const dLat = toRad(lat2 - lat1);
         const dLon = toRad(lon2 - lon1);
         const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -513,34 +532,51 @@
         return R * c;
       }
 
+      // Map init: create reference marker and also set initial "miejsce złożenia zlecenia"
       let map, marker;
-
       function initMap(){
-        map = L.map('map', { attributionControl: false }).setView([latRef, lngRef], 13);
+        if (typeof L === 'undefined') {
+          const mapEl = document.getElementById('map');
+          if (mapEl) mapEl.innerHTML = '<p style="padding:12px;margin:0;color:#b91c1c;font-size:13px">Nie udało się załadować mapy (Leaflet).</p>';
+          return;
+        }
+
+        // Center map on reference point with appropriate zoom
+        map = L.map('map', { attributionControl: false }).setView([latRef, lngRef], 15);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // reference marker for the exact Biskupice coordinates
+        // Reference marker (non-draggable)
         if (window._bspRefMarker) map.removeLayer(window._bspRefMarker);
-        window._bspRefMarker = L.circleMarker([latRef, lngRef], { radius:6, color:'#0b5ed7', fillColor:'#0b5ed7', fillOpacity:0.9 }).addTo(map)
-          .bindPopup('Biskupice (punkt referencyjny)').openPopup();
+        window._bspRefMarker = L.circleMarker([latRef, lngRef], {
+          radius:7, color:'#0b5ed7', fillColor:'#0b5ed7', fillOpacity:0.95, weight:2
+        }).addTo(map).bindPopup('Punkt referencyjny: Biskupice').openPopup();
 
+        // Initialize "miejsce złożenia zlecenia" marker exactly at reference point by default.
+        // This ensures the form's location fields are prefilled with the village coordinates.
+        marker = L.marker([latRef, lngRef], { draggable: true }).addTo(map);
+        marker.on('dragend', function(ev){
+          const p = ev.target.getLatLng();
+          setSelectedLocation(p.lat, p.lng, true);
+        });
+
+        // Set hidden fields and distance (zero)
+        document.getElementById('location_lat').value = latRef;
+        document.getElementById('location_lng').value = lngRef;
+        if (distanceEl) distanceEl.value = 0.00;
+
+        // Clicking map moves the order marker
         map.on('click', function(e){
           const { lat, lng } = e.latlng;
           setSelectedLocation(lat, lng);
         });
-
-        const latVal = parseFloat(document.getElementById('location_lat').value || '');
-        const lngVal = parseFloat(document.getElementById('location_lng').value || '');
-        if (!isNaN(latVal) && !isNaN(lngVal)) {
-          setSelectedLocation(latVal, lngVal, true);
-          map.setView([latVal, lngVal], 14);
-        }
       }
 
       function setSelectedLocation(lat, lng, skipPan){
+        if (!map) return;
         if (marker) marker.setLatLng([lat, lng]);
         else {
           marker = L.marker([lat, lng], { draggable: true }).addTo(map);
@@ -553,7 +589,7 @@
 
         const distKm = haversineDistance(latRef, lngRef, lat, lng);
         const distRounded = Math.round(distKm * 100) / 100;
-        document.getElementById('calc-distance').value = distRounded;
+        if (distanceEl) distanceEl.value = distRounded;
         document.getElementById('location_lat').value = lat;
         document.getElementById('location_lng').value = lng;
       }
@@ -567,24 +603,23 @@
       }
 
       function runCalc(){
-        const area = parseFloat(document.getElementById('calc-area').value) || 0;
-        const models = parseInt(document.getElementById('calc-models').value) || 1;
-        const service = document.getElementById('service-type').value || 'mapping';
-        const distance = parseFloat(document.getElementById('calc-distance').value) || 0;
-        let base = perHaPrices[service] || 100;
-        let unit = unitCosts[service] || 100;
+        const area = parseFloat(areaEl.value) || 0;
+        const models = parseInt(modelsEl.value) || 1;
+        const service = serviceEl.value || 'mapping';
+        const distance = parseFloat(distanceEl.value) || 0;
+        const basePerHa = perHaPrices[service] || 100;
+        const baseUnit = unitCosts[service] || 100;
 
-        let travel = travelFee(distance);
+        const travel = travelFee(distance);
 
         let extras = 0;
         const extrasList = [];
-        if (document.getElementById('calc-lines').checked) { extras += 50; extrasList.push('lines'); }
-        if (document.getElementById('calc-trees').checked) { extras += 50; extrasList.push('trees'); }
-        if (document.getElementById('calc-raw').checked) { extras += 100; extrasList.push('raw'); }
+        if (linesEl.checked) { extras += 50; extrasList.push('linie'); }
+        if (treesEl.checked) { extras += 50; extrasList.push('drzewa'); }
+        if (rawEl.checked) { extras += 100; extrasList.push('RAW'); }
 
-        const price = Math.round((base * area + unit * models) + travel + extras);
+        const price = Math.round((basePerHa * area + baseUnit * models) + travel + extras);
 
-        const resultEl = document.getElementById('calc-result');
         resultEl.style.display = 'block';
         resultEl.textContent = `Szacunkowa cena: ${fmt(price)} zł\nPowierzchnia: ${area} ha\nLiczba modeli: ${models}\nDystans: ${distance} km\nDojazd: ${fmt(travel)} zł\nDodatki: ${extrasList.join(', ') || 'brak'}`;
         document.getElementById('estimated_price').value = price;
@@ -592,32 +627,48 @@
         document.getElementById('area_ha').value = area;
         document.getElementById('flights_estimated').value = models;
         document.getElementById('extras_list').value = extrasList.join(',');
+        resultEl._computed = { total: price, travel, area, models, service, extrasList };
       }
 
-      document.getElementById('calc-run').addEventListener('click', runCalc);
-      document.getElementById('calc-reset').addEventListener('click', function(){
-        document.getElementById('calc-area').value = '0.10';
-        document.getElementById('calc-models').value = '1';
-        document.getElementById('calc-distance').value = '0';
-        document.getElementById('calc-result').style.display = 'none';
-        document.getElementById('calc-result').textContent = '';
-        ['calc-lines','calc-trees','calc-raw'].forEach(id => document.getElementById(id).checked = false);
-        ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'].forEach(id => document.getElementById(id).value = '');
+      runBtn.addEventListener('click', runCalc);
+      resetBtn.addEventListener('click', function(){
+        areaEl.value = '0.10';
+        modelsEl.value = '1';
+        distanceEl.value = '0';
+        resultEl.style.display = 'none';
+        resultEl.textContent = '';
+        linesEl.checked = treesEl.checked = rawEl.checked = false;
+        ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        if (marker && map) { map.removeLayer(marker); marker = null; }
+        // re-create marker at reference point
+        if (map) {
+          marker = L.marker([latRef, lngRef], { draggable: true }).addTo(map);
+          marker.on('dragend', function(ev){
+            const p = ev.target.getLatLng();
+            setSelectedLocation(p.lat, p.lng, true);
+          });
+          document.getElementById('location_lat').value = latRef;
+          document.getElementById('location_lng').value = lngRef;
+          distanceEl.value = 0.00;
+        }
       });
 
-      document.getElementById('calc-to-form').addEventListener('click', function(){
+      toFormBtn.addEventListener('click', function(){
         if (!document.getElementById('estimated_price').value) runCalc();
         document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
       });
 
       document.querySelectorAll('.hw-use').forEach(btn => {
         btn.addEventListener('click', function(){
-          const area = btn.getAttribute('data-area') || '0.10';
-          const models = btn.getAttribute('data-models') || '1';
-          document.getElementById('calc-area').value = area;
-          document.getElementById('calc-models').value = models;
+          const area = Number(this.dataset.area) || 0.1;
+          const models = Math.max(1, Number(this.dataset.models) || 1);
+          areaEl.value = area;
+          modelsEl.value = models;
           runCalc();
-          document.getElementById('calc-result').scrollIntoView({behavior:'smooth', block:'center'});
+          document.getElementById('priceCalc').scrollIntoView({behavior:'smooth', block:'start'});
         });
       });
 
@@ -627,9 +678,9 @@
         const models = btn.getAttribute('data-models') || '1';
         const service = btn.getAttribute('data-service') || 'model3d';
         document.getElementById('selected_model').value = name;
-        document.getElementById('calc-area').value = area;
-        document.getElementById('calc-models').value = models;
-        document.getElementById('service-type').value = service;
+        areaEl.value = area;
+        modelsEl.value = models;
+        serviceEl.value = service;
         runCalc();
         document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
       };
@@ -641,8 +692,8 @@
         if (!contact || !description) { showStatus('Uzupełnij wymagane pola.', true); return; }
 
         const payload = {
-          contact: form.contact.value.trim(),
-          description: form.description.value.trim(),
+          contact,
+          description,
           date: form.date.value || '',
           budget: form.budget.value.trim() || '',
           selected_model: document.getElementById('selected_model').value,
@@ -663,26 +714,47 @@
           if (!SEND_ENDPOINT) {
             showStatus('Brak skonfigurowanego endpointu wysyłki (SEND_ENDPOINT).', true);
             submitBtn.disabled = false;
+            submitBtn.textContent = 'Wyślij zgłoszenie';
             return;
           }
 
           const res = await fetch(SEND_ENDPOINT, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
             body: JSON.stringify(payload)
           });
+
           let json = null;
           try { json = await res.json(); } catch { json = {}; }
+
           if (res.ok && (json.status === 'ok' || json.ok)) {
-            showStatus('Zgłoszenie wysłane. Dziękujemy.', false);
+            showStatus('Wysłano poprawnie.');
             form.reset();
-            hiddenFields.forEach(id => document.getElementById(id).value = '');
+            ['selected_model','estimated_price','location_lat','location_lng','service_type','area_ha','flights_estimated','extras_list'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.value = '';
+            });
+            resultEl.style.display = 'none';
+            // restore marker at reference point
+            if (map) {
+              if (marker) map.removeLayer(marker);
+              marker = L.marker([latRef, lngRef], { draggable: true }).addTo(map);
+              marker.on('dragend', function(ev){
+                const p = ev.target.getLatLng();
+                setSelectedLocation(p.lat, p.lng, true);
+              });
+              document.getElementById('location_lat').value = latRef;
+              document.getElementById('location_lng').value = lngRef;
+              distanceEl.value = 0.00;
+            }
           } else {
-            showStatus(json && json.error ? json.error : 'Błąd wysyłki.', true);
+            const details = json && json.details ? ` (${json.details})` : '';
+            showStatus('Błąd wysyłki.' + details, true);
+            console.error('Send error', res.status, json);
           }
         } catch (err) {
+          showStatus('Błąd połączenia.', true);
           console.error(err);
-          showStatus('Błąd sieci podczas wysyłki.', true);
         } finally {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Wyślij zgłoszenie';
@@ -690,11 +762,7 @@
       });
 
       document.addEventListener('DOMContentLoaded', function(){
-        try {
-          initMap();
-        } catch (e) {
-          console.error('Map init error', e);
-        }
+        try { initMap(); } catch (e) { console.error('Map init error', e); }
       });
     })();
   </script>
