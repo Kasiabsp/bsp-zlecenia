@@ -149,6 +149,54 @@
     .btn:hover{
       background:#084fc7;
     }
+
+    /* POPRAWIONY WYGLĄD KALKULATORA I FORMULARZA */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    #map {
+      width: 100%;
+      height: 260px;
+      border-radius: 12px;
+      border: 1px solid #d0d5dd;
+      margin-bottom: 16px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #cfd4dc;
+      background: #f9fafb;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      background: #fff;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.15);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111;
+      font-weight: 600;
+    }
+
+    .btn.secondary:hover {
+      background: #d1d5db;
+    }
   </style>
 </head>
 
@@ -338,7 +386,7 @@
 
     <div class="calc">
 
-      <label>Wskaż miejsce zlecenia</label>
+      <label>Wskaż miejsce zlecenia na mapie</label>
       <div id="map"></div>
 
       <div class="calc-grid">
@@ -375,8 +423,8 @@
           <label><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
         </div>
 
-        <button class="btn" id="calc-run">Oblicz</button>
-        <button class="btn secondary" id="calc-reset">Reset</button>
+        <button class="btn" id="calc-run" type="button">Oblicz</button>
+        <button class="btn secondary" id="calc-reset" type="button">Reset</button>
 
         <pre id="calc-result" style="display:none;background:#f7f9fc;padding:10px;border-radius:10px"></pre>
       </div>
@@ -394,6 +442,9 @@
 
       <label>Opis zlecenia *</label>
       <textarea id="description" required></textarea>
+
+      <label>Lokalizacja zlecenia (adres)</label>
+      <input id="location_text" placeholder="np. Pobiedziska, ul. Różana 12">
 
       <label>Preferowany termin</label>
       <input id="date" type="date">
@@ -557,9 +608,12 @@ function closeModel() {
   viewer.src = ""; 
 }
 
+/* NAPRAWIONY RESET KAMERY */
 function resetCamera() {
   const viewer = document.getElementById('viewer3D');
-  viewer.resetCamera();
+  viewer.cameraOrbit = viewer.getAttribute('camera-orbit') || "0deg 75deg 100%";
+  viewer.cameraTarget = viewer.getAttribute('camera-target') || "0m 0m 0m";
+  viewer.fieldOfView = "45deg";
 }
 
 function toggleFullscreen() {
@@ -631,18 +685,18 @@ function travelFee(distance){
 }
 
 function runCalc(){
-  const area = parseFloat(calc-area.value) || 0;
-  const models = parseInt(calc-models.value) || 1;
-  const service = service-type.value;
-  const distance = parseFloat(calc-distance.value) || 0;
+  const area = parseFloat(document.getElementById('calc-area').value) || 0;
+  const models = parseInt(document.getElementById('calc-models').value) || 1;
+  const service = document.getElementById('service-type').value;
+  const distance = parseFloat(document.getElementById('calc-distance').value) || 0;
 
   const travel = travelFee(distance);
   let extras = 0;
   const extrasList = [];
 
-  if (calc-lines.checked){ extras+=50; extrasList.push("linie"); }
-  if (calc-trees.checked){ extras+=50; extrasList.push("drzewa"); }
-  if (calc-raw.checked){ extras+=100; extrasList.push("RAW"); }
+  if (document.getElementById('calc-lines').checked){ extras+=50; extrasList.push("linie"); }
+  if (document.getElementById('calc-trees').checked){ extras+=50; extrasList.push("drzewa"); }
+  if (document.getElementById('calc-raw').checked){ extras+=100; extrasList.push("RAW"); }
 
   const price = Math.round(
     perHaPrices[service] * area +
@@ -720,6 +774,7 @@ form.addEventListener('submit', async (e)=>{
 
   const contact = form.contact.value.trim();
   const description = form.description.value.trim();
+  const locationText = document.getElementById('location_text').value.trim();
 
   if (!contact || !description){
     showStatus("Uzupełnij wymagane pola.", true);
@@ -729,6 +784,7 @@ form.addEventListener('submit', async (e)=>{
   const payload = {
     contact,
     description,
+    location_text: locationText,
     date: form.date.value || "",
     budget: form.budget.value.trim() || "",
     selected_model: document.getElementById('selected_model').value,
