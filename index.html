@@ -30,7 +30,6 @@
       color:#111827;
     }
 
-    /* HEADER — lekki, prosty */
     header{
       position:fixed;
       top:0; left:0; right:0;
@@ -87,7 +86,6 @@
       font-weight:600;
     }
 
-    /* LAYOUT */
     .container{
       max-width:900px;
       margin:90px auto 40px;
@@ -139,13 +137,13 @@
 </header>
 
 <main class="container">
-
-  <!-- HERO -->
+    <!-- HERO -->
   <section class="card">
     <h1>Inspekcje dronem • Mapowanie • Modele 3D</h1>
     <p class="muted">Dokładne pomiary, dokumentacja techniczna i modele 3D dla budownictwa i geodezji.</p>
   </section>
-    <!-- MODELE 3D -->
+
+  <!-- MODELE 3D -->
   <section class="card" id="models-3d">
     <h2>Modele 3D</h2>
     <p class="muted">Przykładowe modele fotogrametryczne wykonane podczas inspekcji.</p>
@@ -389,56 +387,53 @@
     }
   </style>
     <!-- FORMULARZ ZGŁOSZENIA -->
-<section class="card" id="form">
-  <h2>Zgłoś zlecenie</h2>
+  <section class="card" id="form">
+    <h2>Zgłoś zlecenie</h2>
 
-  <form id="bspForm" novalidate>
+    <form id="bspForm" novalidate>
 
-    <div class="form-row">
-      <label>E-mail lub telefon *</label>
-      <input id="contact" required>
-    </div>
+      <div class="form-row">
+        <label>E-mail lub telefon *</label>
+        <input id="contact" required>
+      </div>
 
-    <div class="form-row">
-      <label>Opis zlecenia *</label>
-      <textarea id="description" required></textarea>
-    </div>
+      <div class="form-row">
+        <label>Opis zlecenia *</label>
+        <textarea id="description" required></textarea>
+      </div>
 
-    <div class="form-row">
-      <label>Lokalizacja zlecenia (adres)</label>
-      <input id="location_text" placeholder="np. Pobiedziska, ul. Różana 12">
-    </div>
+      <div class="form-row">
+        <label>Lokalizacja zlecenia (adres)</label>
+        <input id="location_text" placeholder="np. Pobiedziska, ul. Różana 12">
+      </div>
 
-    <div class="form-row">
-      <label>Preferowany termin</label>
-      <input id="date" type="date">
-    </div>
+      <div class="form-row">
+        <label>Preferowany termin</label>
+        <input id="date" type="date">
+      </div>
 
-    <div class="form-row">
-      <label>Budżet (PLN)</label>
-      <input id="budget" inputmode="numeric" value="0">
-    </div>
+      <div class="form-row">
+        <label>Budżet (PLN)</label>
+        <input id="budget" inputmode="numeric" value="0">
+      </div>
 
-    <!-- ✔ TU WSTAWIAMY CHECKBOX — TO JEST POPRAWNE MIEJSCE -->
-    <div class="form-row" style="flex-direction:row; align-items:center; gap:8px;">
-      <input type="checkbox" id="accept_rules" style="width:16px; height:16px;">
-      <label for="accept_rules" style="margin:0; font-weight:500;">
-        Akceptuję <a href="regulamin.html" target="_blank">regulamin</a>
-      </label>
-    </div>
+      <!-- CHECKBOX REGULAMINU -->
+      <div class="form-row" style="flex-direction:row; align-items:center; gap:8px;">
+        <input type="checkbox" id="accept_rules" style="width:16px; height:16px;">
+        <label for="accept_rules" style="margin:0; font-weight:500;">
+          Akceptuję <a href="regulamin.html" target="_blank">regulamin</a>
+        </label>
+      </div>
 
-    <!-- PRZYCISKI -->
-    <div class="form-buttons">
-      <button class="btn" type="submit" id="submitBtn">Wyślij</button>
-      <button class="btn secondary" type="button" id="clearBtn">Wyczyść</button>
-    </div>
+      <!-- PRZYCISKI -->
+      <div class="form-buttons">
+        <button class="btn" type="submit" id="submitBtn">Wyślij</button>
+        <button class="btn secondary" type="button" id="clearBtn">Wyczyść</button>
+      </div>
 
-    <div id="status" class="muted" style="margin-top:8px"></div>
+      <div id="status" class="muted" style="margin-top:8px"></div>
 
-  </form>
-</section>
-      <!-- Ukryte pola z kalkulatora -->
-      <input type="hidden" id="selected_model">
+      <!-- UKRYTE POLA Z KALKULATORA -->
       <input type="hidden" id="estimated_price">
       <input type="hidden" id="location_lat">
       <input type="hidden" id="location_lng">
@@ -447,12 +442,6 @@
       <input type="hidden" id="flights_estimated">
       <input type="hidden" id="extras_list">
 
-      <div class="form-buttons">
-        <button class="btn" type="submit" id="submitBtn">Wyślij</button>
-        <button class="btn secondary" type="button" id="clearBtn">Wyczyść</button>
-      </div>
-
-      <div id="status" class="muted" style="margin-top:8px"></div>
     </form>
   </section>
 
@@ -505,95 +494,94 @@
       color:#111;
     }
   </style>
-
-  <footer style="text-align:center;margin-top:20px;font-size:13px;color:var(--muted)">
+    <footer style="text-align:center;margin-top:20px;font-size:13px;color:var(--muted)">
     © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
   </footer>
+
   <!-- MODAL 3D -->
-<div id="modelModal" class="modal">
-  <div class="modal-content">
+  <div id="modelModal" class="modal">
+    <div class="modal-content">
 
-    <div class="modal-header">
-      <span id="viewerTitle">Podgląd modelu</span>
+      <div class="modal-header">
+        <span id="viewerTitle">Podgląd modelu</span>
 
-      <div class="modal-buttons">
-        <button onclick="resetCamera()">Reset kamery</button>
-        <button onclick="toggleFullscreen()">Pełny ekran</button>
-        <button onclick="closeModel()">Zamknij</button>
+        <div class="modal-buttons">
+          <button onclick="resetCamera()">Reset kamery</button>
+          <button onclick="toggleFullscreen()">Pełny ekran</button>
+          <button onclick="closeModel()">Zamknij</button>
+        </div>
       </div>
+
+      <model-viewer id="viewer3D"
+        camera-controls
+        auto-rotate
+        exposure="1.1"
+        shadow-intensity="1"
+        loading="eager">
+      </model-viewer>
+
     </div>
-
-    <model-viewer id="viewer3D"
-      camera-controls
-      auto-rotate
-      exposure="1.1"
-      shadow-intensity="1"
-      loading="eager">
-    </model-viewer>
-
   </div>
-</div>
 
-<style>
-  /* MODAL — jasny, lekki, jak poprzednio */
-  .modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(255,255,255,0.85);
-    backdrop-filter:blur(4px);
-    z-index:2000;
-    align-items:center;
-    justify-content:center;
-  }
+  <style>
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(255,255,255,0.85);
+      backdrop-filter:blur(4px);
+      z-index:2000;
+      align-items:center;
+      justify-content:center;
+    }
 
-  .modal-content{
-    width:90%;
-    max-width:900px;
-    height:80%;
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:10px;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-  }
+    .modal-content{
+      width:90%;
+      max-width:900px;
+      height:80%;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:10px;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
 
-  .modal-header{
-    padding:10px 14px;
-    border-bottom:1px solid var(--border);
-    background:#f9fafb;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-weight:600;
-  }
+    .modal-header{
+      padding:10px 14px;
+      border-bottom:1px solid var(--border);
+      background:#f9fafb;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:600;
+    }
 
-  .modal-buttons{
-    display:flex;
-    gap:8px;
-  }
+    .modal-buttons{
+      display:flex;
+      gap:8px;
+    }
 
-  .modal-buttons button{
-    background:#e5e7eb;
-    border:1px solid var(--border);
-    padding:6px 10px;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:13px;
-  }
+    .modal-buttons button{
+      background:#e5e7eb;
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:13px;
+    }
 
-  .modal-buttons button:hover{
-    background:#d1d5db;
-  }
+    .modal-buttons button:hover{
+      background:#d1d5db;
+    }
 
-  #viewer3D{
-    width:100%;
-    height:100%;
-    background:#f3f4f6;
-  }
-</style>
-<script>
+    #viewer3D{
+      width:100%;
+      height:100%;
+      background:#f3f4f6;
+    }
+  </style>
+  <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
 /* MODAL 3D */
@@ -757,6 +745,13 @@ clearBtn.onclick = ()=>{
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
 
+  // ✔ WALIDACJA REGULAMINU
+  const rules = document.getElementById('accept_rules');
+  if(!rules || !rules.checked){
+    showStatus("Musisz zaakceptować regulamin.", true);
+    return;
+  }
+
   const payload = {
     contact: form.contact.value.trim(),
     description: form.description.value.trim(),
@@ -780,8 +775,7 @@ form.addEventListener('submit', async (e)=>{
   submitBtn.disabled = true;
   submitBtn.textContent = "Wysyłanie...";
   showStatus("Wysyłanie...");
-
-  try{
+    try{
     const res = await fetch("/api/send",{
       method:"POST",
       headers:{
