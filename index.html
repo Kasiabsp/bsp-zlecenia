@@ -106,97 +106,6 @@
       border:1px solid #dfe3ea;
       box-shadow:0 4px 14px rgba(0,0,0,0.05);
     }
-
-    /* MODELS */
-    .models-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:16px;
-      margin-top:16px;
-    }
-    .model-card{
-      background:#fff;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid #d9dce3;
-      box-shadow:0 6px 18px rgba(0,0,0,0.06);
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      transition:0.25s;
-    }
-    .model-card:hover{
-      transform:translateY(-3px);
-      box-shadow:0 10px 26px rgba(0,0,0,0.12);
-    }
-    model-viewer{
-      width:100%;
-      height:220px;
-      border-radius:10px;
-      background:#f7f9fc;
-    }
-
-    .btn{
-      background:var(--accent-2);
-      color:#fff;
-      padding:9px 12px;
-      border:none;
-      border-radius:10px;
-      font-weight:800;
-      cursor:pointer;
-      transition:0.2s;
-    }
-    .btn:hover{
-      background:#084fc7;
-    }
-
-    /* POPRAWIONY WYGLĄD KALKULATORA I FORMULARZA */
-    .calc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    #map {
-      width: 100%;
-      height: 260px;
-      border-radius: 12px;
-      border: 1px solid #d0d5dd;
-      margin-bottom: 16px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #cfd4dc;
-      background: #f9fafb;
-      font-size: 14px;
-      transition: 0.2s;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-      background: #fff;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.15);
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    .btn.secondary {
-      background: #e5e7eb;
-      color: #111;
-      font-weight: 600;
-    }
-
-    .btn.secondary:hover {
-      background: #d1d5db;
-    }
   </style>
 </head>
 
@@ -241,8 +150,7 @@
       <div class="service"><h3>Modele 3D</h3><p class="muted">GLB/OBJ do analiz technicznych.</p></div>
     </div>
   </section>
-
-  <!-- MODELE 3D -->
+    <!-- MODELE 3D -->
   <section class="card" id="models-3d">
     <h2>Modele 3D</h2>
     <p class="muted">Przykładowe modele fotogrametryczne wykonane w Gminie Pobiedziska.</p>
@@ -261,7 +169,7 @@
 
       <!-- MODEL 2 -->
       <div class="model-card">
-        <h4>Urbex — 07.03.2026</h4>
+        <h4>Urbex — 07.03.2026</hh4>
         <model-viewer src="assets/7.03.2026.glb" camera-controls auto-rotate></model-viewer>
         <p class="muted">
           Model 3D opuszczonego obiektu typu URBEX. Realistyczne odwzorowanie zniszczeń, ubytków i degradacji.
@@ -281,7 +189,8 @@
 
     </div>
   </section>
-    <!-- JAK DZIAŁAMY -->
+
+  <!-- JAK DZIAŁAMY -->
   <section class="card" id="how-we-work">
     <h2>Jak działamy</h2>
     <p class="muted">Przejrzysty proces realizacji zlecenia — od zgłoszenia do dostarczenia gotowych materiałów.</p>
@@ -378,8 +287,7 @@
       font-size:13px;
     }
   </style>
-
-  <!-- KALKULATOR WYCENY -->
+    <!-- KALKULATOR WYCENY -->
   <section class="card" id="pricing">
     <h2>Wycena</h2>
     <p class="muted">Kalkulator orientacyjnej ceny — uwzględnia dojazd, powierzchnię, liczbę modeli i dodatki.</p>
@@ -417,7 +325,7 @@
         </div>
 
         <div>
-          <label>Opcje dodatkowe</label>
+          <label><b>Zagrożenia</b></label>
           <label><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
           <label><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
           <label><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
@@ -430,8 +338,7 @@
       </div>
     </div>
   </section>
-
-  <!-- FORMULARZ -->
+    <!-- FORMULARZ -->
   <section class="card" id="form">
     <h2>Zgłoś zlecenie</h2>
 
@@ -452,7 +359,7 @@
       <label>Budżet (PLN)</label>
       <input id="budget" inputmode="numeric">
 
-      <!-- Ukryte pola -->
+      <!-- Ukryte pola z kalkulatora -->
       <input type="hidden" id="selected_model">
       <input type="hidden" id="estimated_price">
       <input type="hidden" id="location_lat">
@@ -472,10 +379,7 @@
   <footer>
     © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
   </footer>
-
-</main>
-
-<!-- FULLSCREEN MODEL VIEWER -->
+  <!-- FULLSCREEN MODEL VIEWER -->
 <div id="modelModal">
   <div class="viewer-container">
     <div class="viewer-header">
@@ -608,7 +512,7 @@ function closeModel() {
   viewer.src = ""; 
 }
 
-/* NAPRAWIONY RESET KAMERY */
+/* RESET KAMERY */
 function resetCamera() {
   const viewer = document.getElementById('viewer3D');
   viewer.cameraOrbit = viewer.getAttribute('camera-orbit') || "0deg 75deg 100%";
@@ -729,7 +633,7 @@ document.getElementById('calc-reset').onclick = ()=>{
   document.getElementById('calc-result').style.display='none';
 };
 
-/* FORMULARZ + API */
+/* FORMULARZ + WYSYŁANIE */
 const form = document.getElementById('bspForm');
 const statusBox = document.getElementById('status');
 const submitBtn = document.getElementById('submitBtn');
@@ -742,52 +646,18 @@ function showStatus(msg, error=false){
 
 clearBtn.onclick = ()=>{
   form.reset();
-  document.getElementById('selected_model').value = "";
-  document.getElementById('estimated_price').value = "";
-  document.getElementById('location_lat').value = "";
-  document.getElementById('location_lng').value = "";
-  document.getElementById('service_type').value = "";
-  document.getElementById('area_ha').value = "";
-  document.getElementById('flights_estimated').value = "";
-  document.getElementById('extras_list').value = "";
   showStatus("");
 };
-
-function resolveApiBase(){
-  const explicit = (window.BSP_API_BASE || '').trim();
-  if (explicit) return explicit.replace(/\/$/, '');
-
-  const metaBase = (document.querySelector('meta[name="bsp-api-base"]')?.content || '').trim();
-  if (metaBase) return metaBase.replace(/\/$/, '');
-
-  if (location.hostname.endsWith('pages.dev')) return 'https://bsp-zlecenia.onrender.com';
-  if (['localhost','127.0.0.1'].includes(location.hostname)) return 'http://127.0.0.1:3000';
-
-  return '';
-}
-
-const API_BASE = resolveApiBase();
-const SEND_ENDPOINT = API_BASE ? API_BASE + '/api/send' : '';
 
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
 
-  const contact = form.contact.value.trim();
-  const description = form.description.value.trim();
-  const locationText = document.getElementById('location_text').value.trim();
-
-  if (!contact || !description){
-    showStatus("Uzupełnij wymagane pola.", true);
-    return;
-  }
-
   const payload = {
-    contact,
-    description,
-    location_text: locationText,
+    contact: form.contact.value.trim(),
+    description: form.description.value.trim(),
+    location: document.getElementById('location_text').value.trim(),
     date: form.date.value || "",
     budget: form.budget.value.trim() || "",
-    selected_model: document.getElementById('selected_model').value,
     estimated_price: document.getElementById('estimated_price').value,
     location_lat: document.getElementById('location_lat').value,
     location_lng: document.getElementById('location_lng').value,
@@ -797,54 +667,36 @@ form.addEventListener('submit', async (e)=>{
     extras_list: document.getElementById('extras_list').value
   };
 
+  if (!payload.contact || !payload.description){
+    showStatus("Uzupełnij wymagane pola.", true);
+    return;
+  }
+
   submitBtn.disabled = true;
   submitBtn.textContent = "Wysyłanie...";
   showStatus("Wysyłanie...");
 
   try {
-    if (!SEND_ENDPOINT){
-      showStatus("Brak skonfigurowanego endpointu wysyłki.", true);
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Wyślij";
-      return;
-    }
-
-    const res = await fetch(SEND_ENDPOINT, {
+    const res = await fetch("/api/send", {
       method:"POST",
-      headers:{ "Content-Type":"application/json" },
+      headers:{
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      },
       body: JSON.stringify(payload)
     });
 
-    let json = null;
-    try { json = await res.json(); } catch { json = {}; }
+    const json = await res.json().catch(()=>null);
 
-    if (res.ok && (json.status === "ok" || json.ok)){
+    if (res.ok && json?.status === "ok") {
       showStatus("Wysłano poprawnie.");
       form.reset();
-
-      document.getElementById('selected_model').value = "";
-      document.getElementById('estimated_price').value = "";
-      document.getElementById('location_lat').value = "";
-      document.getElementById('location_lng').value = "";
-      document.getElementById('service_type').value = "";
-      document.getElementById('area_ha').value = "";
-      document.getElementById('flights_estimated').value = "";
-      document.getElementById('extras_list').value = "";
-
       document.getElementById('calc-result').style.display = "none";
-
-      if (map){
-        marker.setLatLng([latRef,lngRef]);
-        updateLocation(latRef,lngRef);
-      }
-
     } else {
-      const details = json && json.details ? ` (${json.details})` : "";
-      showStatus("Błąd wysyłki." + details, true);
+      showStatus("Błąd wysyłki.", true);
     }
 
-  } catch (err){
-    console.error(err);
+  } catch {
     showStatus("Błąd połączenia.", true);
   }
 
