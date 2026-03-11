@@ -1,89 +1,337 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8" />
-  <title>Polityka prywatności — BSP Zlecenia</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root{
-      --bg:#f7f9fb;
-      --card:#ffffff;
-      --nav:#0f1724;
-      --muted:#6b7280;
-      --accent:#2563eb;
-      --radius:10px;
-      --max-width:900px;
-    }
-    html,body{height:100%;}
-    body{
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:var(--bg);
-      color:var(--nav);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.5;
-    }
-    .wrap{max-width:var(--max-width); margin:28px auto; padding:20px;}
-    .card{background:var(--card); padding:20px; border-radius:12px; box-shadow:0 8px 30px rgba(2,6,23,0.04);}
-    h1{font-size:22px; margin:0 0 12px 0;}
-    h2{font-size:16px; margin:16px 0 8px 0;}
-    p{margin:0 0 12px 0; color:var(--muted);}
-    ul{margin:0 0 12px 0; padding-left:18px; color:var(--muted);}
-    li{margin-bottom:8px;}
-    a{color:var(--accent); text-decoration:none; font-weight:700;}
-    .meta{font-size:13px; color:var(--muted);}
-    hr{border:none; border-top:1px solid #eef2f7; margin:18px 0;}
-  </style>
+    <meta charset="UTF-8">
+    <title>bsp-zlecenia – regulamin i polityka prywatności</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Regulamin świadczenia usług dronowych oraz polityka prywatności serwisu bsp-zlecenia.">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #222;
+        }
+        header, main, footer {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        header {
+            background: #111827;
+            color: #f9fafb;
+        }
+        h1, h2, h3 {
+            margin-top: 1.4em;
+        }
+        a {
+            color: #2563eb;
+        }
+        section {
+            background: #ffffff;
+            margin: 16px 0;
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: 600;
+        }
+        footer {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+    </style>
 </head>
 <body>
-  <main class="wrap card" role="main" aria-labelledby="policy-heading">
-    <h1 id="policy-heading">Polityka prywatności</h1>
-    <p class="meta">Aktualizacja: 2026</p>
+<header>
+    <h1>bsp-zlecenia – regulamin i polityka strony</h1>
+    <p>Serwis: <a href="https://bsp-zlecenia.pages.dev" style="color:#93c5fd;">https://bsp-zlecenia.pages.dev</a></p>
+    <p>E-mail kontaktowy: <a href="mailto:jakbusoperatorbsp@gmail.com" style="color:#93c5fd;">jakbusoperatorbsp@gmail.com</a></p>
+</header>
 
-    <hr>
+<main>
 
-    <h2>Zakres i cel przetwarzania danych</h2>
-    <p>Przetwarzamy dane osobowe wyłącznie w celu obsługi zgłoszeń przesyłanych przez formularz kontaktowy oraz w celu realizacji zleceń (ustalenie terminu, zakresu prac, przekazanie materiałów). Dane nie są wykorzystywane do działań marketingowych bez wyraźnej zgody.</p>
+    <section id="informacje-ogolne">
+        <h2>1. Informacje ogólne o działalności</h2>
+        <p>
+            Właścicielem serwisu internetowego <strong>bsp-zlecenia</strong>, dostępnego pod adresem
+            <a href="https://bsp-zlecenia.pages.dev">https://bsp-zlecenia.pages.dev</a>, jest osoba fizyczna
+            prowadząca <strong>działalność nierejestrowaną</strong> w rozumieniu przepisów prawa polskiego.
+        </p>
+        <p>
+            Działalność polega na świadczeniu <strong>usług dronowych</strong>, w szczególności wykonywaniu zleceń
+            z wykorzystaniem bezzałogowych statków powietrznych (BSP), takich jak m.in. zdjęcia, nagrania wideo,
+            dokumentacja z powietrza, inspekcje i inne ustalane indywidualnie z Klientem.
+        </p>
+        <p>
+            Działalność nie jest wpisana do CEIDG, a przychody mieszczą się w limitach przewidzianych dla
+            działalności nierejestrowanej. Właściciel rozlicza przychody z tej działalności na zasadach
+            przewidzianych w przepisach podatkowych (m.in. w rocznym rozliczeniu z urzędem skarbowym).
+        </p>
+    </section>
 
-    <h2>Jakie dane zbieramy</h2>
-    <ul>
-      <li><strong>Dane kontaktowe</strong> — e‑mail, numer telefonu;</li>
-      <li><strong>Dane zlecenia</strong> — lokalizacja, opis zlecenia, preferowany termin, budżet;</li>
-      <li><strong>Metadane</strong> — data zgłoszenia, ewentualne informacje techniczne niezbędne do realizacji zlecenia.</li>
-    </ul>
+    <section id="kontakt">
+        <h2>2. Dane kontaktowe</h2>
+        <p>
+            W sprawach związanych z funkcjonowaniem serwisu oraz realizacją usług można kontaktować się poprzez:
+        </p>
+        <ul>
+            <li><strong>E-mail:</strong> <a href="mailto:jakbusoperatorbsp@gmail.com">jakbusoperatorbsp@gmail.com</a></li>
+        </ul>
+        <p>
+            Szczegółowe dane (takie jak imię i nazwisko, adres realizacji zlecenia, numer telefonu) są przekazywane
+            przez Klienta dobrowolnie w trakcie ustalania warunków konkretnego zlecenia.
+        </p>
+    </section>
 
-    <h2>Okres przechowywania</h2>
-    <p>Dane związane ze zgłoszeniem przechowujemy maksymalnie przez 30 dni od daty zakończenia sprawy, chyba że obowiązujące przepisy prawa wymagają dłuższego okresu przechowywania. Po upływie tego terminu dane są usuwane lub anonimizowane.</p>
+    <section id="zakres-uslug">
+        <h2>3. Zakres usług i charakter strony</h2>
+        <p>
+            Strona <strong>bsp-zlecenia</strong> pełni funkcję serwisu do składania zapytań i zleceń dotyczących
+            usług dronowych. Nie jest to sklep internetowy w rozumieniu klasycznego koszyka zakupowego.
+        </p>
+        <p>
+            Szczegółowy zakres usług, termin realizacji, miejsce wykonania oraz cena są każdorazowo ustalane
+            indywidualnie z Klientem, najczęściej drogą mailową lub inną uzgodnioną formą kontaktu.
+        </p>
+    </section>
 
-    <h2>Podstawa prawna przetwarzania</h2>
-    <p>Podstawą przetwarzania jest realizacja umowy lub podjęcie działań na żądanie osoby, której dane dotyczą (art. 6 ust. 1 lit. b RODO) oraz prawnie uzasadniony interes administratora w zakresie obsługi zgłoszeń (art. 6 ust. 1 lit. f RODO). Szczegółowe informacje dotyczące praw i podstaw RODO znajdują się w pliku <a href="rodo.html">rodo.html</a>.</p>
+    <section id="regulamin">
+        <h2>4. Regulamin świadczenia usług dronowych</h2>
 
-    <h2>Prawa osoby, której dane dotyczą</h2>
-    <ul>
-      <li><strong>Dostęp</strong> — prawo do uzyskania potwierdzenia i kopii przetwarzanych danych;</li>
-      <li><strong>Sprostowanie</strong> — prawo do poprawienia nieprawidłowych danych;</li>
-      - <strong>Usunięcie</strong> — prawo do żądania usunięcia danych (prawo do bycia zapomnianym) w zakresie przewidzianym prawem;</li>
-      <li><strong>Ograniczenie przetwarzania</strong> — prawo do żądania ograniczenia przetwarzania w określonych sytuacjach;</li>
-      <li><strong>Sprzeciw</strong> — prawo do wniesienia sprzeciwu wobec przetwarzania danych w określonych przypadkach;</li>
-      <li><strong>Wniesienie skargi</strong> — prawo do wniesienia skargi do organu nadzorczego.</li>
-    </ul>
+        <h3>4.1. Zawarcie umowy</h3>
+        <p>
+            1. Złożenie zapytania poprzez serwis lub bezpośrednio na adres e-mail nie stanowi jeszcze zawarcia umowy.
+        </p>
+        <p>
+            2. Umowa o wykonanie usługi dronowej zostaje zawarta w momencie <strong>potwierdzenia zlecenia</strong>
+            przez właściciela serwisu (np. mailowo) wraz z ustaleniem:
+        </p>
+        <ul>
+            <li>zakresu usługi,</li>
+            <li>terminu i miejsca realizacji,</li>
+            <li>orientacyjnej ceny lub sposobu jej wyliczenia,</li>
+            <li>ewentualnych dodatkowych warunków (np. zgody właściciela terenu, wymogi bezpieczeństwa).</li>
+        </ul>
 
-    <h2>Usuwanie danych i kontakt</h2>
-    <p>Masz prawo żądać usunięcia swoich danych w dowolnym momencie. W celu usunięcia danych lub realizacji innych praw skontaktuj się pod adresem e‑mail: <a href="mailto:jakubsoperatorbsp@gmail.com">jakubsoperatorbsp@gmail.com</a>. W zgłoszeniu podaj dane, których żądanie dotyczy, oraz preferowany sposób kontaktu.</p>
+        <h3>4.2. Warunki płatności</h3>
+        <p>
+            1. Płatność za usługę odbywa się w formie <strong>gotówki</strong> lub <strong>BLIK</strong>, zgodnie
+            z indywidualnymi ustaleniami z Klientem.
+        </p>
+        <p>
+            2. Standardowo płatność jest podzielona na dwie części:
+        </p>
+        <ul>
+            <li><strong>50%</strong> wartości wynagrodzenia – płatne w trakcie wykonywania usługi,</li>
+            <li><strong>50%</strong> wartości wynagrodzenia – płatne po zakończeniu usługi.</li>
+        </ul>
+        <p>
+            3. Właściciel może w uzasadnionych przypadkach ustalić inny sposób rozliczenia (np. całość po wykonaniu
+            usługi), o czym Klient zostanie poinformowany przed rozpoczęciem realizacji.
+        </p>
 
-    <h2>Udostępnianie danych</h2>
-    <p>Dane nie są przekazywane podmiotom trzecim w celach marketingowych. Dane mogą być udostępnione wyłącznie podwykonawcom niezbędnym do realizacji zlecenia (np. dostawcom usług chmurowych, jeśli klient wyrazi zgodę na przesłanie materiałów), zawsze na podstawie umowy powierzenia przetwarzania lub innej wymaganej prawem podstawy.</p>
+        <h3>4.3. Rachunki i potwierdzenia</h3>
+        <p>
+            1. Na życzenie Klienta właściciel wystawia <strong>rachunek imienny</strong> lub inne potwierdzenie
+            zapłaty, zawierające podstawowe dane Klienta (imię, nazwisko oraz ewentualnie adres do rachunku).
+        </p>
+        <p>
+            2. Dane z rachunków są wykorzystywane m.in. do prawidłowego rozliczenia przychodów z urzędami
+            (np. urząd skarbowy) pod koniec roku podatkowego.
+        </p>
 
-    <h2>Pliki cookies i narzędzia analityczne</h2>
-    <p>Strona używa minimalnej liczby plików cookies niezbędnych do działania formularza i poprawnego działania serwisu. Szczegóły dotyczące cookies oraz ewentualnych narzędzi analitycznych opisano w pliku <a href="rodo.html">rodo.html</a>.</p>
+        <h3>4.4. Realizacja usługi i zasady bezpieczeństwa</h3>
+        <p>
+            1. Usługi dronowe są wykonywane z zachowaniem obowiązujących przepisów prawa, w szczególności
+            dotyczących lotów BSP, bezpieczeństwa osób trzecich oraz ochrony prywatności.
+        </p>
+        <p>
+            2. Klient zobowiązuje się do przekazania wszelkich istotnych informacji dotyczących miejsca realizacji
+            zlecenia (np. ograniczenia w ruchu lotniczym, zakazy wstępu, szczególne warunki terenowe).
+        </p>
+        <p>
+            3. Właściciel zastrzega sobie prawo do odmowy wykonania usługi lub przerwania jej realizacji, jeżeli
+            warunki pogodowe, terenowe lub prawne uniemożliwiają bezpieczne wykonanie lotu.
+        </p>
 
-    <hr>
+        <h3>4.5. Poprawki i reklamacje</h3>
+        <p>
+            1. W przypadku zastrzeżeń do wykonanej usługi Klient ma prawo zgłosić reklamację w terminie
+            <strong>14 dni</strong> od dnia wykonania usługi.
+        </p>
+        <p>
+            2. Reklamacja może polegać w szczególności na żądaniu <strong>poprawy usługi</strong>, tj. ponownego
+            wykonania ujęć lub innych czynności w celu poprawienia wcześniejszych błędów, o ile jest to obiektywnie
+            możliwe (np. warunki pogodowe, dostęp do miejsca).
+        </p>
+        <p>
+            3. Właściciel i Klient ustalą wspólnie termin i zakres ewentualnej poprawy. Jeżeli poprawa nie będzie
+            możliwa z przyczyn niezależnych od właściciela (np. zakaz lotów, brak dostępu do terenu), strony mogą
+            uzgodnić inne rozwiązanie (np. częściowy zwrot wynagrodzenia).
+        </p>
+        <p>
+            4. Reklamacje należy zgłaszać na adres e-mail:
+            <a href="mailto:jakbusoperatorbsp@gmail.com">jakbusoperatorbsp@gmail.com</a>, opisując możliwie dokładnie
+            zastrzeżenia oraz dołączając przykłady (np. fragmenty materiału).
+        </p>
+    </section>
 
-    <h2>Informacje dodatkowe</h2>
-    <p>Dokładne informacje dotyczące realizacji praw wynikających z RODO, podstaw prawnych oraz szczegółowe zasady przetwarzania danych osobowych znajdują się w oddzielnym dokumencie: <a href="rodo.html">rodo.html</a>. Prosimy o zapoznanie się z nim, jeśli potrzebujesz pełnych informacji prawnych.</p>
+    <section id="prawa-autorskie">
+        <h2>5. Prawa autorskie i wykorzystanie materiałów</h2>
+        <p>
+            1. Materiały wykonane w ramach usługi (np. zdjęcia, nagrania wideo) co do zasady stanowią utwory w
+            rozumieniu przepisów o prawie autorskim.
+        </p>
+        <p>
+            2. Z chwilą przekazania materiałów Klientowi, Klient otrzymuje <strong>licencję</strong> lub inne
+            uzgodnione uprawnienie do korzystania z nich w zakresie ustalonym indywidualnie (np. do użytku prywatnego,
+            do publikacji w mediach społecznościowych, na stronie internetowej, w materiałach promocyjnych).
+        </p>
+        <p>
+            3. O ile nie ustalono inaczej, właściciel zachowuje prawo do wykorzystywania wybranych materiałów w swoim
+            portfolio (np. na stronie internetowej, w social mediach) w celu prezentacji efektów pracy, z poszanowaniem
+            wizerunku osób i tajemnicy przedsiębiorstwa Klienta.
+        </p>
+        <p>
+            4. Treści tekstowe, grafiki, układ strony oraz inne elementy serwisu
+            <a href="https://bsp-zlecenia.pages.dev">https://bsp-zlecenia.pages.dev</a> są chronione prawem autorskim.
+            Kopiowanie, rozpowszechnianie lub wykorzystywanie ich bez zgody właściciela jest zabronione.
+        </p>
+    </section>
 
-    <p class="meta">W razie pytań lub wątpliwości: <a href="mailto:jakubsoperatorbsp@gmail.com">jakubsoperatorbsp@gmail.com</a>.</p>
-  </main>
+    <section id="odpowiedzialnosc">
+        <h2>6. Odpowiedzialność</h2>
+        <p>
+            1. Informacje zamieszczone w serwisie mają charakter informacyjny i poglądowy. Dokładny zakres usług,
+            cena oraz warunki realizacji są każdorazowo ustalane indywidualnie z Klientem.
+        </p>
+        <p>
+            2. Właściciel dokłada starań, aby usługi były wykonywane z należytą starannością i zgodnie z obowiązującymi
+            przepisami, jednak nie ponosi odpowiedzialności za:
+        </p>
+        <ul>
+            <li>zakłócenia w realizacji usługi spowodowane czynnikami niezależnymi (np. nagła zmiana pogody, zakazy lotów),</li>
+            <li>szkody wynikłe z nieprawdziwych lub niepełnych informacji przekazanych przez Klienta,</li>
+            <li>sposób wykorzystania materiałów przez Klienta (np. naruszenie praw osób trzecich, wizerunku, tajemnicy).</li>
+        </ul>
+        <p>
+            3. W przypadku naruszenia przepisów przez Klienta (np. wykorzystanie materiałów w sposób sprzeczny z prawem),
+            odpowiedzialność ponosi Klient.
+        </p>
+    </section>
+
+    <section id="polityka-prywatnosci">
+        <h2>7. Polityka prywatności</h2>
+
+        <h3>7.1. Administrator danych</h3>
+        <p>
+            Administratorem danych osobowych jest właściciel serwisu <strong>bsp-zlecenia</strong>, prowadzący
+            działalność nierejestrowaną na terytorium Polski. Kontakt w sprawach związanych z danymi osobowymi:
+            <a href="mailto:jakbusoperatorbsp@gmail.com">jakbusoperatorbsp@gmail.com</a>.
+        </p>
+
+        <h3>7.2. Zakres przetwarzanych danych</h3>
+        <p>
+            W związku z korzystaniem z serwisu oraz realizacją usług mogą być przetwarzane następujące dane:
+        </p>
+        <ul>
+            <li><strong>Imię i nazwisko</strong> – w celu identyfikacji Klienta i wystawienia rachunku,</li>
+            <li><strong>Adres e-mail</strong> – w celu kontaktu i ustalania szczegółów zlecenia,</li>
+            <li><strong>Numer telefonu</strong> (jeśli podany) – w celu sprawnego kontaktu operacyjnego,</li>
+            <li><strong>Adres miejsca realizacji usługi</strong> – w celu wykonania zlecenia,</li>
+            <li><strong>Dane do rachunku</strong> – w celu udokumentowania transakcji i rozliczeń podatkowych.</li>
+        </ul>
+
+        <h3>7.3. Cele i podstawa przetwarzania</h3>
+        <p>Dane osobowe są przetwarzane w następujących celach:</p>
+        <ul>
+            <li><strong>Realizacja umowy</strong> – przygotowanie wyceny, wykonanie usługi, kontakt z Klientem,</li>
+            <li><strong>Wystawienie rachunku</strong> i prowadzenie ewidencji przychodów,</li>
+            <li><strong>Rozliczenia podatkowe</strong> – w szczególności roczne rozliczenie z urzędami,</li>
+            <li><strong>Odpowiedzi na zapytania</strong> przesyłane przez formularz lub e-mail.</li>
+        </ul>
+        <p>
+            Podstawą prawną przetwarzania danych jest przede wszystkim niezbędność do wykonania umowy lub podjęcia
+            działań na żądanie osoby, której dane dotyczą, przed zawarciem umowy, a także obowiązki wynikające
+            z przepisów prawa (np. podatkowych).
+        </p>
+
+        <h3>7.4. Okres przechowywania danych</h3>
+        <p>
+            Dane osobowe są przechowywane przez okres niezbędny do realizacji usługi, a następnie przez czas
+            wymagany przepisami prawa (np. w zakresie dokumentacji podatkowej) lub do czasu przedawnienia ewentualnych
+            roszczeń.
+        </p>
+
+        <h3>7.5. Odbiorcy danych</h3>
+        <p>
+            Dane mogą być przekazywane podmiotom wspierającym właściciela w rozliczeniach (np. biuro rachunkowe),
+            a także organom publicznym uprawnionym na podstawie przepisów prawa (np. urząd skarbowy), wyłącznie
+            w zakresie niezbędnym do realizacji tych celów.
+        </p>
+
+        <h3>7.6. Prawa osoby, której dane dotyczą</h3>
+        <p>Osobie, której dane dotyczą, przysługują m.in. następujące prawa:</p>
+        <ul>
+            <li><strong>prawo dostępu</strong> do swoich danych,</li>
+            <li><strong>prawo do sprostowania</strong> danych,</li>
+            <li><strong>prawo do ograniczenia przetwarzania</strong> w określonych przypadkach,</li>
+            <li><strong>prawo do usunięcia danych</strong>, o ile nie stoi temu na przeszkodzie obowiązek prawny,</li>
+            <li><strong>prawo wniesienia skargi</strong> do organu nadzorczego (PUODO) w razie uznania, że przetwarzanie narusza przepisy.</li>
+        </ul>
+        <p>
+            W celu realizacji swoich praw można skontaktować się z administratorem danych na adres:
+            <a href="mailto:jakbusoperatorbsp@gmail.com">jakbusoperatorbsp@gmail.com</a>.
+        </p>
+
+        <h3>7.7. Ciasteczka i narzędzia zewnętrzne</h3>
+        <p>
+            Serwis <strong>nie wykorzystuje</strong> narzędzi analitycznych takich jak Google Analytics ani pikseli
+            reklamowych (np. Meta Pixel). Nie są stosowane pliki cookies w celach marketingowych lub analitycznych.
+        </p>
+        <p>
+            Mogą być używane jedynie <strong>techniczne pliki cookies</strong>, niezbędne do prawidłowego działania
+            serwisu (np. związane z infrastrukturą hostingową), jednak nie służą one do profilowania użytkowników.
+        </p>
+
+        <h3>7.8. Newsletter</h3>
+        <p>
+            Serwis nie prowadzi newslettera ani masowej wysyłki treści marketingowych. Dane kontaktowe nie są
+            wykorzystywane do wysyłania niezamówionych informacji handlowych.
+        </p>
+    </section>
+
+    <section id="postanowienia-koncowe">
+        <h2>8. Postanowienia końcowe</h2>
+        <p>
+            1. Niniejszy dokument pełni funkcję <strong>regulaminu świadczenia usług</strong> oraz
+            <strong>polityki prywatności</strong> serwisu <a href="https://bsp-zlecenia.pages.dev">bsp-zlecenia.pages.dev</a>.
+        </p>
+        <p>
+            2. Właściciel zastrzega sobie prawo do wprowadzania zmian w treści regulaminu i polityki prywatności,
+            w szczególności w przypadku zmiany przepisów prawa lub sposobu działania serwisu. Zmiany obowiązują
+            od momentu opublikowania zaktualizowanej wersji na stronie.
+        </p>
+        <p>
+            3. W sprawach nieuregulowanych niniejszym dokumentem zastosowanie mają odpowiednie przepisy prawa
+            polskiego.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; <span id="year"></span> bsp-zlecenia – usługi dronowe. Wszelkie prawa zastrzeżone.</p>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</footer>
 </body>
 </html>
