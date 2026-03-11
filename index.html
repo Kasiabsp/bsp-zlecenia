@@ -393,7 +393,12 @@
     <h2>Zgłoś zlecenie</h2>
 
     <form id="bspForm" novalidate>
-
+     <div class="form-row" style="flex-direction:row; align-items:center; gap:8px;">
+      <input type="checkbox" id="accept_rules" style="width:16px; height:16px;">
+      <label for="accept_rules" style="margin:0; font-weight:500;">
+       Akceptuję <a href="regulamin.html" target="_blank">regulamin</a>
+      </label>
+    </div>
       <div class="form-row">
         <label>E-mail lub telefon *</label>
         <input id="contact" required>
