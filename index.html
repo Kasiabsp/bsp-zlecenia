@@ -389,41 +389,54 @@
     }
   </style>
     <!-- FORMULARZ ZGŁOSZENIA -->
-  <section class="card" id="form">
-    <h2>Zgłoś zlecenie</h2>
+<section class="card" id="form">
+  <h2>Zgłoś zlecenie</h2>
 
-    <form id="bspForm" novalidate>
-     <div class="form-row" style="flex-direction:row; align-items:center; gap:8px;">
+  <form id="bspForm" novalidate>
+
+    <div class="form-row">
+      <label>E-mail lub telefon *</label>
+      <input id="contact" required>
+    </div>
+
+    <div class="form-row">
+      <label>Opis zlecenia *</label>
+      <textarea id="description" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Lokalizacja zlecenia (adres)</label>
+      <input id="location_text" placeholder="np. Pobiedziska, ul. Różana 12">
+    </div>
+
+    <div class="form-row">
+      <label>Preferowany termin</label>
+      <input id="date" type="date">
+    </div>
+
+    <div class="form-row">
+      <label>Budżet (PLN)</label>
+      <input id="budget" inputmode="numeric" value="0">
+    </div>
+
+    <!-- ✔ TU WSTAWIAMY CHECKBOX — TO JEST POPRAWNE MIEJSCE -->
+    <div class="form-row" style="flex-direction:row; align-items:center; gap:8px;">
       <input type="checkbox" id="accept_rules" style="width:16px; height:16px;">
       <label for="accept_rules" style="margin:0; font-weight:500;">
-       Akceptuję <a href="regulamin.html" target="_blank">regulamin</a>
+        Akceptuję <a href="regulamin.html" target="_blank">regulamin</a>
       </label>
     </div>
-      <div class="form-row">
-        <label>E-mail lub telefon *</label>
-        <input id="contact" required>
-      </div>
 
-      <div class="form-row">
-        <label>Opis zlecenia *</label>
-        <textarea id="description" required></textarea>
-      </div>
+    <!-- PRZYCISKI -->
+    <div class="form-buttons">
+      <button class="btn" type="submit" id="submitBtn">Wyślij</button>
+      <button class="btn secondary" type="button" id="clearBtn">Wyczyść</button>
+    </div>
 
-      <div class="form-row">
-        <label>Lokalizacja zlecenia (adres)</label>
-        <input id="location_text" placeholder="np. Pobiedziska, ul. Różana 12">
-      </div>
+    <div id="status" class="muted" style="margin-top:8px"></div>
 
-      <div class="form-row">
-        <label>Preferowany termin</label>
-        <input id="date" type="date">
-      </div>
-
-      <div class="form-row">
-        <label>Budżet (PLN)</label>
-        <input id="budget" inputmode="numeric" value="0">
-      </div>
-
+  </form>
+</section>
       <!-- Ukryte pola z kalkulatora -->
       <input type="hidden" id="selected_model">
       <input type="hidden" id="estimated_price">
