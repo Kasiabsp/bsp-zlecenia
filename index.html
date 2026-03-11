@@ -22,7 +22,7 @@
       --danger:#b91c1c;
       --success:#0a7a2a;
       --radius:12px;
-      --max-width:820px;
+      --max-width:860px;
       --shadow:0 8px 30px rgba(15,23,42,0.08);
       --font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     }
@@ -106,6 +106,49 @@
       border:1px solid #dfe3ea;
       box-shadow:0 4px 14px rgba(0,0,0,0.05);
     }
+
+    /* MODELS */
+    .models-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+    .model-card{
+      background:#fff;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #d9dce3;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      transition:0.25s;
+    }
+    .model-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 10px 26px rgba(0,0,0,0.12);
+    }
+    model-viewer{
+      width:100%;
+      height:220px;
+      border-radius:10px;
+      background:#f7f9fc;
+    }
+
+    .btn{
+      background:var(--accent-2);
+      color:#fff;
+      padding:9px 12px;
+      border:none;
+      border-radius:10px;
+      font-weight:800;
+      cursor:pointer;
+      transition:0.2s;
+    }
+    .btn:hover{
+      background:#084fc7;
+    }
   </style>
 </head>
 
@@ -150,7 +193,8 @@
       <div class="service"><h3>Modele 3D</h3><p class="muted">GLB/OBJ do analiz technicznych.</p></div>
     </div>
   </section>
-    <!-- MODELE 3D -->
+
+  <!-- MODELE 3D -->
   <section class="card" id="models-3d">
     <h2>Modele 3D</h2>
     <p class="muted">Przykładowe modele fotogrametryczne wykonane w Gminie Pobiedziska.</p>
@@ -162,7 +206,7 @@
         <h4>Przerwana budowa — 08.03.2026</h4>
         <model-viewer src="assets/8.03.2026.glb" camera-controls auto-rotate></model-viewer>
         <p class="muted">
-          Szczegółowy model 3D niedokończonej konstrukcji budowlanej. Widoczne elementy żelbetowe, otwarte kondygnacje i surowe powierzchnie. Idealny do inspekcji postępu prac i analiz technicznych.
+          Szczegółowy model 3D niedokończonej konstrukcji budowlanej. Widoczne elementy żelbetowe, otwarte kondygnacje i surowe powierzchnie.
         </p>
         <button class="btn" onclick="openModel('assets/8.03.2026.glb','Przerwana budowa — 08.03.2026')">Podgląd</button>
       </div>
@@ -172,7 +216,7 @@
         <h4>Urbex — 07.03.2026</h4>
         <model-viewer src="assets/7.03.2026.glb" camera-controls auto-rotate></model-viewer>
         <p class="muted">
-          Model 3D opuszczonego obiektu typu URBEX. Realistyczne odwzorowanie zniszczeń, ubytków i degradacji. Przydatny do inwentaryzacji i dokumentacji konserwatorskiej.
+          Model 3D opuszczonego obiektu typu URBEX. Realistyczne odwzorowanie zniszczeń, ubytków i degradacji.
         </p>
         <button class="btn" onclick="openModel('assets/7.03.2026.glb','Urbex — 07.03.2026')">Podgląd</button>
       </div>
@@ -182,15 +226,14 @@
         <h4>Obiekt hydrotechniczny</h4>
         <model-viewer src="assets/model.glb" camera-controls auto-rotate></model-viewer>
         <p class="muted">
-          Zaawansowany model 3D obiektu hydrotechnicznego: przepust/stopień wodny, betonowe konstrukcje, schody i urządzenia techniczne. Idealny do analiz przepływowych i inspekcji infrastruktury.
+          Model 3D obiektu hydrotechnicznego: przepust, stopień wodny, betonowe konstrukcje i urządzenia techniczne.
         </p>
         <button class="btn" onclick="openModel('assets/model.glb','Obiekt hydrotechniczny')">Podgląd</button>
       </div>
 
     </div>
   </section>
-
-  <!-- JAK DZIAŁAMY — TIMELINE -->
+    <!-- JAK DZIAŁAMY -->
   <section class="card" id="how-we-work">
     <h2>Jak działamy</h2>
     <p class="muted">Przejrzysty proces realizacji zlecenia — od zgłoszenia do dostarczenia gotowych materiałów.</p>
@@ -249,7 +292,6 @@
   </section>
 
   <style>
-    /* TIMELINE (techniczny styl) */
     .timeline {
       display:flex;
       flex-direction:column;
@@ -288,7 +330,8 @@
       font-size:13px;
     }
   </style>
-    <!-- KALKULATOR WYCENY -->
+
+  <!-- KALKULATOR WYCENY -->
   <section class="card" id="pricing">
     <h2>Wycena</h2>
     <p class="muted">Kalkulator orientacyjnej ceny — uwzględnia dojazd, powierzchnię, liczbę modeli i dodatki.</p>
@@ -341,7 +384,7 @@
   </section>
 
   <!-- FORMULARZ -->
-  <section class="form-card" id="form">
+  <section class="card" id="form">
     <h2>Zgłoś zlecenie</h2>
 
     <form id="bspForm" novalidate>
@@ -381,29 +424,151 @@
 
 </main>
 
-<!-- MODAL PODGLĄDU MODELI -->
+<!-- FULLSCREEN MODEL VIEWER -->
 <div id="modelModal">
-  <div class="inner">
-    <div style="padding:10px;text-align:right">
-      <button class="btn secondary" onclick="closeModel()">Zamknij</button>
+  <div class="viewer-container">
+    <div class="viewer-header">
+      <h3 id="viewerTitle">Podgląd modelu</h3>
+
+      <div class="viewer-actions">
+        <button onclick="resetCamera()">Reset kamery</button>
+        <button onclick="toggleFullscreen()">Pełny ekran</button>
+        <button onclick="closeModel()">Zamknij</button>
+      </div>
     </div>
-    <div class="body" id="modalBody"></div>
+
+    <model-viewer id="viewer3D"
+      camera-controls
+      auto-rotate
+      exposure="1.1"
+      shadow-intensity="1"
+      ar
+      loading="eager">
+    </model-viewer>
   </div>
 </div>
 
+<style>
+  /* FULLSCREEN MODEL VIEWER — PREMIUM DARK */
+  #modelModal {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(8px);
+    z-index:3000;
+    align-items:center;
+    justify-content:center;
+    animation:fadeIn 0.25s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+  }
+
+  #modelModal .viewer-container {
+    width:92%;
+    height:88%;
+    max-width:1400px;
+    background:#0d1117;
+    border-radius:14px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 40px rgba(0,0,0,0.45);
+    border:1px solid #1f2937;
+  }
+
+  .viewer-header {
+    padding:12px 16px;
+    background:#111827;
+    color:#e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #1f2937;
+  }
+
+  .viewer-header h3 {
+    margin:0;
+    font-size:16px;
+    font-weight:600;
+  }
+
+  .viewer-actions {
+    display:flex;
+    gap:10px;
+  }
+
+  .viewer-actions button {
+    background:#1f2937;
+    border:1px solid #374151;
+    color:#e5e7eb;
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    transition:0.2s;
+  }
+
+  .viewer-actions button:hover {
+    background:#374151;
+  }
+
+  #modelModal model-viewer {
+    width:100%;
+    height:100%;
+    flex:1;
+    background:#0d1117;
+  }
+
+  model-viewer::part(default-progress-bar) {
+    height:6px;
+    border-radius:4px;
+    background:#1f2937;
+  }
+
+  model-viewer::part(default-progress-bar-fill) {
+    background:#3b82f6;
+    border-radius:4px;
+  }
+</style>
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* MODAL MODELI */
-function openModel(src,title){
-  const body = document.getElementById('modalBody');
-  body.innerHTML = `<h3>${title}</h3>
-    <model-viewer src="${src}" camera-controls auto-rotate style="width:100%;height:600px"></model-viewer>`;
-  document.getElementById('modelModal').style.display='flex';
+/* FULLSCREEN MODEL VIEWER */
+function openModel(src, title) {
+  const modal = document.getElementById('modelModal');
+  const viewer = document.getElementById('viewer3D');
+  const titleBox = document.getElementById('viewerTitle');
+
+  viewer.src = src;
+  titleBox.textContent = title;
+
+  modal.style.display = 'flex';
 }
-function closeModel(){
-  document.getElementById('modelModal').style.display='none';
-  document.getElementById('modalBody').innerHTML='';
+
+function closeModel() {
+  const modal = document.getElementById('modelModal');
+  const viewer = document.getElementById('viewer3D');
+
+  modal.style.display = 'none';
+  viewer.src = ""; 
+}
+
+function resetCamera() {
+  const viewer = document.getElementById('viewer3D');
+  viewer.resetCamera();
+}
+
+function toggleFullscreen() {
+  const viewer = document.getElementById('viewer3D');
+  if (!document.fullscreenElement) {
+    viewer.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
 }
 
 /* MAPA + KALKULATOR */
@@ -509,7 +674,8 @@ document.getElementById('calc-reset').onclick = ()=>{
   document.getElementById('calc-distance').value = 0;
   document.getElementById('calc-result').style.display='none';
 };
-  /* OBSŁUGA FORMULARZA */
+
+/* FORMULARZ + API */
 const form = document.getElementById('bspForm');
 const statusBox = document.getElementById('status');
 const submitBtn = document.getElementById('submitBtn');
@@ -533,7 +699,6 @@ clearBtn.onclick = ()=>{
   showStatus("");
 };
 
-/* API BASE DETEKCJA */
 function resolveApiBase(){
   const explicit = (window.BSP_API_BASE || '').trim();
   if (explicit) return explicit.replace(/\/$/, '');
@@ -550,7 +715,6 @@ function resolveApiBase(){
 const API_BASE = resolveApiBase();
 const SEND_ENDPOINT = API_BASE ? API_BASE + '/api/send' : '';
 
-/* WYSYŁKA FORMULARZA */
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
 
