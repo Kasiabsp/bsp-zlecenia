@@ -2,35 +2,33 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>BSP Zlecenia — modele 3D, kalkulator i proces</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BSP Zlecenia — inspekcje dronem, mapowanie i modele 3D</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
     :root{
-      --bg:#f6f7fb;
+      --bg:#f4f6fb;
       --card:#ffffff;
       --muted:#6b7280;
-      --accent:#0f62fe;
-      --accent-2:#0b5ed7;
-      --success:#0a7a2a;
+      --accent:#0b5ed7;
+      --accent-2:#0f62fe;
       --danger:#b91c1c;
+      --success:#0a7a2a;
       --radius:12px;
-      --max-width:980px;
-      --header-h:72px;
-      --shadow: 0 8px 30px rgba(15,23,42,0.06);
-      --mono: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      --maxw:1120px;
+      --header-h:76px;
+      --shadow:0 10px 30px rgba(15,23,42,0.06);
+      --font-sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
     body{
-      font-family:var(--mono);
-      background:linear-gradient(180deg,var(--bg),#eef2ff);
+      font-family:var(--font-sans);
+      background:linear-gradient(180deg,var(--bg),#eef2ff 900px);
       color:#0f172a;
       -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
       line-height:1.45;
     }
 
@@ -41,52 +39,154 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      padding:10px 18px;
+      padding:12px 22px;
       background:rgba(255,255,255,0.96);
-      backdrop-filter: blur(6px);
-      box-shadow:0 2px 8px rgba(2,6,23,0.06);
+      box-shadow:0 2px 10px rgba(2,6,23,0.06);
       z-index:1200;
+      backdrop-filter:blur(6px);
     }
-    .brand{display:flex;align-items:center;gap:12px}
+    .brand{display:flex;gap:12px;align-items:center}
     .logo{
-      width:52px;height:52px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;
-      box-shadow:0 6px 18px rgba(11,18,32,0.12);
+      width:56px;height:56px;border-radius:12px;
+      background:#020617;color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:18px;
+      box-shadow:0 8px 22px rgba(15,23,42,0.25);
     }
-    nav ul{display:flex;gap:12px;list-style:none;margin:0;padding:0;align-items:center}
-    nav a{color:#0f172a;text-decoration:none;font-weight:600;font-size:13px}
-    .cta{background:var(--accent);color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700}
+    nav ul{display:flex;gap:14px;list-style:none;margin:0;padding:0;align-items:center}
+    nav a{
+      color:#0f172a;
+      text-decoration:none;
+      font-weight:600;
+      font-size:14px;
+      padding:8px 10px;
+      border-radius:8px;
+    }
+    nav a:hover{background:rgba(11,94,215,0.06)}
+    .cta{
+      background:var(--accent-2);
+      color:#fff;
+      padding:8px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:800;
+      box-shadow:0 8px 20px rgba(11,94,255,0.12);
+    }
 
-    .container{max-width:var(--max-width);margin:calc(var(--header-h) + 18px) auto;padding:18px}
-    .grid-2{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
-    @media (max-width:980px){ .grid-2{grid-template-columns:1fr} }
+    .container{
+      max-width:var(--maxw);
+      margin:calc(var(--header-h) + 22px) auto;
+      padding:20px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1.2fr 0.9fr;
+      gap:20px;
+      align-items:flex-start;
+    }
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
+    }
 
-    .card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
-    h1,h2,h3{margin:0 0 8px 0}
-    p.muted{margin:0;color:var(--muted);font-size:13px}
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    h1{font-size:21px;margin:0 0 8px}
+    h2{font-size:16px;margin:0 0 8px}
+    h3{font-size:15px;margin:0 0 8px}
+    .muted{color:var(--muted);font-size:13px}
 
-    label{display:block;font-weight:700;margin-bottom:6px;color:#0f172a;font-size:13px}
-    input[type="text"], input[type="date"], textarea, select, input[type="number"], input[type="password"]{
-      width:100%;padding:9px 10px;border-radius:10px;border:1px solid #e6e9ee;background:#fff;font-size:14px;color:#0f172a;
+    label{
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+      color:#0f172a;
+      font-size:13px;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    input[type="password"],
+    textarea,
+    select{
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid #e6e9ee;
+      background:#fff;
+      font-size:14px;
+      color:#0f172a;
     }
     textarea{min-height:120px;resize:vertical}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;border:none;background:var(--accent-2);color:#fff;font-weight:800;cursor:pointer}
-    .btn.secondary{background:#eef2ff;color:var(--accent-2);font-weight:700}
-    .muted{color:var(--muted);font-size:13px}
-    .map-box{height:300px;border-radius:10px;overflow:hidden;border:1px solid #e6e9ee}
-    .breakdown{background:#fbfdff;border-radius:10px;padding:10px;margin-top:10px;color:#0f172a;font-size:13px;white-space:pre-line}
 
-    footer{margin-top:18px;padding:12px 0;text-align:center;color:var(--muted);font-size:12px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 14px;
+      border-radius:10px;
+      border:none;
+      background:var(--accent-2);
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .btn.secondary{
+      background:#eef2ff;
+      color:var(--accent-2);
+      font-weight:700;
+    }
 
-    /* small helpers */
-    .flex{display:flex;gap:8px;align-items:center}
-    .right{margin-left:auto}
-    #map{width:100%;height:260px}
+    .map-box{
+      height:300px;
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid #e6e9ee;
+    }
+    #map{width:100%;height:100%}
+
+    .news-list{display:grid;gap:10px}
+    .news-item{
+      padding:10px 12px;
+      border-radius:10px;
+      background:#fff;
+      border:1px solid rgba(15,23,42,0.03);
+    }
+    .news-item time{
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:4px;
+    }
+    .news-expires{
+      color:#9a3412;
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    footer{
+      margin-top:20px;
+      padding:18px 0 10px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .small{font-size:13px;color:var(--muted)}
     .terms-row{display:flex;gap:8px;align-items:center}
-    .terms-msg{font-size:13px;color:var(--muted)}
-    .news-list{margin-top:12px;display:grid;gap:10px}
-    .news-item{padding:10px;border-radius:10px;border:1px solid rgba(15,23,42,0.03);background:#fff}
-    .admin-badge{font-size:12px;color:#fff;background:#0b5ed7;padding:4px 8px;border-radius:8px}
+    .pill{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#eff6ff;
+      color:#1d4ed8;
+      font-size:11px;
+      font-weight:600;
+    }
   </style>
 </head>
 <body>
@@ -95,7 +195,7 @@
       <div class="logo" aria-hidden="true">BSP</div>
       <div>
         <div style="font-weight:800">BSP Zlecenia</div>
-        <div style="font-size:12px;color:var(--muted)">Inspekcje dronem • Gmina Pobiedziska</div>
+        <div class="muted" style="font-size:13px">Inspekcje dronem • mapowanie • modele 3D</div>
       </div>
     </div>
 
@@ -103,7 +203,7 @@
       <ul>
         <li><a href="index.html">Strona główna</a></li>
         <li><a href="about.html">O nas</a></li>
-        <li><a href="#services">Usługi</a></li>
+        <li><a href="news.html">Aktualności</a></li>
         <li><a href="#pricing-rules">Zasady wyceny</a></li>
         <li><a href="regulamin.html">Regulamin</a></li>
       </ul>
@@ -113,206 +213,189 @@
   </header>
 
   <main class="container" id="main">
-    <div class="grid-2">
-      <div>
-        <section class="card">
-          <h1>Dokładna dokumentacja z lotu drona</h1>
-          <p class="muted">Inspekcje dachów, zdjęcia nieruchomości, mapowanie i modele 3D. Szybkie terminy, przejrzyste zasady wyceny.</p>
+    <div class="grid">
+      <!-- LEWA KOLUMNA -->
+      <section class="card" aria-labelledby="heroTitle">
+        <h1 id="heroTitle">Dokumentacja z drona, mapowanie i modele 3D</h1>
+        <p class="muted">
+          Inspekcje dachów, fotogrametria, ortofotomapy oraz modele 3D budynków i działek.
+          Przejrzyste zasady wyceny, realne terminy, lokalnie w gminie Pobiedziska i okolicach.
+        </p>
 
-          <section id="services" style="margin-top:12px">
-            <h2>Usługi</h2>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">
-              <div style="padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>Inspekcje dachów</strong>
-                <p class="muted" style="margin-top:6px">Dokładna dokumentacja bez rusztowań.</p>
-              </div>
-              <div style="padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>Zdjęcia nieruchomości</strong>
-                <p class="muted" style="margin-top:6px">Materiały marketingowe i dokumentacyjne.</p>
-              </div>
-              <div style="padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>Mapowanie terenu</strong>
-                <p class="muted" style="margin-top:6px">Ortofotomapy i analiza działek.</p>
-              </div>
+        <section id="services" style="margin-top:16px">
+          <h2>Usługi</h2>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px">
+            <div style="padding:12px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
+              <strong>Inspekcje dachów</strong>
+              <p class="muted" style="margin-top:6px">Zdjęcia i filmy z powietrza, bez rusztowań.</p>
             </div>
-          </section>
-
-          <section id="pricing-rules" style="margin-top:14px">
-            <h2>Zasady wyceny</h2>
-            <p class="muted" style="margin-top:6px">Opłata za dojazd + koszt pracy (nowa formuła) + dopłaty (linie, drzewa, RAW) + dopłata za pilny termin.</p>
-
-            <div style="display:grid;gap:8px;margin-top:8px">
-              <div style="padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>Opłata za dojazd</strong>
-                <div class="muted" style="margin-top:6px">0–5 km — 10 zł; 5–10 km — 20 zł; 10–15 km — 30 zł; 15–30 km — 50 zł; dalej >30 km — 50 zł + 10 zł za każde rozpoczęte 5 km.</div>
-              </div>
-
-              <div style="padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>Czynniki i stałe dopłaty</strong>
-                <ul style="margin:6px 0 0 18px;color:var(--muted)">
-                  <li>Linie energetyczne — dopłata stała: <strong>50 zł</strong></li>
-                  <li>Drzewa / trudny dostęp — dopłata stała: <strong>50 zł</strong></li>
-                  <li>Pliki RAW — dopłata: <strong>100 zł</strong> (opcjonalnie)</li>
-                </ul>
-              </div>
+            <div style="padding:12px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
+              <strong>Mapowanie i ortofotomapy</strong>
+              <p class="muted" style="margin-top:6px">Dokładne mapy, pomiary powierzchni i objętości.</p>
             </div>
-          </section>
-
-          <section id="how-we-work" style="margin-top:14px">
-            <h2>Jak pracujemy</h2>
-            <p class="muted" style="margin-top:6px">Proces w 6 krokach — od zgłoszenia do gotowych materiałów: analiza, planowanie, realizacja, obróbka, dostawa, poprawki.</p>
-
-            <div style="display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:8px">
-              <div style="min-width:160px;padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>1. Zgłoszenie</strong>
-                <p class="muted" style="margin-top:6px">Formularz lub telefon; potwierdzenie w 24h.</p>
-              </div>
-              <div style="min-width:160px;padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>2. Analiza</strong>
-                <p class="muted" style="margin-top:6px">Sprawdzamy teren, ryzyka i planujemy loty.</p>
-              </div>
-              <div style="min-width:160px;padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
-                <strong>3. Realizacja</strong>
-                <p class="muted" style="margin-top:6px">Wykonanie lotów i zabezpieczenie strefy.</p>
-              </div>
+            <div style="padding:12px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
+              <strong>Modele 3D</strong> <span class="pill">3D</span>
+              <p class="muted" style="margin-top:6px">Modele GLB/OBJ do analiz, wizualizacji i prezentacji.</p>
             </div>
-          </section>
-
-          <section style="margin-top:14px">
-            <h2>Aktualności</h2>
-            <div id="news" class="news-list" aria-live="polite">
-              <!-- dynamiczne komunikaty -->
-            </div>
-          </section>
+          </div>
         </section>
-      </div>
 
+        <section id="pricing-rules" style="margin-top:18px">
+          <h2>Zasady wyceny</h2>
+          <p class="muted" style="margin-top:6px">
+            Cena składa się z: opłaty za dojazd, kosztu pracy (powierzchnia / liczba modeli / rodzaj usługi)
+            oraz dopłat za warunki (linie, drzewa) i pliki RAW.
+          </p>
+
+          <div style="display:grid;gap:10px;margin-top:10px">
+            <div style="padding:12px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
+              <strong>Opłata za dojazd</strong>
+              <p class="muted" style="margin-top:6px">
+                0–5 km — 10 zł • 5–10 km — 20 zł • 10–15 km — 30 zł • 15–30 km — 50 zł •
+                powyżej 30 km — 50 zł + 10 zł za każde rozpoczęte 5 km.
+              </p>
+            </div>
+            <div style="padding:12px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,42,0.03)">
+              <strong>Dopłaty</strong>
+              <ul style="margin:6px 0 0 18px;color:var(--muted)">
+                <li>Linie energetyczne — 50 zł</li>
+                <li>Drzewa / trudny dostęp — 50 zł</li>
+                <li>Pliki RAW — 100 zł</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>Aktualności (podgląd)</h2>
+          <div id="newsPreview" class="news-list" aria-live="polite">
+            <!-- wczytywane dynamicznie -->
+          </div>
+          <div style="margin-top:10px">
+            <a href="news.html" class="btn secondary" style="text-decoration:none">Przejdź do zakładki „Aktualności”</a>
+          </div>
+        </section>
+      </section>
+
+      <!-- PRAWA KOLUMNA -->
       <aside>
         <div class="card" id="form" aria-labelledby="form-title">
-          <h3 id="form-title" style="margin:0 0 8px">Zgłoś zlecenie</h3>
+          <h2 id="form-title" style="font-size:16px;margin:0 0 8px">Zgłoś zlecenie</h2>
 
           <form id="bspForm" novalidate>
-            <div>
-              <label for="contact">E-mail lub telefon <span style="color:var(--danger)">*</span></label>
-              <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon" autocomplete="email tel">
-            </div>
+            <label for="contact">E-mail lub telefon <span style="color:var(--danger)">*</span></label>
+            <input id="contact" name="contact" type="text" required placeholder="E-mail lub telefon" autocomplete="email tel">
 
-            <div style="margin-top:10px">
-              <label for="description">Opis zlecenia <span style="color:var(--danger)">*</span></label>
-              <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz"></textarea>
-            </div>
+            <label for="description" style="margin-top:10px">Opis zlecenia <span style="color:var(--danger)">*</span></label>
+            <textarea id="description" name="description" required placeholder="Opisz, czego potrzebujesz (np. inspekcja dachu, model 3D budynku, ortofotomapa działki)"></textarea>
 
             <div style="display:flex;gap:8px;margin-top:10px">
               <div style="flex:1">
                 <label for="date">Preferowany termin</label>
                 <input id="date" name="date" type="date">
               </div>
-              <div style="width:120px">
+              <div style="width:130px">
                 <label for="budget">Budżet (PLN)</label>
                 <input id="budget" name="budget" type="text" inputmode="numeric" placeholder="PLN">
               </div>
             </div>
 
-            <div style="margin-top:10px">
-              <label for="calc-area">Powierzchnia (ha)</label>
-              <input id="calc-area" name="calc-area" type="number" min="0" step="0.01" value="0.10">
+            <label for="service-type" style="margin-top:10px">Rodzaj usługi</label>
+            <select id="service-type" name="service-type">
+              <option value="mapping">Mapowanie / ortofotomapa</option>
+              <option value="photos">Zdjęcia</option>
+              <option value="video">Filmy</option>
+              <option value="model3d">Model 3D (GLB/OBJ)</option>
+            </select>
+
+            <label for="calc-area" style="margin-top:10px">Powierzchnia (ha)</label>
+            <input id="calc-area" name="calc-area" type="number" min="0" step="0.01" value="0.10">
+
+            <label for="calc-models" style="margin-top:10px">Liczba modeli / obiektów</label>
+            <input id="calc-models" name="calc-models" type="number" min="1" step="1" value="1">
+
+            <label style="margin-top:10px">Opcje dodatkowe</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <label><input id="calc-lines" type="checkbox"> Linie energetyczne (50 zł)</label>
+              <label><input id="calc-trees" type="checkbox"> Drzewa / utrudnienia (50 zł)</label>
+              <label><input id="calc-raw" type="checkbox"> Pliki RAW (100 zł)</label>
             </div>
 
-            <div style="margin-top:10px">
-              <label for="calc-models">Liczba modeli</label>
-              <input id="calc-models" name="calc-models" type="number" min="1" step="1" value="1">
+            <label for="calc-distance" style="margin-top:10px">Odległość od punktu referencyjnego (km)</label>
+            <input id="calc-distance" type="number" readonly value="0" style="width:140px">
+
+            <div style="margin-top:12px" class="terms-row">
+              <input id="termsCheckbox" type="checkbox" />
+              <label for="termsCheckbox" class="small">
+                Akceptuję <a href="regulamin.html" target="_blank" rel="noopener">regulamin</a>
+              </label>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+              <button id="openTermsBtn" type="button" class="btn secondary">Zatwierdź regulamin</button>
+              <div id="termsMsg" class="small" style="margin-left:4px"></div>
             </div>
 
-            <div style="margin-top:10px">
-              <label for="service-type">Rodzaj usługi</label>
-              <select id="service-type" name="service-type">
-                <option value="mapping">Mapowanie</option>
-                <option value="photos">Zdjęcia</option>
-                <option value="video">Filmy</option>
-                <option value="model3d">Modele 3D</option>
-              </select>
-            </div>
-
-            <div style="margin-top:10px">
-              <label for="calc-distance">Odległość (km)</label>
-              <input id="calc-distance" type="number" readonly value="0" style="width:120px">
-            </div>
-
-            <div style="margin-top:10px">
-              <label>Opcje dodatkowe</label>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <label><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
-                <label><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
-                <label><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
-              </div>
-            </div>
-
-            <!-- Regulamin: checkbox + przycisk -->
-            <div style="margin-top:12px">
-              <div class="terms-row">
-                <input id="termsCheckbox" type="checkbox" />
-                <label for="termsCheckbox" class="terms-msg">Akceptuję <a href="regulamin.html" target="_blank" rel="noopener">regulamin</a></label>
-              </div>
-              <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-                <button id="openTermsBtn" type="button" class="btn secondary">Zatwierdź regulamin</button>
-                <div id="termsMsg" class="terms-msg" style="margin-left:6px"></div>
-              </div>
-            </div>
-
-            <!-- hidden fields -->
+            <!-- ukryte pola do wysyłki -->
             <input type="hidden" id="selected_model" name="selected_model" value="">
             <input type="hidden" id="estimated_price" name="estimated_price" value="">
             <input type="hidden" id="location_lat" name="location_lat" value="">
             <input type="hidden" id="location_lng" name="location_lng" value="">
-            <input type="hidden" id="service_type" name="service_type" value="">
+            <input type="hidden" id="service_type_hidden" name="service_type" value="">
             <input type="hidden" id="area_ha" name="area_ha" value="">
             <input type="hidden" id="flights_estimated" name="flights_estimated" value="">
             <input type="hidden" id="extras_list" name="extras_list" value="">
 
-            <div style="margin-top:12px;display:flex;gap:8px">
+            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn" type="button" id="calc-run">Oblicz</button>
               <button class="btn" type="submit" id="submitBtn" disabled>Wyślij zgłoszenie</button>
-              <button type="button" class="btn secondary" id="calc-run">Oblicz</button>
               <button type="button" class="btn secondary" id="clearBtn">Wyczyść</button>
             </div>
 
-            <div id="calc-result" class="breakdown" style="display:none;margin-top:10px"></div>
-            <div id="status" class="muted" role="status" aria-live="polite" style="margin-top:8px"></div>
+            <div id="calc-result" class="small" style="margin-top:10px;white-space:pre-line;display:none;border-radius:10px;background:#f9fafb;padding:10px;border:1px solid #e5e7eb"></div>
+            <div id="status" class="small" role="status" aria-live="polite" style="margin-top:8px"></div>
           </form>
         </div>
 
         <div class="card" style="margin-top:12px">
-          <h3 style="margin:0 0 8px">Mapa lokalizacji</h3>
-          <div id="map" class="map-box" role="application" aria-label="Mapa do wyboru lokalizacji"></div>
-          <div class="muted" style="margin-top:8px">Kliknij na mapie, aby ustawić miejsce zlecenia; dystans liczony jest od punktu referencyjnego w Biskupicach.</div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h3 style="margin:0 0 8px">Panel administracyjny (szybki dostęp)</h3>
-          <div class="muted">Jeśli masz uprawnienia, odwiedź stronę <a href="aboutinfo.html">Panel administracyjny</a> aby zarządzać komunikatami.</div>
+          <h3 style="margin:0 0 8px">Lokalizacja zlecenia</h3>
+          <div id="map" class="map-box" role="application" aria-label="Mapa do wyboru lokalizacji zlecenia"></div>
+          <p class="small" style="margin-top:8px">
+            Kliknij na mapie, aby ustawić miejsce zlecenia. Dystans liczony jest od punktu referencyjnego w Biskupicach.
+          </p>
         </div>
       </aside>
     </div>
 
     <footer>
-      © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
+      © <span id="year"></span> BSP Zlecenia — inspekcje dronem, mapowanie i modele 3D
     </footer>
   </main>
 
   <script>
-    // --- Konfiguracja i wartości domyślne ---
+    // Rok w stopce
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
-    const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
+    // Cennik bazowy (w tym modele 3D)
+    const perHaPrices = {
+      mapping: 100,
+      photos: 80,
+      video: 120,
+      model3d: 150
+    };
+    const unitCosts = {
+      mapping: 120,
+      photos: 100,
+      video: 140,
+      model3d: 200
+    };
 
-    // Punkt referencyjny: Biskupice (dokładne współrzędne)
+    // Punkt referencyjny: Biskupice
     const latRef = 52.46694444444444; // 52°28′01″N
     const lngRef = 17.17;             // 17°10′12″E
 
-    // --- Haversine ---
     function toRad(v){ return v * Math.PI / 180; }
     function haversineDistance(lat1, lon1, lat2, lon2){
-      const R = 6371; // km
+      const R = 6371;
       const dLat = toRad(lat2 - lat1);
       const dLon = toRad(lon2 - lon1);
       const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -322,24 +405,23 @@
       return R * c;
     }
 
-    // --- Map initialization (Leaflet) ---
     let map, marker;
     function initMap(){
-      if (typeof L === 'undefined') {
-        const mapEl = document.getElementById('map');
-        if (mapEl) mapEl.innerHTML = '<p style="padding:12px;margin:0;color:#b91c1c;font-size:13px">Nie udało się załadować mapy (Leaflet).</p>';
+      const mapEl = document.getElementById('map');
+      if (!mapEl) return;
+      if (typeof L === 'undefined'){
+        mapEl.innerHTML = '<p class="small" style="padding:10px;margin:0;color:#b91c1c">Nie udało się załadować mapy.</p>';
         return;
       }
 
-      map = L.map('map', { attributionControl: false }).setView([latRef, lngRef], 14);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+      map = L.map('map', { attributionControl:false }).setView([latRef, lngRef], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19 }).addTo(map);
 
-      // reference marker for Biskupice
-      window._bspRefMarker = L.circleMarker([latRef, lngRef], { radius:7, color:'#0b5ed7', fillColor:'#0b5ed7', fillOpacity:0.95 }).addTo(map)
-        .bindPopup('Biskupice (punkt referencyjny)').openPopup();
+      L.circleMarker([latRef, lngRef], {
+        radius:7,color:'#0b5ed7',fillColor:'#0b5ed7',fillOpacity:0.95
+      }).addTo(map).bindPopup('Punkt referencyjny: Biskupice').openPopup();
 
-      // default marker at reference point (miejsce złożenia)
-      marker = L.marker([latRef, lngRef], { draggable: true }).addTo(map);
+      marker = L.marker([latRef, lngRef], { draggable:true }).addTo(map);
       marker.on('dragend', function(ev){
         const p = ev.target.getLatLng();
         setSelectedLocation(p.lat, p.lng, true);
@@ -349,7 +431,6 @@
         setSelectedLocation(e.latlng.lat, e.latlng.lng);
       });
 
-      // set initial hidden fields
       document.getElementById('location_lat').value = latRef;
       document.getElementById('location_lng').value = lngRef;
       document.getElementById('calc-distance').value = 0.00;
@@ -359,19 +440,21 @@
       if (!map) return;
       if (marker) marker.setLatLng([lat, lng]);
       else {
-        marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-        marker.on('dragend', function(ev){ const p = ev.target.getLatLng(); setSelectedLocation(p.lat, p.lng, true); });
+        marker = L.marker([lat, lng], { draggable:true }).addTo(map);
+        marker.on('dragend', function(ev){
+          const p = ev.target.getLatLng();
+          setSelectedLocation(p.lat, p.lng, true);
+        });
       }
       if (!skipPan) map.panTo([lat, lng]);
 
       const distKm = haversineDistance(latRef, lngRef, lat, lng);
-      const distRounded = Math.round(distKm * 100) / 100; // two decimals
+      const distRounded = Math.round(distKm * 100) / 100;
       document.getElementById('calc-distance').value = distRounded;
       document.getElementById('location_lat').value = lat;
       document.getElementById('location_lng').value = lng;
     }
 
-    // --- Travel fee logic (zgodnie z zasadami) ---
     function travelFee(distance){
       if (distance <= 5) return 10;
       if (distance <= 10) return 20;
@@ -380,8 +463,7 @@
       return 50 + Math.ceil((distance - 30) / 5) * 10;
     }
 
-    // --- Kalkulator i formularz ---
-    (function(){
+    (function setupCalculatorAndForm(){
       const areaEl = document.getElementById('calc-area');
       const modelsEl = document.getElementById('calc-models');
       const serviceEl = document.getElementById('service-type');
@@ -394,6 +476,7 @@
       const resultEl = document.getElementById('calc-result');
       const statusEl = document.getElementById('status');
       const submitBtn = document.getElementById('submitBtn');
+      const form = document.getElementById('bspForm');
 
       function fmt(v){ return new Intl.NumberFormat('pl-PL').format(Math.round(v)); }
 
@@ -402,6 +485,7 @@
         const models = parseInt(modelsEl.value) || 1;
         const service = serviceEl.value || 'mapping';
         const distance = parseFloat(distanceEl.value) || 0;
+
         const basePerHa = perHaPrices[service] || 100;
         const baseUnit = unitCosts[service] || 100;
 
@@ -409,53 +493,67 @@
 
         let extras = 0;
         const extrasList = [];
-        if (linesEl && linesEl.checked) { extras += 50; extrasList.push('linie'); }
-        if (treesEl && treesEl.checked) { extras += 50; extrasList.push('drzewa'); }
-        if (rawEl && rawEl.checked) { extras += 100; extrasList.push('RAW'); }
+        if (linesEl.checked){ extras += 50; extrasList.push('linie'); }
+        if (treesEl.checked){ extras += 50; extrasList.push('drzewa'); }
+        if (rawEl.checked){ extras += 100; extrasList.push('RAW'); }
 
         const price = Math.round((basePerHa * area + baseUnit * models) + travel + extras);
 
         resultEl.style.display = 'block';
-        resultEl.textContent = `Szacunkowa cena: ${fmt(price)} zł\nPowierzchnia: ${area} ha\nLiczba modeli: ${models}\nDystans: ${distance} km\nDojazd: ${fmt(travel)} zł\nDodatki: ${extrasList.join(', ') || 'brak'}`;
+        resultEl.textContent =
+          `Szacunkowa cena: ${fmt(price)} zł` +
+          `\nRodzaj usługi: ${service === 'model3d' ? 'Model 3D' : service}` +
+          `\nPowierzchnia: ${area} ha` +
+          `\nLiczba modeli / obiektów: ${models}` +
+          `\nDystans: ${distance} km (dojazd: ${fmt(travel)} zł)` +
+          `\nDodatki: ${extrasList.join(', ') || 'brak'}`;
+
         document.getElementById('estimated_price').value = price;
-        document.getElementById('service_type').value = service;
+        document.getElementById('service_type_hidden').value = service;
         document.getElementById('area_ha').value = area;
         document.getElementById('flights_estimated').value = models;
         document.getElementById('extras_list').value = extrasList.join(',');
         statusEl.textContent = '';
+        statusEl.style.color = '';
       }
 
       runBtn.addEventListener('click', runCalc);
 
       clearBtn.addEventListener('click', function(){
-        document.getElementById('bspForm').reset();
+        form.reset();
         areaEl.value = '0.10';
         modelsEl.value = '1';
         distanceEl.value = '0';
         resultEl.style.display = 'none';
         resultEl.textContent = '';
         statusEl.textContent = '';
-        document.getElementById('selected_model').value = '';
+        statusEl.style.color = '';
         document.getElementById('estimated_price').value = '';
+        document.getElementById('service_type_hidden').value = '';
+        document.getElementById('area_ha').value = '';
+        document.getElementById('flights_estimated').value = '';
+        document.getElementById('extras_list').value = '';
         document.getElementById('location_lat').value = latRef;
         document.getElementById('location_lng').value = lngRef;
-        // restore marker
         if (typeof L !== 'undefined' && map){
           if (marker) map.removeLayer(marker);
-          marker = L.marker([latRef, lngRef], { draggable: true }).addTo(map);
-          marker.on('dragend', function(ev){ const p = ev.target.getLatLng(); setSelectedLocation(p.lat, p.lng, true); });
+          marker = L.marker([latRef, lngRef], { draggable:true }).addTo(map);
+          marker.on('dragend', function(ev){
+            const p = ev.target.getLatLng();
+            setSelectedLocation(p.lat, p.lng, true);
+          });
+          map.panTo([latRef, lngRef]);
         }
       });
 
-      // form submit: basic client-side validation and terms check
-      const form = document.getElementById('bspForm');
       form.addEventListener('submit', function(e){
         e.preventDefault();
         const contact = form.contact.value.trim();
         const description = form.description.value.trim();
         const termsCheckbox = document.getElementById('termsCheckbox');
-        if (!contact || !description) {
-          statusEl.textContent = 'Uzupełnij wymagane pola.';
+
+        if (!contact || !description){
+          statusEl.textContent = 'Uzupełnij wymagane pola (kontakt i opis).';
           statusEl.style.color = 'var(--danger)';
           return;
         }
@@ -466,15 +564,12 @@
           return;
         }
 
-        // Simulate sending: here you would call your API. For now show success message.
-        statusEl.textContent = 'Wysłano zgłoszenie (symulacja).';
+        statusEl.textContent = 'Zgłoszenie zostało wysłane (symulacja).';
         statusEl.style.color = 'var(--success)';
-        // keep form data or reset as desired
       });
     })();
 
-    // --- Terms handling (checkbox + open button) ---
-    (function(){
+    (function setupTerms(){
       const LS_KEY = 'bsp_terms_accepted_v1';
       const termsCheckbox = document.getElementById('termsCheckbox');
       const openTermsBtn = document.getElementById('openTermsBtn');
@@ -484,94 +579,106 @@
       const accepted = localStorage.getItem(LS_KEY) === '1';
       if (termsCheckbox) termsCheckbox.checked = accepted;
       if (submitBtn) submitBtn.disabled = !accepted;
-      if (accepted && termsMsg) termsMsg.textContent = 'Regulamin zaakceptowany.';
+      if (accepted && termsMsg){
+        termsMsg.textContent = 'Regulamin zaakceptowany.';
+        termsMsg.style.color = '';
+      }
 
-      if (openTermsBtn) {
+      if (openTermsBtn){
         openTermsBtn.addEventListener('click', function(){
           window.open('regulamin.html', '_blank', 'noopener');
-          // optional: automatically accept on click
-          // termsCheckbox.checked = true; localStorage.setItem(LS_KEY,'1'); submitBtn.disabled = false; termsMsg.textContent = 'Regulamin zaakceptowany.';
         });
       }
 
-      if (termsCheckbox) {
+      if (termsCheckbox){
         termsCheckbox.addEventListener('change', function(){
           if (termsCheckbox.checked){
             localStorage.setItem(LS_KEY, '1');
             if (submitBtn) submitBtn.disabled = false;
-            if (termsMsg) { termsMsg.textContent = 'Regulamin zaakceptowany.'; termsMsg.style.color = ''; }
+            if (termsMsg){
+              termsMsg.textContent = 'Regulamin zaakceptowany.';
+              termsMsg.style.color = '';
+            }
           } else {
             localStorage.removeItem(LS_KEY);
             if (submitBtn) submitBtn.disabled = true;
-            if (termsMsg) { termsMsg.textContent = ''; }
-          }
-        });
-      }
-    })();
-
-    // --- Announcements loader (local fallback) ---
-    (function(){
-      const newsEl = document.getElementById('news');
-
-      function render(items){
-        newsEl.innerHTML = '';
-        if (!items || !items.length){
-          const el = document.createElement('div'); el.className = 'news-item'; el.textContent = 'Brak komunikatów.'; newsEl.appendChild(el); return;
-        }
-        const now = Date.now();
-        items.forEach(it => {
-          // filter expired if expires present
-          if (it.expires){
-            const ex = new Date(it.expires).getTime();
-            if (!isNaN(ex) && ex < now) return;
-          }
-          const el = document.createElement('article'); el.className = 'news-item';
-          const t = document.createElement('time'); t.dateTime = it.date || new Date().toISOString(); t.textContent = new Date(it.date || Date.now()).toLocaleString();
-          const p = document.createElement('p'); p.textContent = it.text || '';
-          el.appendChild(t); el.appendChild(p);
-          if (it.expires){
-            const ex = new Date(it.expires);
-            if (!isNaN(ex.getTime())){
-              const exEl = document.createElement('div'); exEl.style.marginTop = '6px'; exEl.style.color = '#9a3412'; exEl.style.fontSize = '13px';
-              exEl.textContent = 'Wyświetlane do: ' + ex.toLocaleDateString();
-              el.appendChild(exEl);
+            if (termsMsg){
+              termsMsg.textContent = '';
             }
           }
-          newsEl.appendChild(el);
         });
-        if (!newsEl.children.length){
-          const el = document.createElement('div'); el.className = 'news-item'; el.textContent = 'Brak aktualnych komunikatów.'; newsEl.appendChild(el);
-        }
       }
-
-      function load(){
-        // Try API (if configured) - omitted here; fallback to localStorage
-        try {
-          const raw = localStorage.getItem('bsp_announcements');
-          if (raw){
-            const arr = JSON.parse(raw);
-            if (Array.isArray(arr)) { render(arr); return; }
-          }
-        } catch(e){}
-        render([]);
-      }
-
-      // initial load
-      load();
     })();
 
-    // --- Init map on DOM ready ---
+    (function loadNewsPreview(){
+      const container = document.getElementById('newsPreview');
+      if (!container) return;
+
+      function render(items){
+        container.innerHTML = '';
+        const now = Date.now();
+        const active = (items || []).filter(it => {
+          if (!it) return false;
+          if (it.expires){
+            const ex = new Date(it.expires).getTime();
+            if (!isNaN(ex) && ex < now) return false;
+          }
+          return true;
+        });
+
+        const slice = active.slice(0, 3);
+        if (!slice.length){
+          const el = document.createElement('div');
+          el.className = 'news-item';
+          el.textContent = 'Brak komunikatów.';
+          container.appendChild(el);
+          return;
+        }
+
+        slice.forEach(it => {
+          const el = document.createElement('article');
+          el.className = 'news-item';
+          const t = document.createElement('time');
+          t.dateTime = it.date || new Date().toISOString();
+          t.textContent = new Date(it.date || Date.now()).toLocaleString();
+          const p = document.createElement('p');
+          p.textContent = it.text || '';
+          el.appendChild(t);
+          el.appendChild(p);
+          if (it.expires){
+            const exDate = new Date(it.expires);
+            if (!isNaN(exDate.getTime())){
+              const ex = document.createElement('div');
+              ex.className = 'news-expires';
+              ex.textContent = 'Wyświetlane do: ' + exDate.toLocaleDateString();
+              el.appendChild(ex);
+            }
+          }
+          container.appendChild(el);
+        });
+      }
+
+      try{
+        const raw = localStorage.getItem('bsp_announcements');
+        if (!raw){
+          render([]);
+          return;
+        }
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) render(arr);
+        else render([]);
+      }catch(e){
+        console.error(e);
+        render([]);
+      }
+    })();
+
     document.addEventListener('DOMContentLoaded', function(){
-      try { initMap(); } catch(e){ console.error('Map init error', e); }
+      try{ initMap(); }catch(e){ console.error('Map init error', e); }
     });
   </script>
 
-  <!-- Padding comments to increase file length as requested.
-       These comments are intentionally verbose and repeated to make the file longer
-       without affecting runtime behavior. They can be removed later if desired. -->
-  <!-- PADDING START -->
-  <!-- This file intentionally contains additional comment padding to reach a requested size.
-       The padding is harmless and does not affect functionality. -->
+  <!-- Padding comments to utrzymać długość pliku (bez wpływu na działanie) -->
   <!-- PAD 001 -->
   <!-- PAD 002 -->
   <!-- PAD 003 -->
@@ -622,56 +729,5 @@
   <!-- PAD 048 -->
   <!-- PAD 049 -->
   <!-- PAD 050 -->
-  <!-- PAD 051 -->
-  <!-- PAD 052 -->
-  <!-- PAD 053 -->
-  <!-- PAD 054 -->
-  <!-- PAD 055 -->
-  <!-- PAD 056 -->
-  <!-- PAD 057 -->
-  <!-- PAD 058 -->
-  <!-- PAD 059 -->
-  <!-- PAD 060 -->
-  <!-- PAD 061 -->
-  <!-- PAD 062 -->
-  <!-- PAD 063 -->
-  <!-- PAD 064 -->
-  <!-- PAD 065 -->
-  <!-- PAD 066 -->
-  <!-- PAD 067 -->
-  <!-- PAD 068 -->
-  <!-- PAD 069 -->
-  <!-- PAD 070 -->
-  <!-- PAD 071 -->
-  <!-- PAD 072 -->
-  <!-- PAD 073 -->
-  <!-- PAD 074 -->
-  <!-- PAD 075 -->
-  <!-- PAD 076 -->
-  <!-- PAD 077 -->
-  <!-- PAD 078 -->
-  <!-- PAD 079 -->
-  <!-- PAD 080 -->
-  <!-- PAD 081 -->
-  <!-- PAD 082 -->
-  <!-- PAD 083 -->
-  <!-- PAD 084 -->
-  <!-- PAD 085 -->
-  <!-- PAD 086 -->
-  <!-- PAD 087 -->
-  <!-- PAD 088 -->
-  <!-- PAD 089 -->
-  <!-- PAD 090 -->
-  <!-- PAD 091 -->
-  <!-- PAD 092 -->
-  <!-- PAD 093 -->
-  <!-- PAD 094 -->
-  <!-- PAD 095 -->
-  <!-- PAD 096 -->
-  <!-- PAD 097 -->
-  <!-- PAD 098 -->
-  <!-- PAD 099 -->
-  <!-- PAD 100 -->
-  <!-- PADDING END -->
 </body>
 </html>
