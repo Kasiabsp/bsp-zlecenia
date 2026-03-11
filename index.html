@@ -1,894 +1,414 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BSP Zlecenia – Inspekcje dronem, mapowanie, modele 3D</title>
+  <meta charset="utf-8" />
+  <title>BSP Zlecenia — Modele 3D, Mapowanie, Inspekcje</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <!-- Model Viewer -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-  <!-- Leaflet CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  <!-- Inter font -->
-  <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+  <script type="module" src="scripts/model-viewer.js"></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <style>
-    :root {
-      --primary: #2563eb;
-      --primary-light: #3b82f6;
-      --accent: #10b981;
-      --danger: #ef4444;
-      --bg: #f7fafc;
-      --surface: #fff;
-      --border: #e5e7eb;
-      --text: #1e293b;
-      --muted: #64748b;
-      --shadow: 0 2px 8px rgba(30,41,59,0.07), 0 1.5px 4px rgba(30,41,59,0.04);
-      --radius: 14px;
-      --gap: 1.5rem;
-      --max-width: 700px;
+    :root{
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0f62fe;
+      --accent-2:#0b5ed7;
+      --danger:#b91c1c;
+      --success:#0a7a2a;
+      --radius:12px;
+      --max-width:760px;
+      --shadow:0 8px 30px rgba(15,23,42,0.06);
+      --font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:linear-gradient(180deg,var(--bg),#eef2ff 1200px);
+      color:#0f172a;
+      line-height:1.45;
     }
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+
+    /* HEADER */
+    header{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:72px;
+      background:rgba(255,255,255,0.95);
+      backdrop-filter:blur(6px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 16px;
+      box-shadow:0 2px 8px rgba(2,6,23,0.06);
+      z-index:1000;
     }
-    nav {
-      width: 100%;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{
+      width:48px;height:48px;border-radius:10px;
+      background:#0b1220;color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:16px;
     }
-    .nav-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1rem;
+    nav ul{display:flex;gap:12px;list-style:none;margin:0;padding:0}
+    nav a{text-decoration:none;color:#0f172a;font-weight:600;font-size:13px}
+    .cta{
+      background:var(--accent);
+      color:#fff;
+      padding:8px 12px;
+      border-radius:10px;
+      font-weight:700;
+      text-decoration:none;
     }
-    .nav-logo {
-      font-weight: 600;
-      font-size: 1.25rem;
-      color: var(--primary);
-      letter-spacing: 1px;
+
+    /* MAIN LAYOUT */
+    .container{
+      max-width:var(--max-width);
+      margin:90px auto 40px;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
     }
-    .nav-links {
-      display: flex;
-      gap: 1.2rem;
-      list-style: none;
-      margin: 0;
-      padding: 0;
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:var(--shadow);
     }
-    .nav-links a {
-      text-decoration: none;
-      color: var(--muted);
-      font-weight: 500;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      transition: background 0.15s, color 0.15s;
+
+    h1,h2,h3,h4{margin:0 0 8px}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* SERVICES */
+    .services{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px;
+      margin-top:10px;
     }
-    .nav-links a[aria-current="page"], .nav-links a.active {
-      background: var(--primary-light);
-      color: #fff;
+    .service{
+      background:#fff;
+      padding:10px;
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(15,23,42,0.04);
     }
-    .nav-links a:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
+
+    /* MODELS */
+    .models-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      margin-top:12px;
     }
-    /* Hero Section */
-    .hero {
-      width: 100%;
-      background: linear-gradient(90deg, #e0e7ff 0%, #f7fafc 100%);
-      padding: 2.5rem 1rem 2rem 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      box-shadow: var(--shadow);
+    .model-card{
+      background:#fff;
+      padding:10px;
+      border-radius:10px;
+      box-shadow:0 8px 20px rgba(11,18,32,0.04);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
     }
-    .hero h1 {
-      font-size: 2.1rem;
-      font-weight: 700;
-      margin-bottom: 0.7rem;
-      color: var(--primary);
+    model-viewer{
+      width:100%;
+      height:200px;
+      border-radius:10px;
+      background:#f7f9fc;
     }
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--muted);
-      margin-bottom: 1.2rem;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
+
+    /* CALCULATOR */
+    .calc{
+      background:#fff;
+      padding:14px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
     }
-    .hero .hero-cta {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(37,99,235,0.08);
-      transition: background 0.15s;
+    .calc-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
     }
-    .hero .hero-cta:hover, .hero .hero-cta:focus-visible {
-      background: var(--primary-light);
-      outline: none;
+
+    /* FORM */
+    .form-card{
+      background:#fff;
+      padding:16px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
     }
-    /* Main Content Layout */
-    main {
-      width: 100%;
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap);
-      padding: 1.5rem 1rem 2rem 1rem;
-      flex: 1 1 auto;
+    label{font-weight:700;font-size:13px;margin-bottom:4px;display:block}
+    input,select,textarea{
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid #e6e9ee;
+      font-size:14px;
     }
-    section {
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.5rem 1rem;
-      margin-bottom: 0.5rem;
-      position: relative;
+    textarea{min-height:100px}
+
+    .btn{
+      background:var(--accent-2);
+      color:#fff;
+      padding:9px 12px;
+      border:none;
+      border-radius:10px;
+      font-weight:800;
+      cursor:pointer;
     }
-    section h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--primary);
+    .btn.secondary{
+      background:#eef2ff;
+      color:var(--accent-2);
     }
-    /* Gallery */
-    .gallery-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
+
+    /* MAP */
+    #map{
+      width:100%;
+      height:260px;
+      border-radius:10px;
+      border:1px solid #e6e9ee;
     }
-    .gallery-row {
-      display: flex;
-      flex-direction: row;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-      justify-content: center;
+
+    /* MODAL */
+    #modelModal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.6);
+      align-items:center;
+      justify-content:center;
+      z-index:2000;
     }
-    .model-card {
-      flex: 1 1 180px;
-      min-width: 180px;
-      max-width: 220px;
-      background: #f1f5f9;
-      border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(30,41,59,0.06);
-      padding: 0.7rem 0.5rem 1rem 0.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+    #modelModal .inner{
+      width:92%;
+      max-width:1100px;
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
     }
-    .model-card label {
-      font-size: 0.95rem;
-      color: var(--muted);
-      margin-top: 0.5rem;
-    }
-    model-viewer {
-      width: 100%;
-      height: 180px;
-      background: #e0e7ef;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      outline: none;
-    }
-    .model-upload {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 1rem;
-      gap: 0.5rem;
-    }
-    .model-upload input[type="file"] {
-      display: none;
-    }
-    .model-upload label {
-      background: var(--primary-light);
-      color: #fff;
-      padding: 0.5rem 1.2rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.98rem;
-      font-weight: 500;
-      transition: background 0.15s;
-    }
-    .model-upload label:hover, .model-upload label:focus-visible {
-      background: var(--primary);
-      outline: none;
-    }
-    .model-upload .file-name {
-      font-size: 0.93rem;
-      color: var(--muted);
-      margin-top: 0.2rem;
-    }
-    /* Kalkulator i formularz */
-    .flex-columns {
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap);
-    }
-    @media (min-width: 900px) {
-      .flex-columns {
-        flex-direction: row;
-        gap: 2.5rem;
-      }
-      .flex-columns > section {
-        flex: 1 1 0;
-      }
-    }
-    .calc-form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
-      margin-bottom: 1.1rem;
-    }
-    .calc-form-group label {
-      font-weight: 500;
-      color: var(--muted);
-      margin-bottom: 0.2rem;
-    }
-    .calc-form-group input,
-    .calc-form-group select,
-    .calc-form-group textarea {
-      padding: 0.45rem 0.7rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 1rem;
-      background: #f8fafc;
-      color: var(--text);
-      transition: border 0.15s;
-    }
-    .calc-form-group input:focus,
-    .calc-form-group select:focus,
-    .calc-form-group textarea:focus {
-      border-color: var(--primary);
-      outline: none;
-    }
-    .doplaty-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-      margin-bottom: 0.7rem;
-    }
-    .doplaty-group label {
-      font-size: 0.97rem;
-      color: var(--muted);
-      font-weight: 400;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      background: #f1f5f9;
-      border-radius: 5px;
-      padding: 0.2rem 0.7rem;
-      cursor: pointer;
-    }
-    .calc-result {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-top: 0.7rem;
-      margin-bottom: 0.5rem;
-    }
-    .calc-breakdown {
-      font-size: 0.97rem;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-    }
-    /* Formularz zgłoszeniowy */
-    .form-actions {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.2rem;
-    }
-    .form-actions button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.6rem 1.4rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .form-actions button:disabled {
-      background: #cbd5e1;
-      cursor: not-allowed;
-    }
-    .form-actions button:hover:not(:disabled), .form-actions button:focus-visible:not(:disabled) {
-      background: var(--primary-light);
-      outline: none;
-    }
-    .form-checkbox {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-    .form-checkbox input[type="checkbox"] {
-      accent-color: var(--primary);
-      width: 1.1em;
-      height: 1.1em;
-    }
-    .form-checkbox label {
-      font-size: 0.97rem;
-      color: var(--muted);
-      cursor: pointer;
-    }
-    .form-error {
-      color: var(--danger);
-      font-size: 0.97rem;
-      margin-top: 0.2rem;
-    }
-    /* Mapa */
-    #map {
-      width: 100%;
-      height: 260px;
-      border-radius: 10px;
-      margin-bottom: 0.7rem;
-      border: 1px solid var(--border);
-      box-shadow: 0 1px 4px rgba(30,41,59,0.06);
-    }
-    .map-coords {
-      font-size: 0.97rem;
-      color: var(--muted);
-      margin-bottom: 0.3rem;
-    }
-    /* Komunikaty */
-    .messages-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      margin-bottom: 0.7rem;
-    }
-    .message-card {
-      background: #f1f5f9;
-      border-radius: 7px;
-      padding: 0.7rem 1rem;
-      box-shadow: 0 1px 3px rgba(30,41,59,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-    .message-title {
-      font-weight: 600;
-      color: var(--primary);
-      font-size: 1rem;
-    }
-    .message-date {
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-    .message-content {
-      font-size: 0.97rem;
-      color: var(--text);
-    }
-    .messages-link {
-      display: inline-block;
-      margin-top: 0.5rem;
-      color: var(--primary);
-      font-weight: 500;
-      text-decoration: underline;
-      font-size: 0.98rem;
-      transition: color 0.15s;
-    }
-    .messages-link:hover, .messages-link:focus-visible {
-      color: var(--primary-light);
-      outline: none;
-    }
-    /* Responsywność */
-    @media (max-width: 600px) {
-      .nav-container, main {
-        padding-left: 0.3rem;
-        padding-right: 0.3rem;
-      }
-      .gallery-row {
-        flex-direction: column;
-        gap: 1.2rem;
-      }
-      .model-card {
-        max-width: 100%;
-      }
-    }
-    @media (min-width: 700px) {
-      .gallery-row {
-        flex-direction: row;
-      }
-    }
-    /* Focus-visible polyfill */
-    :focus:not(:focus-visible) {
-      outline: none;
-    }
+    #modelModal .body{padding:14px}
+
+    footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
   </style>
 </head>
+
 <body>
-  <!-- Pasek nawigacyjny -->
-  <nav aria-label="Główna nawigacja">
-    <div class="nav-container">
-      <div class="nav-logo">BSP Zlecenia</div>
-      <ul class="nav-links" role="menubar">
-        <li><a href="index.html" aria-current="page" tabindex="0">Strona główna</a></li>
-        <li><a href="about.html" tabindex="0">O nas</a></li>
-        <li><a href="aboutinfo.html" tabindex="0">Informacje</a></li>
-        <li><a href="regulamin.html" tabindex="0">Regulamin</a></li>
-      </ul>
+
+<header>
+  <div class="brand">
+    <div class="logo">BSP</div>
+    <div>
+      <div style="font-weight:700;font-size:14px">BSP Zlecenia</div>
+      <div class="muted">Inspekcje dronem • Pobiedziska</div>
     </div>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Strona główna</a></li>
+      <li><a href="aboutinfo.html">Informacje</a></li>
+      <li><a href="#models-3d">Modele 3D</a></li>
+      <li><a href="#pricing">Wycena</a></li>
+    </ul>
   </nav>
 
-  <!-- Sekcja powitalna (hero) -->
-  <header class="hero" role="banner">
-    <h1>Inspekcje dronem, mapowanie i modele 3D</h1>
-    <p>
-      Profesjonalne usługi BSP: szybkie inspekcje z powietrza, precyzyjne mapowanie terenu oraz realistyczne modele 3D. Zleć nam realizację swojego projektu – od wyceny po gotowy raport i wizualizację.
-    </p>
-    <button class="hero-cta" onclick="document.getElementById('calc-section').scrollIntoView({behavior:'smooth'})">
-      Wyceń zlecenie
-    </button>
-  </header>
+  <a class="cta" href="#form">Zgłoś zlecenie</a>
+</header>
 
-  <main>
-    <!-- Galeria modeli 3D -->
-    <section aria-labelledby="gallery-title">
-      <h2 id="gallery-title">Galeria modeli 3D</h2>
-      <div class="gallery-grid">
-        <div class="gallery-row">
-          <div class="model-card">
-            <model-viewer src="models/drone.glb"
-              alt="Model drona inspekcyjnego"
-              camera-controls auto-rotate ar ar-modes="webxr scene-viewer quick-look"
-              loading="lazy" poster="models/drone.webp" shadow-intensity="1"
-              style="background:#e0e7ef;"
-              tabindex="0">
-            </model-viewer>
-            <label>Inspekcja dronem</label>
-          </div>
-          <div class="model-card">
-            <model-viewer src="models/mapa.glb"
-              alt="Model mapy terenu"
-              camera-controls auto-rotate ar ar-modes="webxr scene-viewer quick-look"
-              loading="lazy" poster="models/mapa.webp" shadow-intensity="1"
-              style="background:#e0e7ef;"
-              tabindex="0">
-            </model-viewer>
-            <label>Mapowanie terenu</label>
-          </div>
-          <div class="model-card">
-            <model-viewer src="models/model3d.glb"
-              alt="Model 3D budynku"
-              camera-controls auto-rotate ar ar-modes="webxr scene-viewer quick-look"
-              loading="lazy" poster="models/model3d.webp" shadow-intensity="1"
-              style="background:#e0e7ef;"
-              tabindex="0">
-            </model-viewer>
-            <label>Model 3D budynku</label>
-          </div>
-        </div>
-        <div class="model-upload">
-          <label for="model-upload-input" tabindex="0">Podgląd własnego modelu (GLB/GLTF)</label>
-          <input type="file" id="model-upload-input" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" aria-label="Wybierz plik GLB lub GLTF">
-          <span class="file-name" id="model-upload-filename"></span>
-          <model-viewer id="model-upload-viewer"
-            alt="Podgląd własnego modelu"
-            camera-controls auto-rotate ar ar-modes="webxr scene-viewer quick-look"
-            loading="lazy" style="width:100%;height:180px;background:#e0e7ef;border-radius:8px;margin-top:0.5rem;"
-            tabindex="0">
-          </model-viewer>
-        </div>
-      </div>
-    </section>
+<main class="container">
 
-    <!-- Kalkulator i formularz w dwóch kolumnach na desktopie -->
-    <div class="flex-columns">
-      <!-- Kalkulator wyceny -->
-      <section id="calc-section" aria-labelledby="calc-title">
-        <h2 id="calc-title">Kalkulator wyceny</h2>
-        <form id="calc-form" autocomplete="off" novalidate>
-          <div class="calc-form-group">
-            <label for="calc-powierzchnia">Powierzchnia (m²)</label>
-            <input type="number" id="calc-powierzchnia" min="1" max="1000000" step="1" required aria-required="true" placeholder="np. 500">
-          </div>
-          <div class="calc-form-group">
-            <label for="calc-liczba-modeli">Liczba modeli</label>
-            <input type="number" id="calc-liczba-modeli" min="1" max="50" step="1" required aria-required="true" placeholder="np. 2">
-          </div>
-          <div class="calc-form-group">
-            <label for="calc-usluga">Rodzaj usługi</label>
-            <select id="calc-usluga" required aria-required="true">
-              <option value="inspekcja">Inspekcja dronem</option>
-              <option value="mapowanie">Mapowanie terenu</option>
-              <option value="model3d">Model 3D</option>
-            </select>
-          </div>
-          <div class="doplaty-group" aria-label="Dodatkowe opcje">
-            <label><input type="checkbox" id="dop-ekspres" value="ekspres">Ekspres</label>
-            <label><input type="checkbox" id="dop-noc" value="noc">Noc</label>
-            <label><input type="checkbox" id="dop-trudny" value="trudny">Trudny teren</label>
-          </div>
-          <div class="calc-form-group">
-            <label for="calc-dystans">Dystans od Biskupic (km)</label>
-            <input type="number" id="calc-dystans" min="0" max="500" step="0.1" readonly aria-readonly="true" placeholder="Wybierz lokalizację na mapie">
-          </div>
-          <div class="calc-result" id="calc-wynik">Wycena: –</div>
-          <div class="calc-breakdown" id="calc-breakdown"></div>
-        </form>
-      </section>
+  <!-- HERO -->
+  <section class="card">
+    <h1>Dokumentacja z drona • Modele 3D • Mapowanie</h1>
+    <p class="muted">Profesjonalne inspekcje, ortofotomapy i modele 3D. Szybkie terminy, przejrzyste zasady wyceny.</p>
+  </section>
 
-      <!-- Formularz zgłoszeniowy -->
-      <section aria-labelledby="form-title">
-        <h2 id="form-title">Formularz zgłoszeniowy</h2>
-        <form id="order-form" autocomplete="off" novalidate>
-          <div class="calc-form-group">
-            <label for="form-name">Imię i nazwisko</label>
-            <input type="text" id="form-name" name="name" required aria-required="true" maxlength="60" placeholder="Jan Kowalski">
-          </div>
-          <div class="calc-form-group">
-            <label for="form-email">E-mail</label>
-            <input type="email" id="form-email" name="email" required aria-required="true" maxlength="80" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="jan.kowalski@email.com">
-          </div>
-          <div class="calc-form-group">
-            <label for="form-phone">Telefon</label>
-            <input type="tel" id="form-phone" name="phone" required aria-required="true" maxlength="20" pattern="^\+?\d{7,15}$" placeholder="+48123456789">
-          </div>
-          <div class="calc-form-group">
-            <label for="form-desc">Opis zlecenia</label>
-            <textarea id="form-desc" name="desc" required aria-required="true" rows="3" maxlength="600" placeholder="Opisz szczegóły zlecenia..."></textarea>
-          </div>
-          <div class="calc-form-group">
-            <label for="form-date">Termin realizacji</label>
-            <input type="date" id="form-date" name="date" required aria-required="true">
-          </div>
-          <div class="calc-form-group">
-            <label for="form-budget">Budżet (PLN)</label>
-            <input type="number" id="form-budget" name="budget" min="0" step="1" placeholder="Opcjonalnie">
-          </div>
-          <div class="calc-form-group">
-            <label for="form-usluga">Rodzaj usługi</label>
-            <select id="form-usluga" name="usluga" required aria-required="true">
-              <option value="inspekcja">Inspekcja dronem</option>
-              <option value="mapowanie">Mapowanie terenu</option>
-              <option value="model3d">Model 3D</option>
-            </select>
-          </div>
-          <div class="calc-form-group">
-            <label for="form-liczba-modeli">Liczba modeli</label>
-            <input type="number" id="form-liczba-modeli" name="liczba_modeli" min="1" max="50" step="1" required aria-required="true" placeholder="np. 2">
-          </div>
-          <div class="calc-form-group">
-            <label for="form-model-file">Załącz model (GLB/GLTF)</label>
-            <input type="file" id="form-model-file" name="model_file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json">
-            <input type="text" id="form-model-filename" name="model_filename" readonly aria-readonly="true" placeholder="Nazwa pliku" style="margin-top:0.3rem;">
-          </div>
-          <div class="form-checkbox">
-            <input type="checkbox" id="form-regulamin" name="regulamin" required aria-required="true">
-            <label for="form-regulamin">Akceptuję <a href="regulamin.html" target="_blank" rel="noopener">regulamin</a> i politykę RODO</label>
-          </div>
-          <div class="form-actions">
-            <button type="submit" id="form-submit">Wyślij</button>
-            <button type="reset" id="form-reset">Wyczyść</button>
-          </div>
-          <div class="form-error" id="form-error" aria-live="polite"></div>
-        </form>
-      </section>
+  <!-- SERVICES -->
+  <section class="card">
+    <h2>Usługi</h2>
+    <div class="services">
+      <div class="service"><h3>Inspekcje dachów</h3><p class="muted">Dokładna dokumentacja bez rusztowań.</p></div>
+      <div class="service"><h3>Zdjęcia nieruchomości</h3><p class="muted">Materiały marketingowe i techniczne.</p></div>
+      <div class="service"><h3>Mapowanie terenu</h3><p class="muted">Ortofotomapy i analizy działek.</p></div>
     </div>
+  </section>
 
-    <!-- Mapa wyboru lokalizacji -->
-    <section aria-labelledby="map-title">
-      <h2 id="map-title">Wybierz lokalizację realizacji</h2>
-      <div class="map-coords" id="map-coords">Współrzędne: –</div>
-      <div id="map" tabindex="0" aria-label="Mapa wyboru lokalizacji"></div>
-      <input type="hidden" id="map-lat" name="lat">
-      <input type="hidden" id="map-lng" name="lng">
-    </section>
+  <!-- MODELS -->
+  <section class="card" id="models-3d">
+    <h2>Modele 3D</h2>
 
-    <!-- Komunikaty -->
-    <section aria-labelledby="messages-title">
-      <h2 id="messages-title">Najnowsze komunikaty</h2>
-      <div class="messages-list" id="messages-list"></div>
-      <a href="aboutinfo.html" class="messages-link">Zobacz wszystkie komunikaty</a>
-    </section>
-  </main>
+    <div class="models-grid">
 
-  <script defer>
-    // --- Galeria: podgląd własnego modelu ---
-    const modelInput = document.getElementById('model-upload-input');
-    const modelViewer = document.getElementById('model-upload-viewer');
-    const modelFilename = document.getElementById('model-upload-filename');
-    modelInput.addEventListener('change', function () {
-      const file = this.files && this.files[0];
-      if (!file) return;
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (!['glb', 'gltf'].includes(ext)) {
-        alert('Obsługiwane są tylko pliki GLB i GLTF.');
-        this.value = '';
-        modelViewer.removeAttribute('src');
-        modelFilename.textContent = '';
-        return;
-      }
-      const url = URL.createObjectURL(file);
-      modelViewer.src = url;
-      modelFilename.textContent = file.name;
-      modelViewer.alt = 'Podgląd: ' + file.name;
-      // Revoke URL po załadowaniu modelu
-      modelViewer.addEventListener('load', () => {
-        setTimeout(() => URL.revokeObjectURL(url), 5000);
-      }, { once: true });
-    });
+      <!-- MODEL 1 -->
+      <div class="model-card">
+        <h4>Przerwana budowa — 08.03.2026</h4>
+        <model-viewer src="assets/8.03.2026.glb" camera-controls auto-rotate></model-viewer>
+        <p class="muted">
+          Szczegółowy model 3D niedokończonej konstrukcji budowlanej. Widoczne elementy żelbetowe, otwarte kondygnacje i surowe powierzchnie. Idealny do inspekcji postępu prac i analiz technicznych.
+        </p>
+        <button class="btn" onclick="openModel('assets/8.03.2026.glb','Przerwana budowa — 08.03.2026')">Podgląd</button>
+      </div>
 
-    // --- Kalkulator wyceny ---
-    const calcForm = document.getElementById('calc-form');
-    const powInput = document.getElementById('calc-powierzchnia');
-    const liczbaInput = document.getElementById('calc-liczba-modeli');
-    const uslugaInput = document.getElementById('calc-usluga');
-    const dystansInput = document.getElementById('calc-dystans');
-    const dopEkspres = document.getElementById('dop-ekspres');
-    const dopNoc = document.getElementById('dop-noc');
-    const dopTrudny = document.getElementById('dop-trudny');
-    const wynikDiv = document.getElementById('calc-wynik');
-    const breakdownDiv = document.getElementById('calc-breakdown');
+      <!-- MODEL 2 -->
+      <div class="model-card">
+        <h4>Urbex — 07.03.2026</h4>
+        <model-viewer src="assets/7.03.2026.glb" camera-controls auto-rotate></model-viewer>
+        <p class="muted">
+          Model 3D opuszczonego obiektu typu URBEX. Realistyczne odwzorowanie zniszczeń, ubytków i degradacji. Przydatny do inwentaryzacji i dokumentacji konserwatorskiej.
+        </p>
+        <button class="btn" onclick="openModel('assets/7.03.2026.glb','Urbex — 07.03.2026')">Podgląd</button>
+      </div>
 
-    // Cennik i dopłaty
-    const CENNIK = {
-      inspekcja: { base: 300, per_m2: 0.5, per_model: 100 },
-      mapowanie: { base: 500, per_m2: 0.3, per_model: 120 },
-      model3d:   { base: 700, per_m2: 0.7, per_model: 200 }
-    };
-    const DOPLATY = {
-      ekspres: 0.15, // +15%
-      noc: 0.10,     // +10%
-      trudny: 0.12   // +12%
-    };
-    const DOPLATA_KM = 2.5; // PLN/km powyżej 20 km
+      <!-- MODEL 3 -->
+      <div class="model-card">
+        <h4>Obiekt hydrotechniczny</h4>
+        <model-viewer src="assets/model.glb" camera-controls auto-rotate></model-viewer>
+        <p class="muted">
+          Zaawansowany model 3D obiektu hydrotechnicznego: przepust/stopień wodny, betonowe konstrukcje, schody i urządzenia techniczne. Idealny do analiz przepływowych i inspekcji infrastruktury.
+        </p>
+        <button class="btn" onclick="openModel('assets/model.glb','Obiekt hydrotechniczny')">Podgląd</button>
+      </div>
 
-    function calcWycena() {
-      const pow = parseFloat(powInput.value) || 0;
-      const liczba = parseInt(liczbaInput.value) || 0;
-      const usluga = uslugaInput.value;
-      const dystans = parseFloat(dystansInput.value) || 0;
-      if (!pow || !liczba || !usluga) {
-        wynikDiv.textContent = 'Wycena: –';
-        breakdownDiv.textContent = '';
-        return;
-      }
-      const c = CENNIK[usluga];
-      let subtotal = c.base + pow * c.per_m2 + liczba * c.per_model;
-      let dop = 0;
-      let dopText = [];
-      if (dopEkspres.checked) { dop += DOPLATY.ekspres * subtotal; dopText.push('Ekspres (+15%)'); }
-      if (dopNoc.checked)     { dop += DOPLATY.noc * subtotal; dopText.push('Noc (+10%)'); }
-      if (dopTrudny.checked)  { dop += DOPLATY.trudny * subtotal; dopText.push('Trudny teren (+12%)'); }
-      let dystansDoplata = 0;
-      if (dystans > 20) {
-        dystansDoplata = (dystans - 20) * DOPLATA_KM;
-        dopText.push(`Dojazd powyżej 20 km (+${dystansDoplata.toFixed(2)} PLN)`);
-      }
-      let suma = subtotal + dop + dystansDoplata;
-      suma = Math.round(suma * 100) / 100;
-      wynikDiv.textContent = 'Wycena: ' + suma.toFixed(2) + ' PLN';
-      breakdownDiv.innerHTML =
-        `Podstawa: ${subtotal.toFixed(2)} PLN<br>` +
-        (dopText.length ? 'Dopłaty: ' + dopText.join(', ') + '<br>' : '') +
-        (dop > 0 ? `Suma dopłat: ${dop.toFixed(2)} PLN<br>` : '') +
-        (dystansDoplata > 0 ? `Dopłata za dystans: ${dystansDoplata.toFixed(2)} PLN<br>` : '');
-    }
-    [powInput, liczbaInput, uslugaInput, dystansInput, dopEkspres, dopNoc, dopTrudny].forEach(el =>
-      el.addEventListener('input', calcWycena)
-    );
+    </div>
+  </section>
 
-    // --- Formularz zgłoszeniowy ---
-    const orderForm = document.getElementById('order-form');
-    const formError = document.getElementById('form-error');
-    const formModelFile = document.getElementById('form-model-file');
-    const formModelFilename = document.getElementById('form-model-filename');
-    const formRegulamin = document.getElementById('form-regulamin');
-    // Synchronizacja nazwy pliku
-    formModelFile.addEventListener('change', function () {
-      const file = this.files && this.files[0];
-      if (!file) {
-        formModelFilename.value = '';
-        return;
-      }
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (!['glb', 'gltf'].includes(ext)) {
-        formError.textContent = 'Dozwolone są tylko pliki GLB i GLTF.';
-        this.value = '';
-        formModelFilename.value = '';
-        return;
-      }
-      formModelFilename.value = file.name;
-      formError.textContent = '';
-    });
+  <!-- CALCULATOR -->
+  <section class="card" id="pricing">
+    <h2>Kalkulator wyceny</h2>
 
-    // Walidacja i wysyłka
-    orderForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      formError.textContent = '';
-      // Sprawdzenie wymaganych pól
-      const requiredFields = [
-        'form-name', 'form-email', 'form-phone', 'form-desc', 'form-date',
-        'form-usluga', 'form-liczba-modeli'
-      ];
-      let valid = true;
-      requiredFields.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el.value.trim()) {
-          valid = false;
-          el.style.borderColor = 'var(--danger)';
-        } else {
-          el.style.borderColor = '';
-        }
-      });
-      if (!formRegulamin.checked) {
-        formError.textContent = 'Musisz zaakceptować regulamin i politykę RODO.';
-        formRegulamin.focus();
-        return;
-      }
-      // Walidacja e-mail i telefon
-      const email = document.getElementById('form-email').value.trim();
-      const phone = document.getElementById('form-phone').value.trim();
-      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      const phonePattern = /^\+?\d{7,15}$/;
-      if (!emailPattern.test(email)) {
-        formError.textContent = 'Podaj poprawny adres e-mail.';
-        document.getElementById('form-email').focus();
-        return;
-      }
-      if (!phonePattern.test(phone)) {
-        formError.textContent = 'Podaj poprawny numer telefonu.';
-        document.getElementById('form-phone').focus();
-        return;
-      }
-      // Walidacja pliku modelu (opcjonalnie)
-      const file = formModelFile.files && formModelFile.files[0];
-      if (file) {
-        const ext = file.name.split('.').pop().toLowerCase();
-        if (!['glb', 'gltf'].includes(ext)) {
-          formError.textContent = 'Dozwolone są tylko pliki GLB i GLTF.';
-          formModelFile.value = '';
-          formModelFilename.value = '';
-          return;
-        }
-      }
-      // Zapis zgody na regulamin w localStorage
-      localStorage.setItem('bsp_regulamin', 'accepted');
-      // Wysyłka do Formspree (przykład, wymaga własnego endpointu)
-      const formData = new FormData(orderForm);
-      fetch('https://formspree.io/f/your-form-id', {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      })
-      .then(response => {
-        if (response.ok) {
-          formError.style.color = 'var(--accent)';
-          formError.textContent = 'Zgłoszenie zostało wysłane. Dziękujemy!';
-          orderForm.reset();
-          setTimeout(() => { formError.textContent = ''; formError.style.color = 'var(--danger)'; }, 5000);
-        } else {
-          formError.textContent = 'Wystąpił błąd podczas wysyłki. Spróbuj ponownie.';
-        }
-      })
-      .catch(() => {
-        formError.textContent = 'Nie udało się wysłać formularza. Sprawdź połączenie internetowe.';
-      });
-    });
+    <div class="calc">
+      <label>Wskaż miejsce zlecenia</label>
+      <div id="map"></div>
 
-    // Reset formularza
-    orderForm.addEventListener('reset', function () {
-      formError.textContent = '';
-      formModelFilename.value = '';
-      Array.from(orderForm.elements).forEach(el => el.style.borderColor = '');
-    });
+      <div class="calc-grid">
+        <div>
+          <label>Odległość (km)</label>
+          <input id="calc-distance" type="number" readonly value="0">
+        </div>
 
-    // --- Mapa Leaflet: wybór lokalizacji i dystans ---
-    const map = L.map('map').setView([52.46694444444444, 17.17], 11);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-    const baseLatLng = L.latLng(52.46694444444444, 17.17);
-    let marker = L.marker(baseLatLng, { draggable: true, title: "Wybrana lokalizacja" }).addTo(map);
-    document.getElementById('map-lat').value = baseLatLng.lat;
-    document.getElementById('map-lng').value = baseLatLng.lng;
-    document.getElementById('map-coords').textContent = `Współrzędne: ${baseLatLng.lat.toFixed(6)}, ${baseLatLng.lng.toFixed(6)}`;
-    // Funkcja Haversine
-    function haversine(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const toRad = deg => deg * Math.PI / 180;
-      const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c;
-    }
-    function updateCoordsAndDistance(latlng) {
-      document.getElementById('map-lat').value = latlng.lat;
-      document.getElementById('map-lng').value = latlng.lng;
-      document.getElementById('map-coords').textContent = `Współrzędne: ${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)}`;
-      const dist = haversine(baseLatLng.lat, baseLatLng.lng, latlng.lat, latlng.lng);
-      dystansInput.value = dist.toFixed(2);
-      calcWycena();
-    }
-    marker.on('dragend', function (e) {
-      updateCoordsAndDistance(e.target.getLatLng());
-    });
-    map.on('click', function (e) {
-      marker.setLatLng(e.latlng);
-      updateCoordsAndDistance(e.latlng);
-    });
+        <div>
+          <label>Powierzchnia (ha)</label>
+          <input id="calc-area" type="number" min="0" step="0.01" value="0.10">
+        </div>
 
-    // --- Komunikaty z localStorage ---
-    const messagesList = document.getElementById('messages-list');
-    function loadMessages() {
-      let messages = [];
-      try {
-        messages = JSON.parse(localStorage.getItem('bsp_messages')) || [];
-      } catch { messages = []; }
-      messagesList.innerHTML = '';
-      messages.slice(-3).reverse().forEach(msg => {
-        const card = document.createElement('div');
-        card.className = 'message-card';
-        card.innerHTML =
-          `<div class="message-title">${msg.title}</div>` +
-          `<div class="message-date">${msg.date}</div>` +
-          `<div class="message-content">${msg.content}</div>`;
-        messagesList.appendChild(card);
-      });
-      if (messages.length === 0) {
-        messagesList.innerHTML = '<div class="message-card">Brak komunikatów.</div>';
-      }
-    }
-    // Nasłuchiwanie zmian localStorage (również w tej samej karcie)
-    function triggerMessagesUpdate() {
-      const event = new Event('bsp_messages_update');
-      document.dispatchEvent(event);
-    }
-    window.addEventListener('storage', function (e) {
-      if (e.key === 'bsp_messages') loadMessages();
-    });
-    document.addEventListener('bsp_messages_update', loadMessages);
-    // Przykład dodania komunikatu (do testów, usunąć w produkcji)
-    if (!localStorage.getItem('bsp_messages')) {
-      const demoMsgs = [
-        { title: "Nowa usługa: Model 3D", date: "2026-03-10", content: "Wprowadziliśmy możliwość zamawiania modeli 3D budynków i obiektów." },
-        { title: "Promocja na mapowanie", date: "2026-03-05", content: "Do końca marca mapowanie terenu -10%!" },
-        { title: "Nowy sprzęt BSP", date: "2026-02-28", content: "Rozszerzyliśmy flotę o drony z kamerą termowizyjną." }
-      ];
-      localStorage.setItem('bsp_messages', JSON.stringify(demoMsgs));
-    }
-    loadMessages();
+        <div>
+          <label>Liczba modeli</label>
+          <input id="calc-models" type="number" min="1" value="1">
+        </div>
 
-    // --- Focus-visible polyfill dla dostępności ---
-    (function () {
-      if ('CSS' in window && CSS.supports('selector(:focus-visible)')) return;
-      document.body.addEventListener('keydown', function (e) {
-        if (e.key === 'Tab') document.body.classList.add('user-is-tabbing');
-      });
-      document.body.addEventListener('mousedown', function () {
-        document.body.classList.remove('user-is-tabbing');
-      });
-    })();
-  </script>
-</body>
-</html>
+        <div>
+          <label>Usługa</label>
+          <select id="service-type">
+            <option value="mapping">Mapowanie</option>
+            <option value="photos">Zdjęcia</option>
+            <option value="video">Filmy</option>
+            <option value="model3d">Modele 3D</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Opcje dodatkowe</label>
+          <label><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
+          <label><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
+          <label><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
+        </div>
+
+        <button class="btn" id="calc-run">Oblicz</button>
+        <button class="btn secondary" id="calc-reset">Reset</button>
+
+        <pre id="calc-result" style="display:none;background:#f7f9fc;padding:10px;border-radius:10px"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="form-card" id="form">
+    <h2>Zgłoś zlecenie</h2>
+
+    <form id="bspForm" novalidate>
+
+      <label>E-mail lub telefon *</label>
+      <input id="contact" required>
+
+      <label>Opis zlecenia *</label>
+      <textarea id="description" required></textarea>
+
+      <label>Preferowany termin</label>
+      <input id="date" type="date">
+
+      <label>Budżet (PLN)</label>
+      <input id="budget" inputmode="numeric">
+
+      <!-- Hidden fields -->
+      <input type="hidden" id="selected_model">
+      <input type="hidden" id="estimated_price">
+      <input type="hidden" id="location_lat">
+      <input type="hidden" id="location_lng">
+      <input type="hidden" id="service_type">
+      <input type="hidden" id="area_ha">
+      <input type="hidden" id="flights_estimated">
+      <input type="hidden" id="extras_list">
+
+      <button class="btn" type="submit" id="submitBtn">Wyślij</button>
+      <button class="btn secondary" type="button" id="clearBtn">Wyczyść</button>
+
+      <div id="status" class="muted" style="margin-top:10px"></div>
+    </form>
+  </section>
+
+  <footer>
+    © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
+  </footer>
+
+</main>
+
+<!-- MODAL -->
+<div id="modelModal">
+  <div class="inner">
+    <div style="padding:10px;text-align:right">
+      <button class="btn secondary" onclick="closeModel()">Zamknij</button>
+    </div>
+    <div class="body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* MODEL MODAL */
+function openModel(src,title){
+  const body = document.getElementById('modalBody');
+  body.innerHTML = `<h3>${title}</h3>
+    <model-viewer src="${src}" camera-controls auto-rotate style="width:100%;height:600px"></model-viewer>`;
+  document.getElementById('modelModal').style.display='flex';
+}
+function closeModel(){
+  document.getElementById('modelModal').style.display='none';
+  document.getElementById('modalBody').innerHTML='';
+}
+
+/* MAP + CALCULATOR */
+const latRef = 52.46694444444444;
+const lngRef = 17.17;
+
+function toRad(v){return v*Math.PI/180}
+function haversine(a,b,c,d){
+  const R=6371;
+  const dLat=toRad(c-a);
+  const dLon=toRad(d-b);
+  const x=Math.sin(dLat/2)**2 + Math.cos(toRad(a))*Math.cos(toRad(c))*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+
+let map, marker;
+
+function initMap(){
+  map = L.map('map',{attributionControl:false}).
