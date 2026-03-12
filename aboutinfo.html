@@ -4,30 +4,91 @@
   <meta charset="utf-8" />
   <title>Informacje — BSP Zlecenia</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="data.js"></script>
   <style>
-    :root{--bg:#f4f6fb;--card:#fff;--muted:#6b7280;--accent:#0b5ed7;--radius:12px;--maxw:980px}
-    *{box-sizing:border-box}html,body{height:100%;margin:0}
-    body{font-family:system-ui,Arial;background:linear-gradient(180deg,var(--bg),#eef2ff);padding:28px;display:flex;justify-content:center}
-    .wrap{width:100%;max-width:var(--maxw);background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:0 10px 30px rgba(15,23,42,0.06)}
-    header{display:flex;gap:12px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:10px;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
-    h1{margin:0;font-size:20px}
-    .subtitle{color:var(--muted);font-size:13px}
-    .news-list{margin-top:18px;display:grid;gap:10px}
-    .news-item{padding:12px;border-radius:10px;border:1px solid rgba(15,23,42,0.03);background:#fff}
-    .news-item time{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
-    .news-item .expires{display:block;color:#9a3412;font-size:13px;margin-top:6px}
-    .login-panel{margin-top:18px;padding:12px;border-radius:10px;background:#fbfdff;border:1px solid rgba(15,23,42,0.03)}
-    .login-row{display:flex;gap:8px;align-items:center}
-    input[type="text"],input[type="password"],textarea,input[type="date"]{padding:8px;border-radius:8px;border:1px solid #e6e9ee;font-size:14px}
-    .btn{padding:10px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#eef2ff;color:var(--accent);border:1px solid rgba(11,94,215,0.06)}
-    .admin-area{margin-top:14px;padding:12px;border-radius:10px;background:#fff9f0;border:1px solid rgba(15,23,42,0.03);display:none}
-    .admin-controls{display:flex;gap:8px;align-items:center;margin-top:8px}
-    .meta{color:var(--muted);font-size:13px;margin-top:10px}
-    .small{font-size:13px;color:var(--muted)}
-    .hidden{display:none}
-    input:focus, button:focus, textarea:focus { outline:3px solid rgba(11,94,215,0.12); outline-offset:2px; }
+    :root {
+      --bg: #f4f6fb;
+      --card: #fff;
+      --muted: #6b7280;
+      --accent: #0b5ed7;
+      --radius: 12px;
+      --maxw: 800px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; font-family: system-ui, sans-serif; background: var(--bg); }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin: 40px auto;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 56px;
+      height: 56px;
+      background: #0b1220;
+      color: #fff;
+      font-weight: 800;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .news-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .news-item {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .news-item time {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .news-item .expires {
+      font-size: 13px;
+      color: #9a3412;
+      margin-top: 8px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -36,306 +97,76 @@
       <div class="logo" aria-hidden="true">BSP</div>
       <div>
         <h1 id="title">Informacje i aktualności</h1>
-        <div class="subtitle">Komunikaty o zmianach w realizacji usług, przerwach i ważne ogłoszenia</div>
+        <div class="subtitle">Komunikaty o przerwach technicznych i dostępności usług</div>
       </div>
     </header>
 
     <section id="news" class="news-list" aria-live="polite"></section>
 
-    <section class="login-panel" aria-labelledby="loginTitle">
-     <h2 id="loginTitle" style="font-size:15px;margin:0 0 8px">Panel administracyjny (logowanie)</h2>
-
-      <div class="login-row" style="gap:6px">
-        <input id="login" type="text" placeholder="Login" autocomplete="username" style="flex:1" />
-        <input id="password" type="password" placeholder="Hasło" autocomplete="current-password" />
-        <button id="loginBtn" class="btn">Zaloguj</button>
-      </div>
-
-      <div id="loginMsg" class="meta" style="margin-top:8px;color:var(--muted)"></div>
-      <div style="margin-top:8px" class="small">Dostęp administracyjny umożliwia publikowanie komunikatów widocznych na tej stronie.</div>
-    </section>
-
-    <section id="adminArea" class="admin-area" aria-hidden="true">
-      <h3 style="margin:0 0 8px">Edytor aktualności</h3>
-      <textarea id="announcement" placeholder="Treść komunikatu..." style="width:100%;min-height:100px"></textarea>
-
-      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-        <label for="expires" class="small" style="margin-right:6px">Wyświetlaj do</label>
-        <input id="expires" type="date" />
-        <div class="small" style="margin-left:8px;color:var(--muted)">puste = bez ograniczenia</div>
-      </div>
-
-      <div class="admin-controls">
-        <button id="publishBtn" class="btn">Opublikuj</button>
-        <button id="logoutBtn" class="btn secondary">Wyloguj</button>
-        <div id="adminMsg" class="meta" style="margin-left:auto"></div>
-      </div>
-    </section>
-
-    <p class="meta">© <span id="year"></span> BSP Zlecenia</p>
+    <footer>
+      © <span id="year"></span> BSP Zlecenia
+    </footer>
   </main>
 
   <script>
-    // --- Konfiguracja API i pomocnicze ---
-    function resolveApiBase(){
-      const explicit = (window.BSP_API_BASE || '').trim();
-      if (explicit) return explicit.replace(/\/$/, '');
-      const metaBase = (document.querySelector('meta[name="bsp-api-base"]')?.content || '').trim();
-      if (metaBase) return metaBase.replace(/\/$/, '');
-      if (location.hostname.endsWith('pages.dev')) return 'https://bsp-zlecenia.onrender.com';
-      if (['localhost', '127.0.0.1'].includes(location.hostname)) return 'http://127.0.0.1:3000';
-      return '';
-    }
-    const API_BASE = resolveApiBase();
-    const API = API_BASE ? (API_BASE + '/api') : '';
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- Fallback credentials (obfuscated) ---
-    const FALLBACK_USER_B64 = 'S0FTSUFfcnN0'; // "KASIA_rst"
-    const FALLBACK_PASS_B64 = 'cnN0a2FzaWEuMjAyMA=='; // "rstkasia.2020"
-    function b64Decode(s){ try { return atob(s); } catch(e){ return ''; } }
-    function b64Encode(s){ try { return btoa(s); } catch(e){ return ''; } }
-
-    // --- Token helpers ---
-    function setToken(token){ sessionStorage.setItem('bsp_token', token); }
-    function getToken(){ return sessionStorage.getItem('bsp_token'); }
-    function clearToken(){ sessionStorage.removeItem('bsp_token'); }
-
-    // --- Renderowanie komunikatów (filtruj wygasłe) ---
-    function isExpired(item){
+    function isExpired(item) {
       if (!item || !item.expires) return false;
-      try {
-        const ex = new Date(item.expires);
-        return isNaN(ex.getTime()) ? false : (ex.getTime() < Date.now());
-      } catch(e){ return false; }
+      const ex = new Date(item.expires);
+      return isNaN(ex.getTime()) ? false : (ex.getTime() < Date.now());
     }
 
-    function renderAnnouncements(items){
+    function renderAnnouncements(items) {
       const list = document.getElementById('news');
       list.innerHTML = '';
-      if (!items || !items.length){
-        const el = document.createElement('div'); el.className='news-item'; el.textContent='Brak komunikatów.'; list.appendChild(el);
-        return;
-      }
-      // show only non-expired
+
       const visible = items.filter(it => !isExpired(it));
-      if (!visible.length){
-        const el = document.createElement('div'); el.className='news-item'; el.textContent='Brak aktualnych komunikatów.'; list.appendChild(el);
+      if (!visible.length) {
+        const el = document.createElement('div');
+        el.className = 'news-item';
+        el.textContent = 'Brak aktualnych komunikatów.';
+        list.appendChild(el);
         return;
       }
+
       visible.forEach(it => {
-        const el = document.createElement('article'); el.className='news-item';
-        const t = document.createElement('time'); t.dateTime = it.date || new Date().toISOString(); t.textContent = new Date(it.date || Date.now()).toLocaleString();
-        const p = document.createElement('p'); p.textContent = it.text || '';
-        el.appendChild(t); el.appendChild(p);
-        if (it.expires){
+        const el = document.createElement('article');
+        el.className = 'news-item';
+
+        const t = document.createElement('time');
+        t.dateTime = it.date || new Date().toISOString();
+        t.textContent = new Date(it.date || Date.now()).toLocaleString();
+
+        const p = document.createElement('p');
+        p.textContent = it.text || '';
+
+        el.appendChild(t);
+        el.appendChild(p);
+
+        if (it.expires) {
           const ex = new Date(it.expires);
-          if (!isNaN(ex.getTime())){
-            const exEl = document.createElement('div'); exEl.className = 'expires';
+          if (!isNaN(ex.getTime())) {
+            const exEl = document.createElement('div');
+            exEl.className = 'expires';
             exEl.textContent = 'Wyświetlane do: ' + ex.toLocaleDateString();
             el.appendChild(exEl);
           }
         }
+
         list.appendChild(el);
       });
     }
 
-    // --- Load announcements: API first, fallback to localStorage ---
-    async function loadAnnouncements(){
-      // Try API
-      if (API){
-        try {
-          const res = await fetch(API + '/announcements');
-          if (res.ok){
-            const j = await res.json().catch(()=>({}));
-            if (j && Array.isArray(j.items)){
-              // normalize: ensure items have {date,text,expires}
-              const items = j.items.map(it => ({ date: it.date || new Date().toISOString(), text: it.text || '', expires: it.expires || null }));
-              renderAnnouncements(items);
-              return;
-            }
-          }
-        } catch(e){ /* fallback below */ }
-      }
-      // Local fallback
-      const raw = localStorage.getItem('bsp_announcements');
-      if (raw){
-        try {
-          const arr = JSON.parse(raw);
-          if (Array.isArray(arr)){
-            renderAnnouncements(arr);
-            return;
-          }
-        } catch(e){}
-      }
-      renderAnnouncements([]);
-    }
-
-    // --- Publish announcement (API if available, else localStorage) ---
-    async function publishAnnouncement(text, expiresIso){
-      const adminMsg = document.getElementById('adminMsg');
-      adminMsg.textContent = '';
-      if (!text) { adminMsg.textContent = 'Wpisz treść komunikatu.'; return; }
-
-      const token = getToken();
-      // Try API publish if token and API available
-      if (API && token){
-        try {
-          const res = await fetch(API + '/announcements', {
-            method: 'POST',
-            headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
-            body: JSON.stringify({ text, expires: expiresIso || null })
-          });
-          const j = await res.json().catch(()=>({}));
-          if (res.ok && j.ok){
-            adminMsg.textContent = 'Opublikowano.';
-            await loadAnnouncements();
-            setTimeout(()=> adminMsg.textContent = '', 2000);
-            return;
-          } else {
-            if (res.status === 401){ clearToken(); showAdminArea(false); adminMsg.textContent = 'Sesja wygasła. Zaloguj ponownie.'; return; }
-            adminMsg.textContent = j.error || 'Błąd publikacji (serwer).';
-            return;
-          }
-        } catch(e){
-          // fall back to local storage
-        }
-      }
-
-      // Local fallback: store in localStorage with limit 100
-      try {
-        const raw = localStorage.getItem('bsp_announcements');
-        const arr = raw ? JSON.parse(raw) : [];
-        arr.unshift({ date: new Date().toISOString(), text, expires: expiresIso || null });
-        // keep newest 100
-        localStorage.setItem('bsp_announcements', JSON.stringify(arr.slice(0,100)));
-        adminMsg.textContent = 'Opublikowano lokalnie.';
-        await loadAnnouncements();
-        setTimeout(()=> adminMsg.textContent = '', 2000);
-      } catch(e){
-        adminMsg.textContent = 'Błąd zapisu lokalnego.';
-      }
-    }
-
-    // --- Login flow: server first, else fallback to local check ---
-    async function attemptLogin(username, password){
-      const loginMsg = document.getElementById('loginMsg');
-      loginMsg.textContent = '';
-      if (!username || !password){ loginMsg.textContent = 'Wypełnij login i hasło.'; return false; }
-
-      if (API){
-        try {
-          const res = await fetch(API + '/login', {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ username, password })
-          });
-          const j = await res.json().catch(()=>({}));
-          if (res.ok && j.token){
-            setToken(j.token);
-            showAdminArea(true);
-            return true;
-          } else {
-            loginMsg.textContent = j.error || 'Błąd logowania (serwer).';
-            // continue to fallback
-          }
-        } catch(e){
-          // network error -> fallback
-        }
-      }
-
-      // Client-side fallback
-      const expectedUser = b64Decode(FALLBACK_USER_B64);
-      const expectedPass = b64Decode(FALLBACK_PASS_B64);
-      if (username === expectedUser && password === expectedPass){
-        const token = 'local:' + b64Encode(username + ':' + Date.now());
-        setToken(token);
-        showAdminArea(true);
-        return true;
+    function loadAnnouncements() {
+      if (window.BSP_ANNOUNCEMENTS) {
+        renderAnnouncements(window.BSP_ANNOUNCEMENTS);
       } else {
-        loginMsg.textContent = 'Nieprawidłowy login lub hasło.';
-        return false;
+        renderAnnouncements([]);
       }
     }
 
-    // --- UI helpers ---
-    function showAdminArea(show){
-      const area = document.getElementById('adminArea');
-      area.style.display = show ? 'block' : 'none';
-      area.setAttribute('aria-hidden', show ? 'false' : 'true');
-      document.getElementById('loginMsg').textContent = show ? 'Zalogowano.' : '';
-    }
-
-    // --- Event bindings ---
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-      const u = document.getElementById('login').value.trim();
-      const p = document.getElementById('password').value;
-      const ok = await attemptLogin(u, p);
-      if (ok){
-        document.getElementById('login').value = '';
-        document.getElementById('password').value = '';
-      }
-    });
-
-    document.getElementById('publishBtn').addEventListener('click', async () => {
-      const text = document.getElementById('announcement').value.trim();
-      const expiresDate = document.getElementById('expires').value; // yyyy-mm-dd or ''
-      let expiresIso = null;
-      if (expiresDate){
-        // set expiry to end of selected day (23:59:59)
-        const d = new Date(expiresDate + 'T23:59:59');
-        if (!isNaN(d.getTime())) expiresIso = d.toISOString();
-      }
-      await publishAnnouncement(text, expiresIso);
-      document.getElementById('announcement').value = '';
-      document.getElementById('expires').value = '';
-    });
-
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      clearToken();
-      showAdminArea(false);
-      document.getElementById('adminMsg').textContent = 'Wylogowano.';
-      setTimeout(()=> document.getElementById('adminMsg').textContent = '', 2000);
-    });
-
-    // Enter to submit login
-    document.getElementById('password').addEventListener('keydown', function(e){
-      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('loginBtn').click(); }
-    });
-    document.getElementById('login').addEventListener('keydown', function(e){
-      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('loginBtn').click(); }
-    });
-
-    // On load: fetch announcements and restore admin area if token exists
-    window.addEventListener('load', async () => {
-      await loadAnnouncements();
-      if (getToken()){
-        if (API){
-          try {
-            const res = await fetch(API + '/me', { headers: { 'Authorization': 'Bearer ' + getToken() } });
-            if (res.ok){ showAdminArea(true); return; }
-            clearToken(); showAdminArea(false);
-          } catch(e){
-            // network error: assume token valid (local fallback)
-            showAdminArea(true);
-          }
-        } else {
-          showAdminArea(true);
-        }
-      }
-    });
-
-    // focus login
-    window.addEventListener('DOMContentLoaded', () => {
-      const l = document.getElementById('login');
-      if (l) l.focus();
-    });
+    window.addEventListener('DOMContentLoaded', loadAnnouncements);
   </script>
-
-  <!-- Padding block to keep file length comparable to index.html (comments only) -->
-  <!-- PAD: A1 --> <!-- PAD: A2 --> <!-- PAD: A3 --> <!-- PAD: A4 --> <!-- PAD: A5 -->
-  <!-- PAD: A6 --> <!-- PAD: A7 --> <!-- PAD: A8 --> <!-- PAD: A9 --> <!-- PAD: A10 -->
-  <!-- PAD: A11 --> <!-- PAD: A12 --> <!-- PAD: A13 --> <!-- PAD: A14 --> <!-- PAD: A15 -->
-  <!-- PAD: A16 --> <!-- PAD: A17 --> <!-- PAD: A18 --> <!-- PAD: A19 --> <!-- PAD: A20 -->
 </body>
 </html>
