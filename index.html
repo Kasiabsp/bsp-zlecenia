@@ -13,101 +13,109 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
-    :root{
-      --bg:#f5f7fa;
-      --card:#ffffff;
-      --border:#d9dce2;
-      --muted:#6b7280;
-      --accent:#0f62fe;
-      --radius:10px;
-      --font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --border: #d9dce2;
+      --muted: #6b7280;
+      --accent: #0f62fe;
+      --radius: 10px;
+      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
     }
 
-    body{
-      margin:0;
-      font-family:var(--font);
-      background:var(--bg);
-      color:#111827;
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: #111827;
     }
 
-    header{
-      position:fixed;
-      top:0; left:0; right:0;
-      height:64px;
-      background:#fff;
-      border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 16px;
-      z-index:1000;
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 1000;
     }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .logo{
-      width:42px;
-      height:42px;
-      border-radius:8px;
-      background:#0f62fe;
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      font-size:15px;
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: #0f62fe;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
     }
 
-    nav ul{
-      list-style:none;
-      display:flex;
-      gap:14px;
-      margin:0;
-      padding:0;
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
     }
 
-    nav a{
-      text-decoration:none;
-      color:#111827;
-      font-weight:600;
-      font-size:14px;
+    nav a {
+      text-decoration: none;
+      color: #111827;
+      font-weight: 600;
+      font-size: 14px;
     }
 
-    .cta{
-      background:var(--accent);
-      color:#fff;
-      padding:8px 12px;
-      border-radius:8px;
-      text-decoration:none;
-      font-weight:600;
+    .cta {
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
     }
 
-    .container{
-      max-width:900px;
-      margin:90px auto 40px;
-      padding:0 16px;
+    .container {
+      max-width: 900px;
+      margin: 90px auto 40px;
+      padding: 0 16px;
     }
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:16px;
-      margin-bottom:20px;
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
     }
 
-    h1,h2,h3,h4{
-      margin:0 0 8px;
-      font-weight:700;
+    h1, h2, h3, h4 {
+      margin: 0 0 8px;
+      font-weight: 700;
     }
 
-    .muted{
-      color:var(--muted);
-      font-size:14px;
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    #map {
+      width: 100%;
+      height: 300px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -137,7 +145,7 @@
 </header>
 
 <main class="container">
-    <!-- HERO -->
+  <!-- HERO -->
   <section class="card">
     <h1>Inspekcje dronem • Mapowanie • Modele 3D</h1>
     <p class="muted">Dokładne pomiary, dokumentacja techniczna i modele 3D dla budownictwa i geodezji.</p>
@@ -145,7 +153,7 @@
 
   <!-- MODELE 3D -->
   <section class="card" id="models-3d">
-    <h2>Modele 3D</h2>
+        <h2>Modele 3D</h2>
     <p class="muted">Przykładowe modele fotogrametryczne wykonane podczas inspekcji.</p>
 
     <div class="models-grid">
@@ -170,42 +178,42 @@
   </section>
 
   <style>
-    .models-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:14px;
-      margin-top:10px;
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
     }
 
-    .model-card{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:12px;
+    .model-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
     }
 
-    .model-card h4{
-      margin:0 0 6px;
-      font-size:15px;
+    .model-card h4 {
+      margin: 0 0 6px;
+      font-size: 15px;
     }
 
-    .model-card model-viewer{
-      width:100%;
-      height:200px;
-      background:#f3f4f6;
-      border-radius:6px;
-      margin-bottom:8px;
+    .model-card model-viewer {
+      width: 100%;
+      height: 200px;
+      background: #f3f4f6;
+      border-radius: 6px;
+      margin-bottom: 8px;
     }
 
-    .btn{
-      background:var(--accent);
-      color:#fff;
-      border:none;
-      padding:7px 10px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:13px;
-      font-weight:600;
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
     }
   </style>
 
@@ -245,34 +253,41 @@
       </div>
     </div>
   </section>
-
-  <style>
-    .steps{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-      gap:14px;
-      margin-top:10px;
+    <style>
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
     }
 
-    .step{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:12px;
+    .step {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
     }
 
-    .step strong{
-      display:block;
-      margin-bottom:4px;
-      font-size:15px;
+    .step strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
     }
 
-    .step p{
-      margin:0;
-      font-size:13px;
+    .step p {
+      margin: 0;
+      font-size: 13px;
     }
   </style>
-    <!-- KALKULATOR WYCENY -->
+
+  <!-- MAPA -->
+  <section class="card" id="map-section">
+    <h2>Mapa lokalizacji</h2>
+    <p class="muted">Kliknij na mapie lub przeciągnij pinezkę, aby wskazać lokalizację zlecenia.</p>
+    <div id="map"></div>
+  </section>
+
+  <!-- KALKULATOR WYCENY -->
   <section class="card" id="pricing">
     <h2>Wycena</h2>
 
@@ -322,68 +337,57 @@
   </section>
 
   <style>
-    .calc-box{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
+    .calc-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .calc-row{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
+    .calc-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .calc-row label{
-      font-size:14px;
-      font-weight:600;
+    .calc-row label {
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .calc-row input,
-    .calc-row select{
-      padding:6px 8px;
-      border:1px solid var(--border);
-      border-radius:6px;
-      font-size:14px;
-      background:#fff;
+    .calc-row select {
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
     }
 
-    .checks{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      font-size:14px;
+    .checks {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 14px;
     }
 
-    .calc-buttons{
-      display:flex;
-      gap:10px;
-      margin-top:6px;
+    .calc-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
     }
 
-    .btn{
-      background:var(--accent);
-      color:#fff;
-      border:none;
-      padding:7px 12px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
-      font-weight:600;
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111;
     }
 
-    .btn.secondary{
-      background:#e5e7eb;
-      color:#111;
-    }
-
-    .calc-output{
-      background:#f3f4f6;
-      border:1px solid var(--border);
-      padding:10px;
-      border-radius:6px;
-      font-size:13px;
-      white-space:pre-wrap;
+    .calc-output {
+      background: #f3f4f6;
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: pre-wrap;
     }
   </style>
     <!-- FORMULARZ ZGŁOSZENIA -->
@@ -446,59 +450,48 @@
   </section>
 
   <style>
-    .form-row{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      margin-bottom:12px;
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
     }
 
-    .form-row label{
-      font-size:14px;
-      font-weight:600;
+    .form-row label {
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .form-row input,
-    .form-row textarea{
-      padding:6px 8px;
-      border:1px solid var(--border);
-      border-radius:6px;
-      font-size:14px;
-      background:#fff;
+    .form-row textarea {
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
     }
 
-    textarea{
-      min-height:80px;
-      resize:vertical;
+    textarea {
+      min-height: 80px;
+      resize: vertical;
     }
 
-    .form-buttons{
-      display:flex;
-      gap:10px;
-      margin-top:6px;
+    .form-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
     }
 
-    .btn{
-      background:var(--accent);
-      color:#fff;
-      border:none;
-      padding:7px 12px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
-      font-weight:600;
-    }
-
-    .btn.secondary{
-      background:#e5e7eb;
-      color:#111;
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111;
     }
   </style>
-    <footer style="text-align:center;margin-top:20px;font-size:13px;color:var(--muted)">
+
+  <footer style="text-align:center;margin-top:20px;font-size:13px;color:var(--muted)">
     © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
   </footer>
-
-  <!-- MODAL 3D -->
+    <!-- MODAL 3D -->
   <div id="modelModal" class="modal">
     <div class="modal-content">
 
@@ -524,185 +517,183 @@
   </div>
 
   <style>
-    .modal{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(255,255,255,0.85);
-      backdrop-filter:blur(4px);
-      z-index:2000;
-      align-items:center;
-      justify-content:center;
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
     }
 
-    .modal-content{
-      width:90%;
-      max-width:900px;
-      height:80%;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:10px;
-      display:flex;
-      flex-direction:column;
-      overflow:hidden;
+    .modal-content {
+      width: 90%;
+      max-width: 900px;
+      height: 80%;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    .modal-header{
-      padding:10px 14px;
-      border-bottom:1px solid var(--border);
-      background:#f9fafb;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-weight:600;
+    .modal-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: #f9fafb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
     }
 
-    .modal-buttons{
-      display:flex;
-      gap:8px;
+    .modal-buttons {
+      display: flex;
+      gap: 8px;
     }
 
-    .modal-buttons button{
-      background:#e5e7eb;
-      border:1px solid var(--border);
-      padding:6px 10px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:13px;
+    .modal-buttons button {
+      background: #e5e7eb;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
     }
 
-    .modal-buttons button:hover{
-      background:#d1d5db;
+    .modal-buttons button:hover {
+      background: #d1d5db;
     }
 
-    #viewer3D{
-      width:100%;
-      height:100%;
-      background:#f3f4f6;
+    #viewer3D {
+      width: 100%;
+      height: 100%;
+      background: #f3f4f6;
     }
   </style>
+
   <script>
-document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-/* MODAL 3D */
-function openModel(src, title){
-  const modal = document.getElementById('modelModal');
-  const viewer = document.getElementById('viewer3D');
-  const titleBox = document.getElementById('viewerTitle');
+    // MODAL 3D
+    function openModel(src, title) {
+      const modal = document.getElementById('modelModal');
+      const viewer = document.getElementById('viewer3D');
+      const titleBox = document.getElementById('viewerTitle');
 
-  viewer.src = src;
-  titleBox.textContent = title;
+      viewer.src = src;
+      titleBox.textContent = title;
+      modal.style.display = 'flex';
+    }
 
-  modal.style.display = 'flex';
-}
+    function closeModel() {
+      const modal = document.getElementById('modelModal');
+      const viewer = document.getElementById('viewer3D');
+      modal.style.display = 'none';
+      viewer.src = "";
+    }
 
-function closeModel(){
-  const modal = document.getElementById('modelModal');
-  const viewer = document.getElementById('viewer3D');
+    function resetCamera() {
+      const viewer = document.getElementById('viewer3D');
+      viewer.cameraOrbit = "0deg 75deg 100%";
+      viewer.cameraTarget = "0m 0m 0m";
+      viewer.fieldOfView = "45deg";
+    }
 
-  modal.style.display = 'none';
-  viewer.src = "";
-}
+    function toggleFullscreen() {
+      const viewer = document.getElementById('viewer3D');
+      if (!document.fullscreenElement) {
+        viewer.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
 
-function resetCamera(){
-  const viewer = document.getElementById('viewer3D');
-  viewer.cameraOrbit = "0deg 75deg 100%";
-  viewer.cameraTarget = "0m 0m 0m";
-  viewer.fieldOfView = "45deg";
-}
+    // MAPA
+    const latRef = 52.46694444444444;
+    const lngRef = 17.17;
 
-function toggleFullscreen(){
-  const viewer = document.getElementById('viewer3D');
-  if(!document.fullscreenElement){
-    viewer.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-}
+    function toRad(v) { return v * Math.PI / 180; }
 
-/* MAPA */
-const latRef = 52.46694444444444;
-const lngRef = 17.17;
+    function haversine(a, b, c, d) {
+      const R = 6371;
+      const dLat = toRad(c - a);
+      const dLon = toRad(d - b);
+      const x = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a)) * Math.cos(toRad(c)) * Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+    }
 
-function toRad(v){ return v * Math.PI / 180; }
+    let map, marker;
 
-function haversine(a,b,c,d){
-  const R = 6371;
-  const dLat = toRad(c - a);
-  const dLon = toRad(d - b);
-  const x = Math.sin(dLat/2)**2 + Math.cos(toRad(a))*Math.cos(toRad(c))*Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
-}
+    function initMap() {
+      map = L.map('map', { attributionControl: false }).setView([latRef, lngRef], 15);
 
-let map, marker;
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      }).addTo(map);
 
-function initMap(){
-  map = L.map('map',{ attributionControl:false }).setView([latRef,lngRef], 15);
+      marker = L.marker([latRef, lngRef], { draggable: true }).addTo(map);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    maxZoom:19
-  }).addTo(map);
+      marker.on('dragend', e => {
+        const p = e.target.getLatLng();
+        updateLocation(p.lat, p.lng);
+      });
 
-  marker = L.marker([latRef,lngRef],{ draggable:true }).addTo(map);
+      map.on('click', e => {
+        const { lat, lng } = e.latlng;
+        marker.setLatLng([lat, lng]);
+        updateLocation(lat, lng);
+      });
 
-  marker.on('dragend', e=>{
-    const p = e.target.getLatLng();
-    updateLocation(p.lat, p.lng);
-  });
+      updateLocation(latRef, lngRef);
+    }
 
-  map.on('click', e=>{
-    const {lat,lng} = e.latlng;
-    marker.setLatLng([lat,lng]);
-    updateLocation(lat,lng);
-  });
+    function updateLocation(lat, lng) {
+      const dist = haversine(latRef, lngRef, lat, lng);
+      document.getElementById('calc-distance').value = dist.toFixed(2);
+      document.getElementById('location_lat').value = lat;
+      document.getElementById('location_lng').value = lng;
+    }
 
-  updateLocation(latRef,lngRef);
-}
+    document.addEventListener('DOMContentLoaded', initMap);
+        // KALKULATOR
+    const perHaPrices = { mapping: 100, photos: 100, video: 100, model3d: 100 };
+    const unitCosts = { mapping: 120, photos: 100, video: 140, model3d: 180 };
 
-function updateLocation(lat,lng){
-  const dist = haversine(latRef,lngRef,lat,lng);
-  document.getElementById('calc-distance').value = dist.toFixed(2);
-  document.getElementById('location_lat').value = lat;
-  document.getElementById('location_lng').value = lng;
-}
+    function travelFee(distance) {
+      if (distance <= 5) return 10;
+      if (distance <= 10) return 20;
+      if (distance <= 15) return 30;
+      if (distance <= 30) return 50;
+      return 50 + Math.ceil((distance - 30) / 5) * 10;
+    }
 
-document.addEventListener('DOMContentLoaded', initMap);
+    function runCalc() {
+      const area = parseFloat(document.getElementById('calc-area').value) || 0;
+      const models = parseInt(document.getElementById('calc-models').value) || 1;
+      const service = document.getElementById('service-type').value;
+      const distance = parseFloat(document.getElementById('calc-distance').value) || 0;
 
-/* KALKULATOR */
-const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
-const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
+      const travel = travelFee(distance);
+      let extras = 0;
+      const extrasList = [];
 
-function travelFee(distance){
-  if(distance <= 5) return 10;
-  if(distance <= 10) return 20;
-  if(distance <= 15) return 30;
-  if(distance <= 30) return 50;
-  return 50 + Math.ceil((distance - 30) / 5) * 10;
-}
+      if (document.getElementById('calc-lines').checked) { extras += 50; extrasList.push("linie"); }
+      if (document.getElementById('calc-trees').checked) { extras += 50; extrasList.push("drzewa"); }
+      if (document.getElementById('calc-raw').checked) { extras += 100; extrasList.push("RAW"); }
 
-function runCalc(){
-  const area = parseFloat(document.getElementById('calc-area').value) || 0;
-  const models = parseInt(document.getElementById('calc-models').value) || 1;
-  const service = document.getElementById('service-type').value;
-  const distance = parseFloat(document.getElementById('calc-distance').value) || 0;
+      const price = Math.round(
+        perHaPrices[service] * area +
+        unitCosts[service] * models +
+        travel + extras
+      );
 
-  const travel = travelFee(distance);
-  let extras = 0;
-  const extrasList = [];
-
-  if(document.getElementById('calc-lines').checked){ extras+=50; extrasList.push("linie"); }
-  if(document.getElementById('calc-trees').checked){ extras+=50; extrasList.push("drzewa"); }
-  if(document.getElementById('calc-raw').checked){ extras+=100; extrasList.push("RAW"); }
-
-  const price = Math.round(
-    perHaPrices[service] * area +
-    unitCosts[service] * models +
-    travel + extras
-  );
-
-  const result = document.getElementById('calc-result');
-  result.style.display = 'block';
-  result.textContent =
+      const result = document.getElementById('calc-result');
+      result.style.display = 'block';
+      result.textContent =
 `Szacunkowa cena: ${price} zł
 Powierzchnia: ${area} ha
 Modele: ${models}
@@ -710,99 +701,99 @@ Dystans: ${distance} km
 Dojazd: ${travel} zł
 Dodatki: ${extrasList.join(', ') || 'brak'}`;
 
-  document.getElementById('estimated_price').value = price;
-  document.getElementById('service_type').value = service;
-  document.getElementById('area_ha').value = area;
-  document.getElementById('flights_estimated').value = models;
-  document.getElementById('extras_list').value = extrasList.join(',');
-}
-
-document.getElementById('calc-run').onclick = runCalc;
-
-document.getElementById('calc-reset').onclick = ()=>{
-  document.getElementById('calc-area').value = 0.1;
-  document.getElementById('calc-models').value = 1;
-  document.getElementById('calc-distance').value = 0;
-  document.getElementById('calc-result').style.display = "none";
-};
-
-/* FORMULARZ */
-const form = document.getElementById('bspForm');
-const statusBox = document.getElementById('status');
-const submitBtn = document.getElementById('submitBtn');
-const clearBtn = document.getElementById('clearBtn');
-
-function showStatus(msg, error=false){
-  statusBox.textContent = msg;
-  statusBox.style.color = error ? "#b91c1c" : "#047857";
-}
-
-clearBtn.onclick = ()=>{
-  form.reset();
-  showStatus("");
-};
-
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-
-  // ✔ WALIDACJA REGULAMINU
-  const rules = document.getElementById('accept_rules');
-  if(!rules || !rules.checked){
-    showStatus("Musisz zaakceptować regulamin.", true);
-    return;
-  }
-
-  const payload = {
-    contact: form.contact.value.trim(),
-    description: form.description.value.trim(),
-    location: document.getElementById('location_text').value.trim(),
-    date: form.date.value || "",
-    budget: form.budget.value.trim() || "",
-    estimated_price: document.getElementById('estimated_price').value,
-    location_lat: document.getElementById('location_lat').value,
-    location_lng: document.getElementById('location_lng').value,
-    service_type: document.getElementById('service_type').value,
-    area_ha: document.getElementById('area_ha').value,
-    flights_estimated: document.getElementById('flights_estimated').value,
-    extras_list: document.getElementById('extras_list').value
-  };
-
-  if(!payload.contact || !payload.description){
-    showStatus("Uzupełnij wymagane pola.", true);
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Wysyłanie...";
-  showStatus("Wysyłanie...");
-    try{
-    const res = await fetch("/api/send",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Accept":"application/json"
-      },
-      body:JSON.stringify(payload)
-    });
-
-    const json = await res.json().catch(()=>null);
-
-    if(res.ok && json?.status === "ok"){
-      showStatus("Wysłano poprawnie.");
-      form.reset();
-      document.getElementById('calc-result').style.display = "none";
-    } else {
-      showStatus("Błąd wysyłki.", true);
+      document.getElementById('estimated_price').value = price;
+      document.getElementById('service_type').value = service;
+      document.getElementById('area_ha').value = area;
+      document.getElementById('flights_estimated').value = models;
+      document.getElementById('extras_list').value = extrasList.join(',');
     }
 
-  } catch {
-    showStatus("Błąd połączenia.", true);
-  }
+    document.getElementById('calc-run').onclick = runCalc;
 
-  submitBtn.disabled = false;
-  submitBtn.textContent = "Wyślij";
-});
-</script>
+    document.getElementById('calc-reset').onclick = () => {
+      document.getElementById('calc-area').value = 0.1;
+      document.getElementById('calc-models').value = 1;
+      document.getElementById('calc-distance').value = 0;
+      document.getElementById('calc-result').style.display = "none";
+    };
+
+    // FORMULARZ
+    const form = document.getElementById('bspForm');
+    const statusBox = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function showStatus(msg, error = false) {
+      statusBox.textContent = msg;
+      statusBox.style.color = error ? "#b91c1c" : "#047857";
+    }
+
+    clearBtn.onclick = () => {
+      form.reset();
+      showStatus("");
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const rules = document.getElementById('accept_rules');
+      if (!rules || !rules.checked) {
+        showStatus("Musisz zaakceptować regulamin.", true);
+        return;
+      }
+
+      const payload = {
+        contact: form.contact.value.trim(),
+        description: form.description.value.trim(),
+        location: document.getElementById('location_text').value.trim(),
+        date: form.date.value || "",
+        budget: form.budget.value.trim() || "",
+        estimated_price: document.getElementById('estimated_price').value,
+        location_lat: document.getElementById('location_lat').value,
+        location_lng: document.getElementById('location_lng').value,
+        service_type: document.getElementById('service_type').value,
+        area_ha: document.getElementById('area_ha').value,
+        flights_estimated: document.getElementById('flights_estimated').value,
+        extras_list: document.getElementById('extras_list').value
+      };
+
+      if (!payload.contact || !payload.description) {
+        showStatus("Uzupełnij wymagane pola.", true);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Wysyłanie...";
+      showStatus("Wysyłanie...");
+
+      try {
+        const res = await fetch("/api/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const json = await res.json().catch(() => null);
+
+        if (res.ok && json?.status === "ok") {
+          showStatus("Wysłano poprawnie.");
+          form.reset();
+          document.getElementById('calc-result').style.display = "none";
+        } else {
+          showStatus("Błąd wysyłki.", true);
+        }
+
+      } catch {
+        showStatus("Błąd połączenia.", true);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Wyślij";
+    });
+  </script>
 
 </body>
 </html>
