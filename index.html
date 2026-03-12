@@ -280,116 +280,268 @@
     }
   </style>
 
-  <!-- MAPA -->
-  <section class="card" id="map-section">
-    <h2>Mapa lokalizacji</h2>
-    <p class="muted">Kliknij na mapie lub przeciągnij pinezkę, aby wskazać lokalizację zlecenia.</p>
-    <div id="map"></div>
-  </section>
+ <!-- MAPA -->
+<section class="card" id="map-section">
+  <h2>Mapa lokalizacji</h2>
+  <p class="muted">Kliknij na mapie lub przeciągnij pinezkę, aby wskazać lokalizację zlecenia.</p>
+  <div id="map" aria-label="Mapa lokalizacji"></div>
+</section>
 
-  <!-- KALKULATOR WYCENY -->
-  <section class="card" id="pricing">
-    <h2>Wycena</h2>
+<!-- KALKULATOR WYCENY -->
+<section class="card" id="pricing">
+  <h2>Wycena</h2>
 
-    <div class="calc-box">
+  <div class="calc-box">
 
-      <div class="calc-row">
-        <label>Odległość (km)</label>
-        <input id="calc-distance" type="number" readonly value="0.00">
-      </div>
-
-      <div class="calc-row">
-        <label>Powierzchnia (ha)</label>
-        <input id="calc-area" type="number" min="0" step="0.1" value="0.1">
-      </div>
-
-      <div class="calc-row">
-        <label>Liczba modeli</label>
-        <input id="calc-models" type="number" min="1" value="1">
-      </div>
-
-      <div class="calc-row">
-        <label>Usługa</label>
-        <select id="service-type">
-          <option value="mapping">Mapowanie</option>
-          <option value="photos">Zdjęcia</option>
-          <option value="video">Filmy</option>
-          <option value="model3d">Modele 3D</option>
-        </select>
-      </div>
-
-      <div class="calc-row">
-        <label><b>Zagrożenia</b></label>
-        <div class="checks">
-          <label><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
-          <label><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
-          <label><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
-        </div>
-      </div>
-
-      <div class="calc-buttons">
-        <button class="btn" id="calc-run" type="button">Oblicz</button>
-        <button class="btn secondary" id="calc-reset" type="button">Reset</button>
-      </div>
-
-      <pre id="calc-result" class="calc-output" style="display:none"></pre>
+    <div class="calc-row">
+      <label>Odległość (km)</label>
+      <input id="calc-distance" type="number" readonly value="0.00">
     </div>
-  </section>
 
-  <style>
-    .calc-box {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    <div class="calc-row">
+      <label>Powierzchnia (ha)</label>
+      <input id="calc-area" type="number" min="0" step="0.1" value="0.1">
+    </div>
+
+    <div class="calc-row">
+      <label>Liczba modeli</label>
+      <input id="calc-models" type="number" min="1" value="1">
+    </div>
+
+    <div class="calc-row">
+      <label>Usługa</label>
+      <select id="service-type">
+        <option value="mapping">Mapowanie</option>
+        <option value="photos">Zdjęcia</option>
+        <option value="video">Filmy</option>
+        <option value="model3d">Modele 3D</option>
+      </select>
+    </div>
+
+    <div class="calc-row">
+      <label><b>Zagrożenia</b></label>
+      <div class="checks">
+        <label><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
+        <label><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
+        <label><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
+      </div>
+    </div>
+
+    <div class="calc-buttons">
+      <button class="btn" id="calc-run" type="button">Oblicz</button>
+      <button class="btn secondary" id="calc-reset" type="button">Reset</button>
+    </div>
+
+    <pre id="calc-result" class="calc-output" style="display:none"></pre>
+  </div>
+</section>
+
+<style>
+  /* map + kalkulator */
+  #map {
+    width: 100%;
+    height: 320px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-top: 10px;
+    background: linear-gradient(180deg,#f8fafc,#eef2f6); /* delikatne tło, widać kontener */
+  }
+
+  .calc-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .calc-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .calc-row label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .calc-row input,
+  .calc-row select {
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    background: #fff;
+  }
+
+  .checks {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+  }
+
+  .calc-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .btn.secondary {
+    background: #e5e7eb;
+    color: #111;
+  }
+
+  .calc-output {
+    background: #f3f4f6;
+    border: 1px solid var(--border);
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: pre-wrap;
+  }
+</style>
+
+<script>
+  (function(){
+    // referencyjne współrzędne startowe
+    const latRef = 52.46694444444444;
+    const lngRef = 17.17;
+
+    // pomocnicze funkcje
+    function toRad(v){ return v * Math.PI / 180; }
+    function haversine(a,b,c,d){
+      const R = 6371;
+      const dLat = toRad(c - a);
+      const dLon = toRad(d - b);
+      const x = Math.sin(dLat/2)**2 + Math.cos(toRad(a))*Math.cos(toRad(c))*Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
     }
 
-    .calc-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    // ceny
+    const perHaPrices = { mapping:100, photos:100, video:100, model3d:100 };
+    const unitCosts = { mapping:120, photos:100, video:140, model3d:180 };
+
+    function travelFee(distance){
+      if(distance <= 5) return 10;
+      if(distance <= 10) return 20;
+      if(distance <= 15) return 30;
+      if(distance <= 30) return 50;
+      return 50 + Math.ceil((distance - 30) / 5) * 10;
     }
 
-    .calc-row label {
-      font-size: 14px;
-      font-weight: 600;
+    // elementy DOM (będą dostępne po DOMContentLoaded)
+    let map, marker;
+    function initMapSafe(){
+      if(typeof L === 'undefined') {
+        console.error('Leaflet nie załadowany (L undefined). Sprawdź link do leaflet.js');
+        return;
+      }
+      // jeśli kontener nie istnieje, przerwij
+      const mapEl = document.getElementById('map');
+      if(!mapEl){
+        console.error('Brak elementu #map w DOM');
+        return;
+      }
+
+      // inicjalizacja mapy
+      map = L.map('map', { attributionControl: false }).setView([latRef, lngRef], 15);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      marker = L.marker([latRef, lngRef], { draggable: true }).addTo(map);
+
+      marker.on('dragend', e => {
+        const p = e.target.getLatLng();
+        updateLocation(p.lat, p.lng);
+      });
+
+      map.on('click', e => {
+        const { lat, lng } = e.latlng;
+        marker.setLatLng([lat, lng]);
+        updateLocation(lat, lng);
+      });
+
+      // wymuś poprawne wyrenderowanie kafelków (przydatne gdy map był w ukrytym kontenerze)
+      setTimeout(()=>{ map.invalidateSize(); }, 200);
+      window.addEventListener('resize', ()=>{ if(map) map.invalidateSize(); });
+
+      // ustaw początkowe wartości
+      updateLocation(latRef, lngRef);
     }
 
-    .calc-row input,
-    .calc-row select {
-      padding: 6px 8px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 14px;
-      background: #fff;
+    function updateLocation(lat, lng){
+      const dist = haversine(latRef, lngRef, lat, lng);
+      const distEl = document.getElementById('calc-distance');
+      if(distEl) distEl.value = dist.toFixed(2);
+
+      const latEl = document.getElementById('location_lat');
+      const lngEl = document.getElementById('location_lng');
+      if(latEl) latEl.value = lat;
+      if(lngEl) lngEl.value = lng;
     }
 
-    .checks {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 14px;
+    function runCalc(){
+      const area = parseFloat(document.getElementById('calc-area').value) || 0;
+      const models = parseInt(document.getElementById('calc-models').value) || 1;
+      const service = document.getElementById('service-type').value;
+      const distance = parseFloat(document.getElementById('calc-distance').value) || 0;
+
+      const travel = travelFee(distance);
+      let extras = 0;
+      const extrasList = [];
+      if(document.getElementById('calc-lines').checked){ extras+=50; extrasList.push("linie"); }
+      if(document.getElementById('calc-trees').checked){ extras+=50; extrasList.push("drzewa"); }
+      if(document.getElementById('calc-raw').checked){ extras+=100; extrasList.push("RAW"); }
+
+      const price = Math.round(
+        perHaPrices[service] * area +
+        unitCosts[service] * models +
+        travel + extras
+      );
+
+      const result = document.getElementById('calc-result');
+      result.style.display = 'block';
+      result.textContent =
+`Szacunkowa cena: ${price} zł
+Powierzchnia: ${area} ha
+Modele: ${models}
+Dystans: ${distance} km
+Dojazd: ${travel} zł
+Dodatki: ${extrasList.join(', ') || 'brak'}`;
+
+      // aktualizuj ukryte pola formularza
+      const setIf = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+      setIf('estimated_price', price);
+      setIf('service_type', service);
+      setIf('area_ha', area);
+      setIf('flights_estimated', models);
+      setIf('extras_list', extrasList.join(','));
     }
 
-    .calc-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 6px;
-    }
+    // przypięcie eventów po załadowaniu DOM
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // inicjalizacja mapy bezpiecznie
+      initMapSafe();
 
-    .btn.secondary {
-      background: #e5e7eb;
-      color: #111;
-    }
-
-    .calc-output {
-      background: #f3f4f6;
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 13px;
-      white-space: pre-wrap;
-    }
-  </style>
+      // przyciski kalkulatora
+      const runBtn = document.getElementById('calc-run');
+      const resetBtn = document.getElementById('calc-reset');
+      if(runBtn) runBtn.addEventListener('click', runCalc);
+      if(resetBtn) resetBtn.addEventListener('click', ()=>{
+        document.getElementById('calc-area').value = 0.1;
+        document.getElementById('calc-models').value = 1;
+        document.getElementById('calc-distance').value = 0;
+        document.getElementById('calc-result').style.display = "none";
+        // wyczyść ukryte pola
+        ['estimated_price','service_type','area_ha','flights_estimated','extras_list'].forEach(id=>{
+          const el = document.getElementById(id); if(el) el.value = '';
+        });
+      });
+    });
+  })();
+</script>
     <!-- FORMULARZ ZGŁOSZENIA -->
   <section class="card" id="form">
     <h2>Zgłoś zlecenie</h2>
