@@ -324,6 +324,7 @@
         <label><input id="calc-lines" type="checkbox"> Linie (50 zł)</label>
         <label><input id="calc-trees" type="checkbox"> Drzewa (50 zł)</label>
         <label><input id="calc-raw" type="checkbox"> RAW (100 zł)</label>
+        <label><input id="calc-raw" type="checkbox"> impreza/wydarzenie (200 zł)</label>
       </div>
     </div>
 
@@ -836,6 +837,7 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
       if (document.getElementById('calc-lines').checked) { extras += 50; extrasList.push("linie"); }
       if (document.getElementById('calc-trees').checked) { extras += 50; extrasList.push("drzewa"); }
       if (document.getElementById('calc-raw').checked) { extras += 100; extrasList.push("RAW"); }
+      if (document.getElementById('calc-raw').checked) { extras += 200; extrasList.push("imporeza/wydarzenie"); }
 
       const price = Math.round(
         perHaPrices[service] * area +
