@@ -495,6 +495,7 @@
       if(document.getElementById('calc-lines').checked){ extras+=50; extrasList.push("linie"); }
       if(document.getElementById('calc-trees').checked){ extras+=50; extrasList.push("drzewa"); }
       if(document.getElementById('calc-raw').checked){ extras+=100; extrasList.push("RAW"); }
+      if(document.getElementById('calc-raw').checked){ extras+=200; extrasList.push("Impreza/Wydarzenie"); }
 
       const price = Math.round(
         perHaPrices[service] * area +
