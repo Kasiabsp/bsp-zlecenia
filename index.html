@@ -530,6 +530,7 @@
             <label><input id="calc-lines" type="checkbox" /> Linie (50 zł)</label>
             <label><input id="calc-trees" type="checkbox" /> Drzewa (50 zł)</label>
             <label><input id="calc-raw" type="checkbox" /> RAW (100 zł)</label>
+            <label><input id="calc-gli" type="checkbox" /> Mapa GLI (100 zł)</label>
             <label><input id="calc-events" type="checkbox" /> Impreza/Wydarzenie (200 zł)</label>
           </div>
         </div>
@@ -788,6 +789,7 @@
         const models = parseInt(calcModels.value, 10) || 1;
         const service = serviceType.value;
         const distance = parseFloat(calcDistance.value) || 0;
+        const areaUnits = area * 10;
         const travel = travelFee(distance);
         let extras = 0;
         const extrasList = [];
@@ -795,10 +797,11 @@
         if (document.getElementById('calc-lines').checked) { extras += 50; extrasList.push('linie'); }
         if (document.getElementById('calc-trees').checked) { extras += 50; extrasList.push('drzewa'); }
         if (document.getElementById('calc-raw').checked) { extras += 100; extrasList.push('RAW'); }
+        if (document.getElementById('calc-gli').checked) { extras += 100; extrasList.push('Mapa GLI'); }
         if (document.getElementById('calc-events').checked) { extras += 200; extrasList.push('Impreza/Wydarzenie'); }
 
         const price = Math.round(
-          perHaPrices[service] * area +
+          perHaPrices[service] * areaUnits +
           unitCosts[service] * models +
           travel + extras
         );
@@ -806,7 +809,7 @@
         calcResult.style.display = 'block';
         calcResult.textContent =
 `Szacunkowa cena: ${price} zł
-Powierzchnia: ${area} ha
+Powierzchnia: ${area} ha (${areaUnits.toFixed(1)} × cena za 0,1 ha)
 Modele: ${models}
 Dystans: ${distance} km
 Dojazd: ${travel} zł
@@ -940,3 +943,4 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
   </script>
 </body>
 </html>
+
