@@ -39,7 +39,11 @@
     body {
       margin: 0;
       font-family: var(--font);
-      background: var(--bg);
+      background-image: url("assets/Zrzut ekranu (17).png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
       color: #111827;
       overflow-x: hidden;
       line-height: 1.5;
@@ -52,7 +56,7 @@
       left: 0;
       right: 0;
       min-height: 64px;
-      background: #fff;
+      background: rgba(255,255,255,0.95);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -60,6 +64,7 @@
       gap: 16px;
       padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
       z-index: 1000;
+      backdrop-filter: blur(4px);
     }
 
     .brand {
@@ -898,6 +903,10 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
         calcArea.value = 0.1;
         calcModels.value = 1;
         calcDistance.value = '0.00';
+        ['calc-lines','calc-trees','calc-raw','calc-gli','calc-events'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.checked = false;
+        });
         calcResult.style.display = 'none';
         calcResult.textContent = '';
         ['estimated_price', 'service_type', 'area_ha', 'flights_estimated', 'extras_list'].forEach((id) => setIf(id, ''));
@@ -905,63 +914,96 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
           accuracyCircle.remove();
           accuracyCircle = null;
         }
-        moveMarkerTo(latRef, lngRef);
+        if (marker && map) {
+          moveMarkerTo(latRef, lngRef);
+        }
         setLocationStatus('');
       }
 
-      function openModel(src, title) {
-        viewer.src = src;
-        viewerTitle.textContent = title;
+      // Modal and viewer helpers
+      function openModelModal(src, title) {
+        if (!viewer || !modal) return;
+        viewer.setAttribute('src', src);
+        viewerTitle.textContent = title || 'Podgląd modelu';
         modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
       }
 
-      function closeModel() {
+      function closeModelModal() {
+        if (!viewer || !modal) return;
+        viewer.removeAttribute('src');
         modal.style.display = 'none';
-        viewer.src = '';
+        document.body.style.overflow = '';
       }
 
       function resetCamera() {
-        viewer.cameraOrbit = '0deg 75deg 100%';
-        viewer.cameraTarget = '0m 0m 0m';
-        viewer.fieldOfView = '45deg';
+        if (!viewer) return;
+        // Try resetting by reloading src (simple and compatible)
+        const src = viewer.getAttribute('src');
+        viewer.removeAttribute('src');
+        setTimeout(() => {
+          if (src) viewer.setAttribute('src', src);
+        }, 60);
       }
 
       function toggleFullscreen() {
+        if (!viewer) return;
         if (!document.fullscreenElement) {
-          viewer.requestFullscreen();
+          if (viewer.requestFullscreen) viewer.requestFullscreen();
+          else if (viewer.webkitEnterFullscreen) viewer.webkitEnterFullscreen();
         } else {
           document.exitFullscreen();
         }
       }
 
-      document.querySelectorAll('.model-preview').forEach((button) => {
-        button.addEventListener('click', () => openModel(button.dataset.src, button.dataset.title));
+      // Event bindings
+      document.getElementById('calc-run')?.addEventListener('click', runCalc);
+      document.getElementById('calc-reset')?.addEventListener('click', resetCalc);
+      locateBtn?.addEventListener('click', showUserLocation);
+
+      document.querySelectorAll('.model-preview').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const src = btn.getAttribute('data-src');
+          const title = btn.getAttribute('data-title');
+          openModelModal(src, title);
+        });
       });
 
-      document.getElementById('closeModelBtn').addEventListener('click', closeModel);
-      document.getElementById('resetCameraBtn').addEventListener('click', resetCamera);
-      document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
-      document.getElementById('calc-run').addEventListener('click', runCalc);
-      document.getElementById('calc-reset').addEventListener('click', resetCalc);
-      locateBtn.addEventListener('click', showUserLocation);
+      document.getElementById('closeModelBtn')?.addEventListener('click', closeModelModal);
+      document.getElementById('fullscreenBtn')?.addEventListener('click', toggleFullscreen);
+      document.getElementById('resetCameraBtn')?.addEventListener('click', resetCamera);
 
-      clearBtn.addEventListener('click', () => {
-        form.reset();
-        resetCalc();
-        showStatus('');
+      // Close modal on backdrop click or ESC
+      modal?.addEventListener('click', (ev) => {
+        if (ev.target === modal) closeModelModal();
+      });
+      document.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape' && modal && modal.style.display === 'flex') closeModelModal();
       });
 
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+      // Form handling (client-side + optional backend)
+      form?.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const contact = document.getElementById('contact').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const accept = document.getElementById('accept_rules').checked;
 
-        if (!document.getElementById('accept_rules').checked) {
+        if (!contact || !description) {
+          showStatus('Uzupełnij wymagane pola.', true);
+          return;
+        }
+        if (!accept) {
           showStatus('Musisz zaakceptować regulamin.', true);
           return;
         }
 
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wysyłanie...';
+        showStatus('Wysyłanie...');
+
         const payload = {
-          contact: document.getElementById('contact').value.trim(),
-          description: document.getElementById('description').value.trim(),
+          contact,
+          description,
           location: document.getElementById('location_text').value.trim(),
           date: document.getElementById('date').value || '',
           budget: document.getElementById('budget').value.trim() || '',
@@ -973,15 +1015,6 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
           flights_estimated: document.getElementById('flights_estimated').value,
           extras_list: document.getElementById('extras_list').value
         };
-
-        if (!payload.contact || !payload.description) {
-          showStatus('Uzupełnij wymagane pola.', true);
-          return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Wysyłanie...';
-        showStatus('Wysyłanie...');
 
         try {
           const response = await fetch('/api/send', {
@@ -1010,6 +1043,13 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
         submitBtn.textContent = 'Wyślij';
       });
 
+      clearBtn?.addEventListener('click', () => {
+        form.reset();
+        resetCalc();
+        showStatus('');
+      });
+
+      // Initialize map
       initMap();
     });
   </script>
