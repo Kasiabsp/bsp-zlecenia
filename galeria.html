@@ -29,16 +29,36 @@
     body {
       margin: 0;
       font-family: var(--font);
-      background: var(--bg);
       color: #111827;
       line-height: 1.5;
       overflow-x: hidden;
+
+      /* Tło strony (plik z katalogu assets) */
+      background-image: url("assets/Zrzut ekranu (17).png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+    }
+
+    /* Lekki overlay pod treścią, żeby poprawić czytelność na tle obrazka */
+    main::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.18);
+      pointer-events: none;
+      z-index: 0;
+      backdrop-filter: blur(0.5px);
     }
 
     header {
-      background: #fff;
+      background: rgba(255,255,255,0.95);
       border-bottom: 1px solid var(--border);
       padding: 14px 16px;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(4px);
     }
 
     .header-inner {
@@ -113,15 +133,19 @@
       width: min(100%, 1000px);
       margin: 28px auto 40px;
       padding: 0 16px;
+      position: relative;
+      z-index: 5;
     }
 
+    /* Karty z półprzezroczystym tłem, aby tekst był czytelny na obrazku */
     .hero,
     .gallery-card {
-      background: var(--card);
+      background: rgba(255,255,255,0.92);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: clamp(16px, 4vw, 24px);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
     }
 
     .hero {
@@ -168,10 +192,12 @@
 
     .gallery-content h3 {
       font-size: 17px;
+      margin: 0 0 6px;
     }
 
     .gallery-content p {
       margin: 0;
+      color: var(--muted);
     }
 
     footer {
@@ -179,6 +205,8 @@
       text-align: center;
       color: var(--muted);
       font-size: 13px;
+      position: relative;
+      z-index: 5;
     }
 
     @media (max-width: 700px) {
