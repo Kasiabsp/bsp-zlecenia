@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>Galeria zleceń — BSP Zlecenia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --border: #d9dce2;
+      --muted: #6b7280;
+      --accent: #0f62fe;
+      --accent-dark: #084cdf;
+      --radius: 12px;
+      --shadow: 0 12px 30px rgba(2, 6, 23, 0.06);
+      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: #111827;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+    }
+
+    .header-inner {
+      width: min(100%, 1000px);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      flex: 0 0 auto;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    nav a,
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 9px 13px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    nav a:hover,
+    .btn:hover {
+      background: var(--accent-dark);
+    }
+
+    main {
+      width: min(100%, 1000px);
+      margin: 28px auto 40px;
+      padding: 0 16px;
+    }
+
+    .hero,
+    .gallery-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(16px, 4vw, 24px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      margin-bottom: 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 8px;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: clamp(28px, 6vw, 44px);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .gallery-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(2, 6, 23, 0.04);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: #e5e7eb;
+    }
+
+    .gallery-content {
+      padding: 14px;
+    }
+
+    .gallery-content h3 {
+      font-size: 17px;
+    }
+
+    .gallery-content p {
+      margin: 0;
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      .header-inner {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      nav a {
+        width: 100%;
+      }
+
+      main {
+        margin-top: 20px;
+        padding: 0 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="logo">BSP</div>
+        <div>
+          <div class="brand-title">BSP Zlecenia</div>
+          <div class="muted" style="font-size:12px">Galeria zleceń</div>
+        </div>
+      </div>
+
+      <nav aria-label="Nawigacja">
+        <a href="index.html">Strona główna</a>
+        <a href="index.html#form">Zgłoś zlecenie</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Galeria zleceń</h1>
+      <p class="muted">
+        Przykładowe realizacje: zdjęcia, inspekcje, mapowanie i dokumentacja wykonana dronem.
+      </p>
+    </section>
+
+    <section class="gallery-card">
+      <h2>Ostatnie realizacje</h2>
+      <p class="muted">
+        Tutaj możesz dodawać zdjęcia z wykonanych zleceń.
+      </p>
+
+      <div class="gallery-grid">
+        <article class="gallery-item">
+          <img src="assets/gallery1.jpg" alt="Przykładowe zdjęcie ze zlecenia dronowego" />
+          <div class="gallery-content">
+            <h3>Inspekcja terenu</h3>
+            <p class="muted">Dokumentacja fotograficzna wykonana z powietrza.</p>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="assets/gallery2.jpg" alt="Zdjęcie z realizacji usługi dronowej" />
+          <div class="gallery-content">
+            <h3>Zdjęcia z lotu ptaka</h3>
+            <p class="muted">Ujęcia nieruchomości i okolicy z perspektywy drona.</p>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="assets/gallery3.jpg" alt="Przykład dokumentacji wykonanej dronem" />
+          <div class="gallery-content">
+            <h3>Dokumentacja obiektu</h3>
+            <p class="muted">Materiały pomocne przy ocenie stanu i planowaniu prac.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> BSP Zlecenia — Galeria zleceń
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
