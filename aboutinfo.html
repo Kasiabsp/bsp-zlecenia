@@ -5,6 +5,7 @@
   <title>Informacje — BSP Zlecenia</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <script src="data.js"></script>
+
   <style>
     :root {
       --bg: #f4f6fb;
@@ -13,10 +14,27 @@
       --accent: #0b5ed7;
       --radius: 12px;
       --maxw: 800px;
+      --font: system-ui, sans-serif;
     }
 
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; font-family: system-ui, sans-serif; background: var(--bg); }
+
+    /* 🔥 Twój styl tła */
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background-image: url("assets/Zrzut ekranu (17).png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      color: #111827;
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    html { margin: 0; padding: 0; }
 
     .wrap {
       max-width: var(--maxw);
@@ -91,6 +109,7 @@
     }
   </style>
 </head>
+
 <body>
   <main class="wrap" role="main" aria-labelledby="title">
     <header>
