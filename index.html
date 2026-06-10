@@ -981,25 +981,125 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
         if (ev.key === 'Escape' && modal && modal.style.display === 'flex') closeModelModal();
       });
 
-      // Form handling (client-side + optional backend)
+      // Clear button
+      clearBtn?.addEventListener('click', () => {
+        form.reset();
+        resetCalc();
+        showStatus('');
+      });
+
+      // Initialize map
+      initMap();
+
+      // Note: form submit handler is defined below after Google API is loaded
+    });
+  </script>
+
+  <!-- Google API loader -->
+  <script src="https://apis.google.com/js/api.js"></script>
+
+  <!-- Calendar integration and form submit handler (after gapi loaded) -->
+  <script>
+    // Use the same CLIENT_ID you provided
+    const CLIENT_ID = "943084123242-vkbgsjibf0d5mdtuogl6mhdcbnelk9k0.apps.googleusercontent.com";
+    const SCOPES = "https://www.googleapis.com/auth/calendar.events";
+    const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+
+    function initGoogleClient() {
+      if (!gapi.client) return;
+      gapi.client.init({
+        clientId: CLIENT_ID,
+        scope: SCOPES,
+        discoveryDocs: DISCOVERY_DOCS
+      }).catch((e) => {
+        console.warn('gapi init error', e);
+      });
+    }
+
+    // Wait until gapi is available, then init
+    if (window.gapi && gapi.load) {
+      gapi.load('client:auth2', initGoogleClient);
+    } else {
+      // If gapi isn't ready yet, try again shortly
+      const gapiInterval = setInterval(() => {
+        if (window.gapi && gapi.load) {
+          clearInterval(gapiInterval);
+          gapi.load('client:auth2', initGoogleClient);
+        }
+      }, 200);
+    }
+
+    async function addToCalendar(payload) {
+      if (!window.gapi || !gapi.auth2) throw new Error('Google API not loaded');
+
+      // Ensure user is signed in
+      const auth = gapi.auth2.getAuthInstance();
+      if (!auth) throw new Error('Auth instance not available');
+
+      if (!auth.isSignedIn.get()) {
+        await auth.signIn();
+      }
+
+      const startDate = payload.date
+        ? new Date(payload.date + "T10:00:00").toISOString()
+        : new Date().toISOString();
+
+      const endDate = payload.date
+        ? new Date(payload.date + "T11:00:00").toISOString()
+        : new Date(Date.now() + 3600000).toISOString();
+
+      const event = {
+        summary: "Nowe zlecenie BSP",
+        description:
+          "Kontakt: " + payload.contact + "\n" +
+          "Opis: " + payload.description + "\n" +
+          "Lokalizacja: " + payload.location + "\n" +
+          "Budżet: " + payload.budget + " zł\n" +
+          "Cena szacunkowa: " + payload.estimated_price + " zł\n" +
+          "Usługa: " + payload.service_type + "\n" +
+          "Powierzchnia: " + payload.area_ha + " ha\n" +
+          "Dodatki: " + payload.extras_list,
+        start: { dateTime: startDate },
+        end: { dateTime: endDate }
+      };
+
+      return gapi.client.calendar.events.insert({
+        calendarId: "primary",
+        resource: event
+      });
+    }
+
+    // Attach submit handler (after DOM loaded)
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('bspForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const statusBox = document.getElementById('status');
+
+      function showStatusLocal(message, isError = false) {
+        if (!statusBox) return;
+        statusBox.textContent = message;
+        statusBox.style.color = isError ? 'var(--danger)' : 'var(--success)';
+      }
+
       form?.addEventListener('submit', async (ev) => {
         ev.preventDefault();
+
         const contact = document.getElementById('contact').value.trim();
         const description = document.getElementById('description').value.trim();
         const accept = document.getElementById('accept_rules').checked;
 
         if (!contact || !description) {
-          showStatus('Uzupełnij wymagane pola.', true);
+          showStatusLocal('Uzupełnij wymagane pola.', true);
           return;
         }
         if (!accept) {
-          showStatus('Musisz zaakceptować regulamin.', true);
+          showStatusLocal('Musisz zaakceptować regulamin.', true);
           return;
         }
 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Wysyłanie...';
-        showStatus('Wysyłanie...');
+        showStatusLocal('Wysyłanie...');
 
         const payload = {
           contact,
@@ -1029,28 +1129,30 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
           const json = await response.json().catch(() => null);
 
           if (response.ok && json?.status === 'ok') {
-            showStatus('Wysłano poprawnie.');
+            showStatusLocal('Wysłano poprawnie. Dodawanie do kalendarza...');
+
+            try {
+              await addToCalendar(payload);
+              showStatusLocal('Zlecenie wysłane i dodane do kalendarza.');
+            } catch (e) {
+              console.warn('Calendar error', e);
+              showStatusLocal('Wysłano, ale nie udało się dodać do kalendarza.', true);
+            }
+
             form.reset();
-            resetCalc();
+            // resetCalc is defined in the main script; call if available
+            if (typeof resetCalc === 'function') resetCalc();
           } else {
-            showStatus('Błąd wysyłki.', true);
+            showStatusLocal('Błąd wysyłki.', true);
           }
         } catch (error) {
-          showStatus('Błąd połączenia.', true);
+          console.error('Send error', error);
+          showStatusLocal('Błąd połączenia.', true);
         }
 
         submitBtn.disabled = false;
         submitBtn.textContent = 'Wyślij';
       });
-
-      clearBtn?.addEventListener('click', () => {
-        form.reset();
-        resetCalc();
-        showStatus('');
-      });
-
-      // Initialize map
-      initMap();
     });
   </script>
 </body>
