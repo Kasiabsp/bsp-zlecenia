@@ -75,17 +75,21 @@
       min-width: 0;
     }
 
+    /* 🔄 ZMIENIONE LOGO */
     .logo {
       width: 42px;
       height: 42px;
       border-radius: 8px;
-      background: var(--accent);
-      color: #fff;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 15px;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .brand-title {
@@ -147,6 +151,31 @@
       color: var(--muted);
       font-size: 14px;
     }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+
+    <!-- 🔄 NOWE LOGO W HTML -->
+    <div class="logo">
+      <img src="assets/ikonka.png" alt="Logo BSP Zlecenia">
+    </div>
+
+    <div class="brand-title">BSP Zlecenia</div>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="#uslugi">Usługi</a></li>
+      <li><a href="#modele">Modele 3D</a></li>
+      <li><a href="#mapy">Mapy</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+</header>
 
     .btn,
     .cta {
