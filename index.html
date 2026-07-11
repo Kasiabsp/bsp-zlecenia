@@ -513,43 +513,24 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
- <!-- MODAL PODGLĄDU (zamień istniejący modal+skrypt tym blokiem) -->
+ <!-- Wklej ten blok raz pod kartą Pomiar dachu -->
 <style>
-  /* Dodatkowe style dla ładowania i błędu */
-  .preview-loading {
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(0,0,0,0.08);
-    border-top-color: #0b66ff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 12px auto;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .preview-placeholder {
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-width: 320px;
-    min-height: 160px;
-  }
-
-  /* zachowaj istniejące reguły modalu, jeśli już są */
   .preview-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; }
   .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
   .preview-content { position: relative; background: #fff; padding: 16px; border-radius: 8px; max-width: 92%; max-height: 92%; overflow: auto; z-index: 1; box-shadow: 0 8px 30px rgba(2,6,23,0.2); }
   .preview-close { position: absolute; right: 8px; top: 8px; background: transparent; border: none; font-size: 24px; cursor: pointer; }
+  .preview-placeholder { display:flex; align-items:center; justify-content:center; min-width:320px; min-height:160px; }
+  .preview-loading { width:36px; height:36px; border:4px solid rgba(0,0,0,0.08); border-top-color:#0b66ff; border-radius:50%; animation:spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   #preview-error { color:#b91c1c; margin-top:8px; display:none; }
 </style>
 
 <div id="preview-modal" class="preview-modal" aria-hidden="true">
-  <div class="preview-backdrop"></div>
+  <div class="preview-backdrop" data-close="true"></div>
   <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
     <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
     <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
 
-    <!-- placeholder: spinner pokaże się dopóki obraz się nie załaduje -->
     <div id="preview-placeholder" class="preview-placeholder" aria-hidden="true" style="display:none;">
       <div class="preview-loading" aria-hidden="true"></div>
     </div>
@@ -563,6 +544,7 @@
 (function(){
   function attr(el, name){ return el ? el.getAttribute(name) : null; }
 
+  // Otwieranie: preload obrazu, potem pokazanie modalu z gotowym obrazem
   document.addEventListener('click', function(e){
     const btn = e.target.closest('.model-preview');
     if (!btn) return;
@@ -570,10 +552,7 @@
     const src = attr(btn, 'data-src');
     const title = attr(btn, 'data-title') || '';
 
-    if (!src) {
-      console.error('Brak data-src na przycisku Podgląd');
-      return;
-    }
+    if (!src) { console.error('Brak data-src na przycisku Podgląd'); return; }
 
     const modal = document.getElementById('preview-modal');
     const img = document.getElementById('preview-img');
@@ -581,194 +560,79 @@
     const placeholder = document.getElementById('preview-placeholder');
     const err = document.getElementById('preview-error');
 
-    // reset widoku
+    // Reset widoku
     h.textContent = title;
     err.style.display = 'none';
     img.style.display = 'none';
     img.src = '';
     placeholder.style.display = 'flex';
 
-    // pokaż modal (tylko tło i ramka) — użytkownik widzi spinner
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden','false');
-
-    // preload obrazu w tle
+    // Preload w tle
     const pre = new Image();
     pre.onload = function(){
-      // ustawiamy gotowy obraz w modalu i pokazujemy go
+      // dopiero gdy obraz w pełni załadowany, ustawiamy go i pokazujemy modal
       img.src = pre.src;
       placeholder.style.display = 'none';
-      img.style.display = 'block';
       err.style.display = 'none';
+      img.style.display = 'block';
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+      // ustaw fokus na przycisk zamknięcia dla dostępności
+      const closeBtn = document.getElementById('preview-close');
+      if (closeBtn) closeBtn.focus();
     };
     pre.onerror = function(){
-      // błąd ładowania: pokaż komunikat, ukryj spinner i obraz
       placeholder.style.display = 'none';
       img.style.display = 'none';
       err.style.display = 'block';
+      // pokaż modal z komunikatem błędu (użytkownik widzi powód)
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
     };
 
-    // rozpocznij ładowanie (encodeURI obsługuje spacje)
+    // Rozpocznij ładowanie (encodeURI obsługuje spacje)
     pre.src = encodeURI(src);
   });
 
-  // zamknięcie modalu
+  // Funkcja zamykająca modal i czyści wszystko
+  function closePreview(){
+    const modal = document.getElementById('preview-modal');
+    const img = document.getElementById('preview-img');
+    const placeholder = document.getElementById('preview-placeholder');
+    const err = document.getElementById('preview-error');
+
+    // Ukryj modal i wyczyść źródło obrazu
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+
+    // Usuń src i ukryj elementy, żeby nie pozostała pusta przestrzeń
+    img.src = '';
+    img.style.display = 'none';
+    placeholder.style.display = 'none';
+    err.style.display = 'none';
+  }
+
+  // Zamknięcie przyciskiem X
   const closeBtn = document.getElementById('preview-close');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', function(){
-      const modal = document.getElementById('preview-modal');
-      const img = document.getElementById('preview-img');
-      const placeholder = document.getElementById('preview-placeholder');
-      const err = document.getElementById('preview-error');
-      modal.style.display = 'none';
-      modal.setAttribute('aria-hidden','true');
-      img.src = '';
-      img.style.display = 'none';
-      placeholder.style.display = 'none';
-      err.style.display = 'none';
-    });
-  }
+  if (closeBtn) closeBtn.addEventListener('click', closePreview);
 
-  const backdrop = document.querySelector('.preview-backdrop');
-  if (backdrop && closeBtn) backdrop.addEventListener('click', () => closeBtn.click());
-
-  // ESC zamyka modal
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') {
-      const modal = document.getElementById('preview-modal');
-      if (modal && modal.style.display === 'flex') closeBtn.click();
-    }
-  });
-})();
-</script>
-<!-- MODAL PODGLĄDU (zamień istniejący modal+skrypt tym blokiem) -->
-<style>
-  /* Dodatkowe style dla ładowania i błędu */
-  .preview-loading {
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(0,0,0,0.08);
-    border-top-color: #0b66ff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 12px auto;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .preview-placeholder {
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-width: 320px;
-    min-height: 160px;
-  }
-
-  /* zachowaj istniejące reguły modalu, jeśli już są */
-  .preview-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; }
-  .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
-  .preview-content { position: relative; background: #fff; padding: 16px; border-radius: 8px; max-width: 92%; max-height: 92%; overflow: auto; z-index: 1; box-shadow: 0 8px 30px rgba(2,6,23,0.2); }
-  .preview-close { position: absolute; right: 8px; top: 8px; background: transparent; border: none; font-size: 24px; cursor: pointer; }
-  #preview-error { color:#b91c1c; margin-top:8px; display:none; }
-</style>
-
-<div id="preview-modal" class="preview-modal" aria-hidden="true">
-  <div class="preview-backdrop"></div>
-  <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
-    <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
-    <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
-
-    <!-- placeholder: spinner pokaże się dopóki obraz się nie załaduje -->
-    <div id="preview-placeholder" class="preview-placeholder" aria-hidden="true" style="display:none;">
-      <div class="preview-loading" aria-hidden="true"></div>
-    </div>
-
-    <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:none;">
-    <div id="preview-error">Nie udało się załadować obrazu.</div>
-  </div>
-</div>
-
-<script>
-(function(){
-  function attr(el, name){ return el ? el.getAttribute(name) : null; }
-
+  // Zamknięcie kliknięciem w tło
   document.addEventListener('click', function(e){
-    const btn = e.target.closest('.model-preview');
-    if (!btn) return;
-
-    const src = attr(btn, 'data-src');
-    const title = attr(btn, 'data-title') || '';
-
-    if (!src) {
-      console.error('Brak data-src na przycisku Podgląd');
-      return;
+    if (e.target && e.target.getAttribute && e.target.getAttribute('data-close') === 'true') {
+      closePreview();
     }
-
-    const modal = document.getElementById('preview-modal');
-    const img = document.getElementById('preview-img');
-    const h = document.getElementById('preview-title');
-    const placeholder = document.getElementById('preview-placeholder');
-    const err = document.getElementById('preview-error');
-
-    // reset widoku
-    h.textContent = title;
-    err.style.display = 'none';
-    img.style.display = 'none';
-    img.src = '';
-    placeholder.style.display = 'flex';
-
-    // pokaż modal (tylko tło i ramka) — użytkownik widzi spinner
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden','false');
-
-    // preload obrazu w tle
-    const pre = new Image();
-    pre.onload = function(){
-      // ustawiamy gotowy obraz w modalu i pokazujemy go
-      img.src = pre.src;
-      placeholder.style.display = 'none';
-      img.style.display = 'block';
-      err.style.display = 'none';
-    };
-    pre.onerror = function(){
-      // błąd ładowania: pokaż komunikat, ukryj spinner i obraz
-      placeholder.style.display = 'none';
-      img.style.display = 'none';
-      err.style.display = 'block';
-    };
-
-    // rozpocznij ładowanie (encodeURI obsługuje spacje)
-    pre.src = encodeURI(src);
   });
-
-  // zamknięcie modalu
-  const closeBtn = document.getElementById('preview-close');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', function(){
-      const modal = document.getElementById('preview-modal');
-      const img = document.getElementById('preview-img');
-      const placeholder = document.getElementById('preview-placeholder');
-      const err = document.getElementById('preview-error');
-      modal.style.display = 'none';
-      modal.setAttribute('aria-hidden','true');
-      img.src = '';
-      img.style.display = 'none';
-      placeholder.style.display = 'none';
-      err.style.display = 'none';
-    });
-  }
-
-  const backdrop = document.querySelector('.preview-backdrop');
-  if (backdrop && closeBtn) backdrop.addEventListener('click', () => closeBtn.click());
 
   // ESC zamyka modal
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape') {
       const modal = document.getElementById('preview-modal');
-      if (modal && modal.style.display === 'flex') closeBtn.click();
+      if (modal && modal.style.display === 'flex') closePreview();
     }
   });
 })();
 </script>
+
 
 
         <div class="model-card">
