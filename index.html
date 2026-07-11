@@ -540,7 +540,7 @@
       background: #f6f7f9;
     }
 
-    /* przycisk Podgląd */
+    /* przycisk Podgląd (bez działania) */
     .btn.model-preview {
       margin-top: 10px;
       padding: 8px 12px;
@@ -548,7 +548,7 @@
       background: #0b66ff;
       color: #fff;
       border: none;
-      cursor: pointer;
+      cursor: default; /* wskazuje brak działania */
       font-size: 14px;
     }
 
@@ -572,14 +572,12 @@
       role="img"
     />
 
-    <!-- Przycisk Podgląd: data-src wskazuje oryginał, data-title tytuł w modalu
-         (UWAGA: usunięto modal i skrypt — przycisk pozostaje jako zwykły element, bez działania) -->
-    <button class="btn model-preview" type="button"
-            data-src="assets/pomiar dachu.png"
-            data-title="Pomiar dachu">Podgląd</button>
+    <!-- Przycisk Podgląd: pozostawiony wizualnie, ale BEZ data-src i BEZ klasy wywołującej modal -->
+    <button class="btn model-preview" type="button" aria-disabled="true">Podgląd</button>
   </article>
 </div>
 <!-- === KONIEC BLOKU === -->
+
 
 
 
