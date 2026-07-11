@@ -237,15 +237,7 @@
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 10px;
       align-items: end;
-      margin-top: 18px;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-    }
-
-    .procedures-gate .form-row {
-      margin-bottom: 0;
+      margin-top: 12px;
     }
 
     .access-status {
@@ -376,7 +368,7 @@
 
       .container { margin-top: 20px; }
 
-@@ -307,163 +395,171 @@
+@@ -307,126 +387,132 @@
   <header>
     <div class="brand">
       <div class="logo">BSP</div>
@@ -409,13 +401,13 @@
         Wypełnij checklistę przed, w trakcie i po zakończeniu operacji. Formularz pomaga zachować spójny standard bezpieczeństwa oraz kompletną dokumentację lotu.
       </p>
 
-      <form class="procedures-gate" id="proceduresGate">
+      <div class="procedures-gate" id="proceduresGate">
         <div class="form-row">
-          <label for="proceduresPassword">Hasło pilota</label>
-          <input id="proceduresPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="Podaj hasło pilota" />
+          <label for="proceduresPassword">Hasło pilota </label>
+          <input id="proceduresPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Podaj hasło pilota" />
         </div>
-        <button class="btn" id="unlockProcedures" type="submit">Otwórz</button>
-      </form>
+        <button class="btn" id="unlockProcedures" type="button">Otwórz</button>
+      </div>
       <div id="proceduresAccessStatus" class="access-status muted" role="status" aria-live="polite"></div>
 
       <form class="procedures-form" id="proceduresForm" action="https://formspree.io/f/mqevryww" method="POST">
@@ -509,42 +501,3 @@
 
       function setProceduresStatus(message, isError = false) {
         if (!proceduresAccessStatus) return;
-        proceduresAccessStatus.textContent = message;
-        proceduresAccessStatus.style.color = isError ? 'var(--danger)' : 'var(--success)';
-      }
-
-      function fillCurrentProcedureTime() {
-        if (!proceduresTime || proceduresTime.value) return;
-        const now = new Date();
-        const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-        proceduresTime.value = local.toISOString().slice(0, 16);
-      }
-
-      function unlockProceduresForm() {
-        if (!proceduresPassword || !proceduresForm || !proceduresGate) return;
-
-        if (proceduresPassword.value.trim() !== '5862') {
-          setProceduresStatus('Nieprawidłowe hasło. Spróbuj ponownie.', true);
-          proceduresPassword.focus();
-          return;
-        }
-
-        proceduresForm.classList.add('is-visible');
-        proceduresGate.style.display = 'none';
-        fillCurrentProcedureTime();
-        setProceduresStatus('Dostęp odblokowany. Uzupełnij checklistę i wyślij formularz.');
-      }
-
-      proceduresGate?.addEventListener('submit', (event) => {
-        event.preventDefault();
-        unlockProceduresForm();
-      });
-
-      unlockProcedures?.addEventListener('click', (event) => {
-        event.preventDefault();
-        unlockProceduresForm();
-      });
-    });
-  </script>
-</body>
-</html>
