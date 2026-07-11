@@ -513,73 +513,201 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
-     <div class="gallery-grid">
-  <article class="gallery-item model-card">
-    <img
-      class="gallery-thumb thumb"
-      src="assets/pomiar dachu.png"
-      alt="Pomiar Fotowoltaiki"
-      width="241"
-      height="220"
-      loading="lazy"
-      role="img"
-    />
-    <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png" data-title="Pomiar dachu">Podgląd</button>
-  </article>
-</div>
+    <!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Galeria — Pomiar dachu</title>
+  <style>
+    /* --- Ogólne --- */
+    :root { --card-bg:#fff; --accent:#0b66ff; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:20px; background:#f5f7fb; color:#111; }
+    .container { max-width:1100px; margin:0 auto; }
 
-<style>
-/* dopasowanie do reszty stylu */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-  align-items: start;
-}
+    /* --- Galeria / karta --- */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+    .gallery-item,
+    .model-card {
+      padding: 12px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(16,24,40,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .gallery-item h4 { margin:0 0 8px 0; font-size:16px; }
 
-.gallery-item,
-.model-card {
-  padding: 12px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 1px 6px rgba(16,24,40,0.06);
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+    /* miniaturka: dokładne wymiary i crop center */
+    .gallery-thumb,
+    .thumb {
+      width: 241px;
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 4px;
+      display: block;
+      background: #f6f7f9;
+      pointer-events: none; /* miniaturka nie reaguje na kliknięcie */
+    }
 
-/* miniaturka: dokładne wymiary, crop center, spójne z resztą */
-.gallery-thumb,
-.thumb {
-  width: 241px;
-  height: 220px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 4px;
-  display: block;
-  background: #f6f7f9;
-  pointer-events: none; /* miniaturka nie reaguje na kliknięcie */
-}
+    /* przycisk Podgląd */
+    .btn.model-preview {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
 
-/* przycisk Podgląd dopasowany do stylu */
-.btn.model-preview {
-  margin-top: 10px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  background: #0b66ff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
+    /* MODAL */
+    .preview-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none; /* JS ustawia display:flex */
+      align-items: center;
+      justify-content: center;
+    }
+    .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
+    .preview-content {
+      position: relative;
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      max-width: 92%;
+      max-height: 92%;
+      overflow: auto;
+      z-index: 1;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.2);
+    }
+    .preview-close {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
 
-/* responsywność: zmniejsz miniaturkę na małych ekranach */
-@media (max-width: 520px) {
-  .gallery-thumb,
-  .thumb { width: 200px; height: 182px; }
-}
-</style>
+    /* responsywność */
+    @media (max-width:520px) {
+      .gallery-thumb, .thumb { width: 200px; height: 182px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Galeria</h2>
+    <p style="color:var(--muted); margin-top:4px; margin-bottom:12px;">Kliknij Podgląd, aby zobaczyć oryginalne zdjęcie.</p>
+
+    <div class="gallery-grid">
+      <!-- Przykładowa karta (inne elementy galerii) -->
+      <article class="gallery-item model-card">
+        <h4>Budowa — przykładowe</h4>
+        <img class="thumb" src="assets/budowa.png" alt="Budowa" width="241" height="220" loading="lazy" />
+        <button class="btn model-preview" type="button" data-src="assets/budowa.png" data-title="Budowa">Podgląd</button>
+      </article>
+
+      <!-- KARTA POMIAR DACHU (to jest ta, którą poprawialiśmy) -->
+      <article class="gallery-item model-card">
+        <h4>Pomiar dachu</h4>
+        <img
+          class="gallery-thumb thumb"
+          src="assets/pomiar dachu.png"
+          alt="Pomiar Fotowoltaiki"
+          width="241"
+          height="220"
+          loading="lazy"
+          role="img"
+        />
+        <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png" data-title="Pomiar dachu">Podgląd</button>
+      </article>
+
+      <!-- Kolejna przykładowa karta -->
+      <article class="gallery-item model-card">
+        <h4>Obiekt hydrotechniczny</h4>
+        <img class="thumb" src="assets/hydrotechniczny.png" alt="Hydrotechnika" width="241" height="220" loading="lazy" />
+        <button class="btn model-preview" type="button" data-src="assets/hydrotechniczny.png" data-title="Hydrotechnika">Podgląd</button>
+      </article>
+    </div>
+  </div>
+
+  <!-- MODAL PODGLĄDU (wklejony raz) -->
+  <div id="preview-modal" class="preview-modal" aria-hidden="true">
+    <div class="preview-backdrop"></div>
+    <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+      <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
+      <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
+      <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:block;">
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Obsługa przycisku Podgląd — ładuje oryginał dopiero po kliknięciu
+      function attr(el, name){ return el ? el.getAttribute(name) : null; }
+
+      document.addEventListener('click', function(e){
+        const btn = e.target.closest('.model-preview');
+        if (!btn) return;
+
+        const src = attr(btn, 'data-src');
+        const title = attr(btn, 'data-title') || '';
+
+        if (!src) {
+          console.error('Brak data-src na przycisku Podgląd');
+          return;
+        }
+
+        const modal = document.getElementById('preview-modal');
+        const img = document.getElementById('preview-img');
+        const h = document.getElementById('preview-title');
+
+        h.textContent = title;
+        img.alt = title;
+        img.src = ''; // wyczyść poprzedni
+        img.src = encodeURI(src); // obsługuje spacje w nazwie pliku
+
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden','false');
+      });
+
+      // Zamknięcie modalu
+      const closeBtn = document.getElementById('preview-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function(){
+          const modal = document.getElementById('preview-modal');
+          const img = document.getElementById('preview-img');
+          modal.style.display = 'none';
+          modal.setAttribute('aria-hidden','true');
+          img.src = '';
+        });
+      }
+      const backdrop = document.querySelector('.preview-backdrop');
+      if (backdrop && closeBtn) backdrop.addEventListener('click', () => closeBtn.click());
+
+      // ESC zamyka modal
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('preview-modal');
+          if (modal && modal.style.display === 'flex') closeBtn.click();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
 
 
         <div class="model-card">
