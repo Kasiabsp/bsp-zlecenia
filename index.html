@@ -502,92 +502,99 @@
       <p class="muted">Dokładne pomiary, dokumentacja techniczna i modele 3D dla budownictwa i geodezji.</p>
     </section>
 
-    <section class="card" id="models-3d">
-      <h2>Modele 3D oraz pomiary</h2>
-      <p class="muted">Przykładowe modele fotogrametryczne i pomiary wykonane podczas inspekcji.</p>
+   <section class="card" id="models-3d">
+  <h2>Modele 3D oraz pomiary</h2>
+  <p class="muted">Przykładowe modele fotogrametryczne i pomiary wykonane podczas inspekcji.</p>
 
-      <div class="models-grid">
-        <div class="model-card">
-          <h4>Budowa — 30.05.2026</h4>
-          <model-viewer src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" camera-controls auto-rotate></model-viewer>
-          <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
-        </div>
-        
-   <!-- === ZASTĄP TĄ SEKCJĘ W MIEJSCU GALERII === -->
-<div class="gallery-single-container">
-  <style>
-    .gallery-single-container { max-width: 320px; margin: 0; }
-    .model-card {
-      padding: 12px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 1px 6px rgba(16,24,40,0.06);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .model-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #0b1726; }
+  <div class="models-grid">
+    <!-- Model 3D -->
+    <div class="model-card">
+      <h4>Budowa — 30.05.2026</h4>
+      <model-viewer src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" camera-controls auto-rotate></model-viewer>
+      <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb">Podgląd</button>
+    </div>
 
-    .thumb {
-      width: 241px;
-      height: 220px;
-      object-fit: cover;
-      border-radius: 4px;
-      display: block;
-      background: #f6f7f9;
-    }
+    <!-- Pomiar dachu -->
+    <div class="model-card">
+      <h4>Pomiar dachu</h4>
+      <img class="thumb" src="assets/pomiar dachu.png" alt="Pomiar dachu" width="241" height="220" loading="lazy" />
+      <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png">Podgląd</button>
+    </div>
 
-    .btn.model-preview {
-      margin-top: 10px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      background: #0b66ff;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    /* uproszczony modal — tylko obraz + X */
-    .preview-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 10000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.8);
-    }
-    .preview-modal img {
-      max-width: 95%;
-      max-height: 95%;
-      border-radius: 6px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    }
-    .preview-close {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 36px;
-      color: #fff;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-  </style>
-
-  <article class="model-card">
-    <h4>Pomiar dachu</h4>
-    <img class="thumb" src="assets/pomiar dachu.png" alt="Pomiar dachu" width="241" height="220" loading="lazy" />
-    <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png">Podgląd</button>
-  </article>
-</div>
+    <!-- Obiekt hydrotechniczny -->
+    <div class="model-card">
+      <h4>Obiekt hydrotechniczny</h4>
+      <model-viewer src="assets/model.glb" camera-controls auto-rotate></model-viewer>
+      <button class="btn model-preview" type="button" data-src="assets/model.glb">Podgląd</button>
+    </div>
+  </div>
+</section>
 
 <!-- MODAL -->
 <div id="preview-modal" class="preview-modal">
   <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
   <img id="preview-img" src="" alt="">
 </div>
+
+<style>
+  .models-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .model-card {
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(16,24,40,0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .model-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #0b1726; }
+  .thumb {
+    width: 241px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #f6f7f9;
+  }
+  .btn.model-preview {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #0b66ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8);
+  }
+  .preview-modal img {
+    max-width: 95%;
+    max-height: 95%;
+    border-radius: 6px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  .preview-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 36px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+</style>
 
 <script>
   (function(){
@@ -609,29 +616,16 @@
       img.src = '';
     });
 
-    // klik poza obrazem też zamyka
     document.getElementById('preview-modal').addEventListener('click', function(e){
       if (e.target === this) closeBtn.click();
     });
 
-    // ESC zamyka
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape') closeBtn.click();
     });
   })();
 </script>
-<!-- === KONIEC BLOKU === -->
 
-
-
-
-        <div class="model-card">
-          <h4>Obiekt hydrotechniczny</h4>
-          <model-viewer src="assets/model.glb" camera-controls auto-rotate></model-viewer>
-          <button class="btn model-preview" type="button" data-src="assets/model.glb" data-title="Obiekt hydrotechniczny">Podgląd</button>
-        </div>
-      </div>
-    </section>
 
     <section class="card" id="how-we-work">
       <h2>Jak działamy</h2>
