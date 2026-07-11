@@ -513,7 +513,7 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
-      <div class="gallery-grid">
+     <div class="gallery-grid">
   <article class="gallery-item model-card">
     <img
       class="gallery-thumb thumb"
@@ -527,6 +527,59 @@
     <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png" data-title="Pomiar dachu">Podgląd</button>
   </article>
 </div>
+
+<style>
+/* dopasowanie do reszty stylu */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.gallery-item,
+.model-card {
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(16,24,40,0.06);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* miniaturka: dokładne wymiary, crop center, spójne z resztą */
+.gallery-thumb,
+.thumb {
+  width: 241px;
+  height: 220px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 4px;
+  display: block;
+  background: #f6f7f9;
+  pointer-events: none; /* miniaturka nie reaguje na kliknięcie */
+}
+
+/* przycisk Podgląd dopasowany do stylu */
+.btn.model-preview {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #0b66ff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* responsywność: zmniejsz miniaturkę na małych ekranach */
+@media (max-width: 520px) {
+  .gallery-thumb,
+  .thumb { width: 200px; height: 182px; }
+}
+</style>
 
 
         <div class="model-card">
