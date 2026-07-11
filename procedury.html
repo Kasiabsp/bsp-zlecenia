@@ -2,20 +2,25 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>Procedury — BSP Zlecenia</title>
+  <title>Procedury lotu BSP — BSP Zlecenia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
       --bg: #f5f7fa;
       --card: #ffffff;
+      --card-soft: #f8fafc;
       --border: #d9dce2;
+      --border-strong: #cbd5e1;
+      --text: #111827;
       --muted: #6b7280;
       --accent: #0f62fe;
       --accent-dark: #084cdf;
+      --accent-soft: #eaf1ff;
       --danger: #b91c1c;
       --success: #047857;
-      --radius: 10px;
-      --shadow: 0 12px 30px rgba(2, 6, 23, 0.06);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 18px 45px rgba(2, 6, 23, 0.09);
       --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
@@ -29,12 +34,14 @@
     body {
       margin: 0;
       font-family: var(--font);
-      background-image: url("assets/Zrzut ekranu (17).png");
+      background-image:
+        linear-gradient(120deg, rgba(15, 23, 42, 0.72), rgba(15, 98, 254, 0.38)),
+        url("assets/Zrzut ekranu (17).png");
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center center;
       background-attachment: fixed;
-      color: #111827;
+      color: var(--text);
       overflow-x: hidden;
       line-height: 1.5;
       -webkit-text-size-adjust: 100%;
@@ -46,7 +53,7 @@
       left: 0;
       right: 0;
       min-height: 64px;
-      background: rgba(255,255,255,0.95);
+      background: rgba(255, 255, 255, 0.95);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -54,7 +61,7 @@
       gap: 16px;
       padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
       z-index: 1000;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
     }
 
     .brand {
@@ -68,19 +75,21 @@
     .logo {
       width: 42px;
       height: 42px;
-      border-radius: 8px;
-      background: var(--accent);
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #063fb6);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 15px;
+      box-shadow: 0 8px 18px rgba(15, 98, 254, 0.22);
     }
 
     .brand-title {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 15px;
+      letter-spacing: -0.01em;
     }
 
     .muted {
@@ -102,9 +111,10 @@
 
     nav a {
       text-decoration: none;
-      color: #111827;
-      font-weight: 600;
+      color: var(--text);
+      font-weight: 700;
       font-size: 14px;
+      transition: color 0.2s ease;
     }
 
     nav a:hover,
@@ -117,52 +127,79 @@
       background: var(--accent);
       color: #fff;
       border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 14px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: background-color 0.2s ease, opacity 0.2s ease;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     }
 
     .cta:hover,
-    .btn:hover { background: var(--accent-dark); }
+    .btn:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 10px 20px rgba(15, 98, 254, 0.18);
+      transform: translateY(-1px);
+    }
 
     .btn.secondary {
       background: #e5e7eb;
-      color: #111827;
+      color: var(--text);
     }
 
     .btn.secondary:hover { background: #d1d5db; }
 
     .container {
-      width: min(100%, 900px);
-      margin: 90px auto 40px;
-      padding: 0 clamp(12px, 4vw, 16px);
+      width: min(100%, 980px);
+      margin: 96px auto 40px;
+      padding: 0 clamp(12px, 4vw, 18px);
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       border-radius: var(--radius);
-      padding: clamp(14px, 3vw, 18px);
+      padding: clamp(20px, 4vw, 34px);
       margin-bottom: 20px;
       box-shadow: var(--shadow);
     }
 
+    .page-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
     h1, h2, h3 {
       margin: 0 0 8px;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: -0.02em;
     }
 
     h1 {
-      font-size: clamp(26px, 5vw, 42px);
-      line-height: 1.1;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.08;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 16px;
     }
 
     .form-row {
@@ -174,95 +211,142 @@
 
     .form-row label {
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 800;
     }
 
     .form-row input {
       width: 100%;
       min-width: 0;
-      padding: 10px 12px;
+      padding: 12px 13px;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       font-size: 16px;
       background: #fff;
       font: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-row input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.12);
+      outline: none;
     }
 
     .procedures-gate {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
+      gap: 12px;
       align-items: end;
-      margin-top: 12px;
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-soft);
+    }
+
+    .access-status {
+      min-height: 22px;
+      margin-top: 10px;
+      font-weight: 700;
     }
 
     .procedures-form {
       display: none;
       flex-direction: column;
-      gap: 16px;
-      margin-top: 16px;
+      gap: 18px;
+      margin-top: 20px;
     }
 
     .procedures-form.is-visible { display: flex; }
 
-    .procedure-group {
+    .operator-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: #f9fafb;
+      border-radius: var(--radius);
+      background: var(--card-soft);
+    }
+
+    .operator-grid .form-row { margin-bottom: 0; }
+
+    .procedure-group {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 14px 16px 8px;
+      background: #fff;
     }
 
     .procedure-group legend {
-      padding: 0 6px;
-      font-weight: 700;
+      padding: 0 8px;
+      color: #0f172a;
+      font-weight: 900;
+      font-size: 17px;
     }
 
     .procedure-item {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
+      gap: 14px;
       align-items: center;
-      padding: 10px 0;
+      padding: 13px 0;
       border-top: 1px solid #e5e7eb;
     }
 
     .procedure-item:first-of-type { border-top: 0; }
 
+    .procedure-text {
+      font-weight: 650;
+    }
+
     .procedure-choice {
       display: inline-flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: flex-end;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 800;
     }
 
     .procedure-choice label {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       white-space: nowrap;
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--card-soft);
+      cursor: pointer;
     }
+
+    .procedure-choice input { accent-color: var(--accent); }
 
     .procedure-note {
       display: block;
       color: var(--muted);
       font-size: 13px;
-      margin-top: 3px;
+      font-weight: 500;
+      margin-top: 4px;
     }
 
     .form-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     footer {
       text-align: center;
       margin-top: 20px;
       font-size: 13px;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    @media (max-width: 860px) {
+      .operator-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 760px) {
@@ -288,22 +372,7 @@
 
       .container { margin-top: 20px; }
 
-      .procedures-gate,
-      .procedure-item,
-      .form-buttons {
-        grid-template-columns: 1fr;
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .btn,
-      .cta { width: 100%; }
-
-      .procedure-choice { justify-content: flex-start; }
-    }
-  </style>
-</head>
-<body>
+@@ -307,163 +391,169 @@
   <header>
     <div class="brand">
       <div class="logo">BSP</div>
@@ -329,82 +398,88 @@
   </header>
 
   <main class="container">
-    <section class="card">
-      <h1>Procedury lotu</h1>
-      
+    <section class="card" aria-labelledby="proceduresTitle">
+      <div class="page-kicker">Panel pilota BSP</div>
+      <h1 id="proceduresTitle">Profesjonalna checklista procedur lotu</h1>
+      <p class="lead">
+        Wypełnij checklistę przed, w trakcie i po zakończeniu operacji. Formularz pomaga zachować spójny standard bezpieczeństwa oraz kompletną dokumentację lotu.
+      </p>
+
       <div class="procedures-gate" id="proceduresGate">
         <div class="form-row">
-          <label for="proceduresPassword">Hasło pilota </label>
+          <label for="proceduresPassword">Hasło pilota</label>
           <input id="proceduresPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Podaj hasło pilota" />
         </div>
-        <button class="btn" id="unlockProcedures" type="button">Otwórz</button>
+        <button class="btn" id="unlockProcedures" type="button">Otwórz checklistę</button>
       </div>
-      <div id="proceduresAccessStatus" class="muted" role="status" aria-live="polite"></div>
+      <div id="proceduresAccessStatus" class="access-status muted" role="status" aria-live="polite"></div>
 
       <form class="procedures-form" id="proceduresForm" action="https://formspree.io/f/mqevryww" method="POST">
         <input type="hidden" name="formularz" value="Procedury lotu BSP" />
 
-        <div class="form-row">
-          <label for="proceduresOperator">Imię i nazwisko *</label>
-          <input id="proceduresOperator" name="imie_i_nazwisko" required />
-        </div>
+        <div class="operator-grid" aria-label="Dane operacyjne">
+          <div class="form-row">
+            <label for="proceduresOperator">Imię i nazwisko *</label>
+            <input id="proceduresOperator" name="imie_i_nazwisko" autocomplete="name" required />
+          </div>
 
-        <div class="form-row">
-          <label for="proceduresTime">Obecny czas *</label>
-          <input id="proceduresTime" name="obecny_czas" type="datetime-local" required />
-        </div>
+          <div class="form-row">
+            <label for="proceduresTime">Data i czas *</label>
+            <input id="proceduresTime" name="data_i_czas" type="datetime-local" required />
+          </div>
 
-        <div class="form-row">
-          <label for="proceduresPlace">Miejsce *</label>
-          <input id="proceduresPlace" name="miejsce" required />
+          <div class="form-row">
+            <label for="proceduresPlace">Miejsce operacji *</label>
+            <input id="proceduresPlace" name="miejsce_operacji" required />
+          </div>
         </div>
 
         <fieldset class="procedure-group">
-          <legend>Procedury startowe</legend>
-          <div class="procedure-item"><span>Sprawdzono strefę lotu.</span><span class="procedure-choice"><label><input type="radio" name="start_sprawdzono_strefe_lotu" value="Tak" required /> Tak</label><label><input type="radio" name="start_sprawdzono_strefe_lotu" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Naładowano baterie.</span><span class="procedure-choice"><label><input type="radio" name="start_naladowano_baterie" value="Tak" required /> Tak</label><label><input type="radio" name="start_naladowano_baterie" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Sprawdzono śmigła i ramiona.</span><span class="procedure-choice"><label><input type="radio" name="start_smigla_ramiona" value="Tak" required /> Tak</label><label><input type="radio" name="start_smigla_ramiona" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Sprawdzono kamerę i gimbal.</span><span class="procedure-choice"><label><input type="radio" name="start_kamera_gimbal" value="Tak" required /> Tak</label><label><input type="radio" name="start_kamera_gimbal" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Sprawdzono sygnał GPS (liczba satelit).</span><span class="procedure-choice"><label><input type="radio" name="start_gps_satelity" value="Tak" required /> Tak</label><label><input type="radio" name="start_gps_satelity" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>IMU OK lub wykonano kalibrację.</span><span class="procedure-choice"><label><input type="radio" name="start_imu" value="Tak" required /> Tak</label><label><input type="radio" name="start_imu" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Kompas OK lub wykonano kalibrację.</span><span class="procedure-choice"><label><input type="radio" name="start_kompas" value="Tak" required /> Tak</label><label><input type="radio" name="start_kompas" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Miejsce startu wolne od metalu i zakłóceń.</span><span class="procedure-choice"><label><input type="radio" name="start_miejsce_wolne" value="Tak" required /> Tak</label><label><input type="radio" name="start_miejsce_wolne" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Ustawiono punkt RTH i wysokość powrotu.</span><span class="procedure-choice"><label><input type="radio" name="start_rth" value="Tak" required /> Tak</label><label><input type="radio" name="start_rth" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Zgłoszono lot.</span>.</span><span class="procedure-choice"><label><input type="radio" name="start_sprawdzono_strefe_lotu" value="Tak" required /> Tak</label><label><input type="radio" name="start_sprawdzono_strefe_lotu" value="Nie" /> Nie</label></span></div>
+          <legend>1. Procedury przedstartowe</legend>
+          <div class="procedure-item"><span class="procedure-text">Sprawdzono strefę lotu, ograniczenia przestrzeni powietrznej oraz warunki pogodowe.</span><span class="procedure-choice"><label><input type="radio" name="start_strefa_lotu" value="Tak" required /> Tak</label><label><input type="radio" name="start_strefa_lotu" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Zweryfikowano stan i poziom naładowania akumulatorów.</span><span class="procedure-choice"><label><input type="radio" name="start_akumulatory" value="Tak" required /> Tak</label><label><input type="radio" name="start_akumulatory" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Skontrolowano śmigła, ramiona, obudowę oraz mocowania.</span><span class="procedure-choice"><label><input type="radio" name="start_smigla_ramiona" value="Tak" required /> Tak</label><label><input type="radio" name="start_smigla_ramiona" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Sprawdzono kamerę, gimbal i czystość obiektywu.</span><span class="procedure-choice"><label><input type="radio" name="start_kamera_gimbal" value="Tak" required /> Tak</label><label><input type="radio" name="start_kamera_gimbal" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Zweryfikowano sygnał GPS oraz liczbę satelitów.</span><span class="procedure-choice"><label><input type="radio" name="start_gps_satelity" value="Tak" required /> Tak</label><label><input type="radio" name="start_gps_satelity" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Status IMU jest prawidłowy lub wykonano wymaganą kalibrację.</span><span class="procedure-choice"><label><input type="radio" name="start_imu" value="Tak" required /> Tak</label><label><input type="radio" name="start_imu" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Status kompasu jest prawidłowy lub wykonano wymaganą kalibrację.</span><span class="procedure-choice"><label><input type="radio" name="start_kompas" value="Tak" required /> Tak</label><label><input type="radio" name="start_kompas" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Miejsce startu jest wolne od metalu, przeszkód i źródeł zakłóceń.</span><span class="procedure-choice"><label><input type="radio" name="start_miejsce_startu" value="Tak" required /> Tak</label><label><input type="radio" name="start_miejsce_startu" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Ustawiono punkt RTH oraz bezpieczną wysokość powrotu.</span><span class="procedure-choice"><label><input type="radio" name="start_rth" value="Tak" required /> Tak</label><label><input type="radio" name="start_rth" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Lot został zgłoszony zgodnie z wymaganiami operacyjnymi.</span><span class="procedure-choice"><label><input type="radio" name="start_zgloszenie_lotu" value="Tak" required /> Tak</label><label><input type="radio" name="start_zgloszenie_lotu" value="Nie" /> Nie</label></span></div>
         </fieldset>
 
         <fieldset class="procedure-group">
-          <legend>W trakcie lotu</legend>
-          <div class="procedure-item"><span>Monitoruję poziom baterii.</span><span class="procedure-choice"><label><input type="radio" name="lot_bateria" value="Tak" required /> Tak</label><label><input type="radio" name="lot_bateria" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Sprawdzam siłę sygnału RC i GPS.</span><span class="procedure-choice"><label><input type="radio" name="lot_sygnal_rc_gps" value="Tak" required /> Tak</label><label><input type="radio" name="lot_sygnal_rc_gps" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Obserwuję stabilność drona (hover).</span><span class="procedure-choice"><label><input type="radio" name="lot_stabilnosc" value="Tak" required /> Tak</label><label><input type="radio" name="lot_stabilnosc" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Kontroluję obraz z kamery.</span><span class="procedure-choice"><label><input type="radio" name="lot_obraz_kamery" value="Tak" required /> Tak</label><label><input type="radio" name="lot_obraz_kamery" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Notuję nietypowe komunikaty w aplikacji.</span><span class="procedure-choice"><label><input type="radio" name="lot_komunikaty" value="Tak" required /> Tak</label><label><input type="radio" name="lot_komunikaty" value="Nie" /> Nie</label></span></div>
+          <legend>2. Kontrola w trakcie lotu</legend>
+          <div class="procedure-item"><span class="procedure-text">Monitorowano poziom akumulatora i przewidywany czas powrotu.</span><span class="procedure-choice"><label><input type="radio" name="lot_bateria" value="Tak" required /> Tak</label><label><input type="radio" name="lot_bateria" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Kontrolowano jakość sygnału RC, GPS oraz transmisji obrazu.</span><span class="procedure-choice"><label><input type="radio" name="lot_sygnal_rc_gps" value="Tak" required /> Tak</label><label><input type="radio" name="lot_sygnal_rc_gps" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Obserwowano stabilność drona w zawisie i podczas manewrów.</span><span class="procedure-choice"><label><input type="radio" name="lot_stabilnosc" value="Tak" required /> Tak</label><label><input type="radio" name="lot_stabilnosc" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Weryfikowano kadr, ostrość i poprawność pracy kamery.</span><span class="procedure-choice"><label><input type="radio" name="lot_obraz_kamery" value="Tak" required /> Tak</label><label><input type="radio" name="lot_obraz_kamery" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Odnotowano nietypowe komunikaty, ostrzeżenia lub anomalie w aplikacji.</span><span class="procedure-choice"><label><input type="radio" name="lot_komunikaty" value="Tak" required /> Tak</label><label><input type="radio" name="lot_komunikaty" value="Nie" /> Nie</label></span></div>
         </fieldset>
 
         <fieldset class="procedure-group">
-          <legend>Proste procedury awaryjne</legend>
-          <div class="procedure-item"><span>Yaw drift / niestabilność:<span class="procedure-note">Zawis; obniż wysokość; przełącz na tryb stabilny; ląduj jeśli problem trwa.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_yaw_drift" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_yaw_drift" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
-          <div class="procedure-item"><span>Komunikat „Compass interference” / kalibracja wymagana:<span class="procedure-note">Zawis; przemieść się 10–20 m; jeśli nadal, bezpieczne lądowanie i kalibracja.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_compass_interference" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_compass_interference" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
-          <div class="procedure-item"><span>Dryf/„toilet bowl effect”:<span class="procedure-note">Natychmiast lądowanie; po lądowaniu wykonaj IMU, potem kompas.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_toilet_bowl" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_toilet_bowl" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
-          <div class="procedure-item"><span>Utrata GPS:<span class="procedure-note">Przejdź do trybu ATTI/manual; przygotuj natychmiastowe lądowanie.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_utrata_gps" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_utrata_gps" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
-          <div class="procedure-item"><span>Spadek sygnału RC:<span class="procedure-note">Zmniejsz odległość; ustaw drona w zasięgu; jeśli brak poprawy — RTH lub lądowanie.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_spadek_rc" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_spadek_rc" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
-          <div class="procedure-item"><span>Błąd gimbala/kamery:<span class="procedure-note">Zawis; ląduj i sprawdź sprzęt; nie kontynuuj misji.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_gimbal_kamera" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_gimbal_kamera" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
+          <legend>3. Procedury awaryjne</legend>
+          <div class="procedure-item"><span class="procedure-text">Yaw drift / niestabilność<span class="procedure-note">Zatrzymaj lot w zawisie, obniż wysokość, przełącz na tryb stabilny i ląduj, jeśli problem nie ustępuje.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_yaw_drift" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_yaw_drift" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Komunikat „Compass interference” lub wymagana kalibracja<span class="procedure-note">Zatrzymaj lot, oddal się od źródeł zakłóceń o 10–20 m; przy braku poprawy bezpiecznie ląduj i wykonaj kalibrację.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_compass_interference" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_compass_interference" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Dryf / „toilet bowl effect”<span class="procedure-note">Wykonaj natychmiastowe lądowanie; po lądowaniu sprawdź IMU i kompas.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_toilet_bowl" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_toilet_bowl" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Utrata GPS<span class="procedure-note">Przejdź do trybu ATTI/manual, utrzymuj kontrolę wzrokową i przygotuj bezpieczne lądowanie.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_utrata_gps" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_utrata_gps" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Spadek sygnału RC<span class="procedure-note">Zmniejsz odległość, ustaw anteny prawidłowo; przy braku poprawy użyj RTH lub bezpiecznie ląduj.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_spadek_rc" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_spadek_rc" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Błąd gimbala lub kamery<span class="procedure-note">Zatrzymaj misję, wyląduj i sprawdź sprzęt przed wznowieniem operacji.</span></span><span class="procedure-choice"><label><input type="radio" name="awaryjne_gimbal_kamera" value="Użyto" required /> Użyto</label><label><input type="radio" name="awaryjne_gimbal_kamera" value="Nie było potrzeby" /> Nie było potrzeby</label></span></div>
         </fieldset>
 
         <fieldset class="procedure-group">
-          <legend>Po locie</legend>
-          <div class="procedure-item"><span>Zapisano czas i opis problemów (jeśli były).</span><span class="procedure-choice"><label><input type="radio" name="po_locie_opis_problemow" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_opis_problemow" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Pobrano logi lotu.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_logi" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_logi" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Wykonano diagnostykę IMU/kompasu (jeśli wystąpiły objawy).</span><span class="procedure-choice"><label><input type="radio" name="po_locie_diagnostyka" value="Wykonano" required /> Wykonano</label><label><input type="radio" name="po_locie_diagnostyka" value="Nie było potrzebne" /> Nie było potrzebne</label></span></div>
-          <div class="procedure-item"><span>Jeśli problem nie rozwiązany → zgłoszono serwisowi.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_serwis" value="Wykonano" required /> Wykonano</label><label><input type="radio" name="po_locie_serwis" value="Nie było potrzebne" /> Nie było potrzebne</label></span></div>
-          <div class="procedure-item"><span>Uzupełniono checklistę i archiwizowano.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_checklista" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_checklista" value="Nie" /> Nie</label></span></div>
-          <div class="procedure-item"><span>Zakończono zgłoszenie lotu.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_checklista" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_checklista" value="Nie" /> Nie</label></span></div>
-       </fieldset>
+          <legend>4. Procedury po locie</legend>
+          <div class="procedure-item"><span class="procedure-text">Zapisano czas zakończenia lotu oraz opis ewentualnych problemów.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_opis_problemow" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_opis_problemow" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Pobrano lub zabezpieczono logi lotu.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_logi" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_logi" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Wykonano diagnostykę IMU/kompasu, jeśli wystąpiły objawy nieprawidłowej pracy.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_diagnostyka" value="Wykonano" required /> Wykonano</label><label><input type="radio" name="po_locie_diagnostyka" value="Nie było potrzebne" /> Nie było potrzebne</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Nierozwiązane problemy techniczne zgłoszono do serwisu.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_serwis" value="Wykonano" required /> Wykonano</label><label><input type="radio" name="po_locie_serwis" value="Nie było potrzebne" /> Nie było potrzebne</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Checklistę uzupełniono i zarchiwizowano.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_checklista" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_checklista" value="Nie" /> Nie</label></span></div>
+          <div class="procedure-item"><span class="procedure-text">Zakończono zgłoszenie lotu w systemie.</span><span class="procedure-choice"><label><input type="radio" name="po_locie_zgloszenie" value="Tak" required /> Tak</label><label><input type="radio" name="po_locie_zgloszenie" value="Nie" /> Nie</label></span></div>
+        </fieldset>
 
         <div class="form-buttons">
-          <button class="btn" type="submit">Wyślij</button>
-          <button class="btn secondary" type="reset">Wyczyść</button>
+          <button class="btn" type="submit">Wyślij checklistę</button>
+          <button class="btn secondary" type="reset">Wyczyść formularz</button>
         </div>
       </form>
     </section>
@@ -445,7 +520,7 @@
         if (!proceduresPassword || !proceduresForm || !proceduresGate) return;
 
         if (proceduresPassword.value.trim() !== '5862') {
-          setProceduresStatus('Nieprawidłowe hasło.', true);
+          setProceduresStatus('Nieprawidłowe hasło. Spróbuj ponownie.', true);
           proceduresPassword.focus();
           return;
         }
