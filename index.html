@@ -513,7 +513,7 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
-<!-- === ZASTĄP TĄ SEKCJĘ W MIEJSCU GALERII === -->
+    <!-- === ZASTĄP TĄ SEKCJĘ W MIEJSCU GALERII === -->
 <div class="gallery-single-container">
   <style>
     /* Styl lokalny dla tej sekcji — wklejony inline, żeby nie nadpisywać globalnych plików */
@@ -552,55 +552,6 @@
       font-size: 14px;
     }
 
-    /* modal (globalnie tylko dla tej sekcji) */
-    .preview-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 10000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
-    .preview-content {
-      position: relative;
-      background: #fff;
-      padding: 16px;
-      border-radius: 8px;
-      max-width: 92%;
-      max-height: 92%;
-      overflow: auto;
-      z-index: 1;
-      box-shadow: 0 8px 30px rgba(2,6,23,0.2);
-    }
-    .preview-close {
-      position: absolute;
-      right: 8px;
-      top: 8px;
-      background: transparent;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    /* DODATKOWA REGUŁA: ukryj wszystkie niechciane elementy wewnątrz modalu
-       i pokaż tylko te, które mają znaczenie (X, tytuł, obraz, komunikat błędu).
-       Dzięki temu żadne dodatkowe kontrolki/napisy typu "restart kamery" nie będą widoczne. */
-    .preview-content > * { display: none !important; }
-    .preview-content #preview-close,
-    .preview-content #preview-title,
-    .preview-content #preview-img,
-    .preview-content #preview-error {
-      display: block !important;
-    }
-
-    /* dodatkowa defensywna reguła: ukryj elementy zawierające słowa "restart" lub "kamera" (jeśli mają atrybut data-label) */
-    .preview-content [data-label*="restart" i],
-    .preview-content [data-label*="kamera" i],
-    .preview-content [data-label*="camera" i] {
-      display: none !important;
-    }
-
     @media (max-width:520px) {
       .thumb { width: 200px; height: 182px; }
       .gallery-single-container { max-width: 220px; }
@@ -621,88 +572,15 @@
       role="img"
     />
 
-    <!-- Przycisk Podgląd: data-src wskazuje oryginał, data-title tytuł w modalu -->
+    <!-- Przycisk Podgląd: data-src wskazuje oryginał, data-title tytuł w modalu
+         (UWAGA: usunięto modal i skrypt — przycisk pozostaje jako zwykły element, bez działania) -->
     <button class="btn model-preview" type="button"
             data-src="assets/pomiar dachu.png"
             data-title="Pomiar dachu">Podgląd</button>
   </article>
 </div>
-
-<!-- MODAL PODGLĄDU: wklejony raz (może być też globalnie w stopce strony) -->
-<div id="preview-modal" class="preview-modal" aria-hidden="true">
-  <div class="preview-backdrop"></div>
-  <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
-    <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
-    <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
-    <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:block;">
-    <div id="preview-error" style="display:none; color:#b91c1c; margin-top:8px;">Nie udało się załadować obrazu.</div>
-  </div>
-</div>
-
-<script>
-  (function(){
-    function attr(el, name){ return el ? el.getAttribute(name) : null; }
-
-    document.addEventListener('click', function(e){
-      const btn = e.target.closest('.model-preview');
-      if (!btn) return;
-
-      const src = attr(btn, 'data-src');
-      const title = attr(btn, 'data-title') || '';
-
-      if (!src) {
-        console.error('Brak data-src na przycisku Podgląd');
-        return;
-      }
-
-      const modal = document.getElementById('preview-modal');
-      const img = document.getElementById('preview-img');
-      const h = document.getElementById('preview-title');
-      const err = document.getElementById('preview-error');
-
-      // reset
-      h.textContent = title;
-      err.style.display = 'none';
-      img.alt = title;
-      img.src = '';
-
-      // pokaż modal natychmiast (użytkownik widzi loader jeśli obraz duży)
-      modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden','false');
-
-      // załaduj oryginał (encodeURI obsługuje spacje)
-      const encoded = encodeURI(src);
-      img.onload = function(){ err.style.display = 'none'; };
-      img.onerror = function(){ err.style.display = 'block'; img.src = ''; };
-      img.src = encoded;
-    });
-
-    // zamknięcie
-    const closeBtn = document.getElementById('preview-close');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function(){
-        const modal = document.getElementById('preview-modal');
-        const img = document.getElementById('preview-img');
-        const err = document.getElementById('preview-error');
-        modal.style.display = 'none';
-        modal.setAttribute('aria-hidden','true');
-        img.src = '';
-        err.style.display = 'none';
-      });
-    }
-    const backdrop = document.querySelector('.preview-backdrop');
-    if (backdrop && closeBtn) backdrop.addEventListener('click', () => closeBtn.click());
-
-    // ESC zamyka modal
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') {
-        const modal = document.getElementById('preview-modal');
-        if (modal && modal.style.display === 'flex') closeBtn.click();
-      }
-    });
-  })();
-</script>
 <!-- === KONIEC BLOKU === -->
+
 
 
         <div class="model-card">
