@@ -513,125 +513,208 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
- <!-- Wklej ten blok raz pod kartą Pomiar dachu -->
-<style>
-  .preview-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; }
-  .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
-  .preview-content { position: relative; background: #fff; padding: 16px; border-radius: 8px; max-width: 92%; max-height: 92%; overflow: auto; z-index: 1; box-shadow: 0 8px 30px rgba(2,6,23,0.2); }
-  .preview-close { position: absolute; right: 8px; top: 8px; background: transparent; border: none; font-size: 24px; cursor: pointer; }
-  .preview-placeholder { display:flex; align-items:center; justify-content:center; min-width:320px; min-height:160px; }
-  .preview-loading { width:36px; height:36px; border:4px solid rgba(0,0,0,0.08); border-top-color:#0b66ff; border-radius:50%; animation:spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  #preview-error { color:#b91c1c; margin-top:8px; display:none; }
-</style>
+<!-- === ZASTĄP TĄ SEKCJĘ W MIEJSCU GALERII === -->
+<div class="gallery-single-container">
+  <style>
+    .gallery-single-container { max-width: 320px; margin: 0; }
+    .model-card {
+      padding: 12px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(16,24,40,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .model-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #0b1726; }
 
+    /* miniaturka: dokładne wymiary 241 x 220 */
+    .thumb {
+      width: 241px;
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 4px;
+      display: block;
+      background: #f6f7f9;
+    }
+
+    /* przycisk Podgląd */
+    .btn.model-preview {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: #0b66ff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* modal (globalnie tylko dla tej sekcji) */
+    .preview-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
+    .preview-content {
+      position: relative;
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      max-width: 92%;
+      max-height: 92%;
+      overflow: auto;
+      z-index: 1;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.2);
+    }
+    .preview-close {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    @media (max-width:520px) {
+      .thumb { width: 200px; height: 182px; }
+      .gallery-single-container { max-width: 220px; }
+    }
+  </style>
+
+  <article class="model-card" aria-labelledby="pomiar-title">
+    <h4 id="pomiar-title">Pomiar dachu</h4>
+
+    <!-- Miniaturka: atrybuty width/height dla stabilnego layoutu -->
+    <img
+      class="thumb"
+      src="assets/pomiar dachu.png"
+      alt="Pomiar dachu"
+      width="241"
+      height="220"
+      loading="lazy"
+      role="img"
+    />
+
+    <!-- Przycisk Podgląd: data-src wskazuje oryginał, data-title tytuł w modalu -->
+    <button class="btn model-preview" type="button"
+            data-src="assets/pomiar dachu.png"
+            data-title="Pomiar dachu">Podgląd</button>
+  </article>
+</div>
+
+<!-- MODAL PODGLĄDU: wklejony raz (może być też globalnie w stopce strony) -->
 <div id="preview-modal" class="preview-modal" aria-hidden="true">
   <div class="preview-backdrop" data-close="true"></div>
   <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
     <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
     <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
-
-    <div id="preview-placeholder" class="preview-placeholder" aria-hidden="true" style="display:none;">
-      <div class="preview-loading" aria-hidden="true"></div>
-    </div>
-
-    <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:none;">
-    <div id="preview-error">Nie udało się załadować obrazu.</div>
+    <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:block;">
+    <div id="preview-error" style="display:none; color:#b91c1c; margin-top:8px;">Nie udało się załadować obrazu.</div>
   </div>
 </div>
 
 <script>
-(function(){
-  function attr(el, name){ return el ? el.getAttribute(name) : null; }
+  (function(){
+    function attr(el, name){ return el ? el.getAttribute(name) : null; }
 
-  // Otwieranie: preload obrazu, potem pokazanie modalu z gotowym obrazem
-  document.addEventListener('click', function(e){
-    const btn = e.target.closest('.model-preview');
-    if (!btn) return;
+    // Bezpieczne otwieranie: ustawiamy src, pokazujemy modal natychmiast,
+    // a przy zamknięciu zawsze ukrywamy modal i czyścimy src tak, żeby nie pozostała pusta ramka.
+    document.addEventListener('click', function(e){
+      const btn = e.target.closest('.model-preview');
+      if (!btn) return;
 
-    const src = attr(btn, 'data-src');
-    const title = attr(btn, 'data-title') || '';
+      const src = attr(btn, 'data-src');
+      const title = attr(btn, 'data-title') || '';
 
-    if (!src) { console.error('Brak data-src na przycisku Podgląd'); return; }
+      if (!src) {
+        console.error('Brak data-src na przycisku Podgląd');
+        return;
+      }
 
-    const modal = document.getElementById('preview-modal');
-    const img = document.getElementById('preview-img');
-    const h = document.getElementById('preview-title');
-    const placeholder = document.getElementById('preview-placeholder');
-    const err = document.getElementById('preview-error');
-
-    // Reset widoku
-    h.textContent = title;
-    err.style.display = 'none';
-    img.style.display = 'none';
-    img.src = '';
-    placeholder.style.display = 'flex';
-
-    // Preload w tle
-    const pre = new Image();
-    pre.onload = function(){
-      // dopiero gdy obraz w pełni załadowany, ustawiamy go i pokazujemy modal
-      img.src = pre.src;
-      placeholder.style.display = 'none';
-      err.style.display = 'none';
-      img.style.display = 'block';
-      modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden','false');
-      // ustaw fokus na przycisk zamknięcia dla dostępności
-      const closeBtn = document.getElementById('preview-close');
-      if (closeBtn) closeBtn.focus();
-    };
-    pre.onerror = function(){
-      placeholder.style.display = 'none';
-      img.style.display = 'none';
-      err.style.display = 'block';
-      // pokaż modal z komunikatem błędu (użytkownik widzi powód)
-      modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden','false');
-    };
-
-    // Rozpocznij ładowanie (encodeURI obsługuje spacje)
-    pre.src = encodeURI(src);
-  });
-
-  // Funkcja zamykająca modal i czyści wszystko
-  function closePreview(){
-    const modal = document.getElementById('preview-modal');
-    const img = document.getElementById('preview-img');
-    const placeholder = document.getElementById('preview-placeholder');
-    const err = document.getElementById('preview-error');
-
-    // Ukryj modal i wyczyść źródło obrazu
-    modal.style.display = 'none';
-    modal.setAttribute('aria-hidden','true');
-
-    // Usuń src i ukryj elementy, żeby nie pozostała pusta przestrzeń
-    img.src = '';
-    img.style.display = 'none';
-    placeholder.style.display = 'none';
-    err.style.display = 'none';
-  }
-
-  // Zamknięcie przyciskiem X
-  const closeBtn = document.getElementById('preview-close');
-  if (closeBtn) closeBtn.addEventListener('click', closePreview);
-
-  // Zamknięcie kliknięciem w tło
-  document.addEventListener('click', function(e){
-    if (e.target && e.target.getAttribute && e.target.getAttribute('data-close') === 'true') {
-      closePreview();
-    }
-  });
-
-  // ESC zamyka modal
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') {
       const modal = document.getElementById('preview-modal');
-      if (modal && modal.style.display === 'flex') closePreview();
+      const img = document.getElementById('preview-img');
+      const h = document.getElementById('preview-title');
+      const err = document.getElementById('preview-error');
+
+      // Reset widoku
+      h.textContent = title;
+      err.style.display = 'none';
+
+      // Usuń poprzednie handler-y, żeby nie zostały po wcześniejszych otwarciach
+      img.onload = null;
+      img.onerror = null;
+
+      // Ustaw src (rozpoczyna pobieranie) i pokaż modal natychmiast
+      // Dzięki temu użytkownik widzi ramkę od razu, a obraz pojawi się gdy się załaduje.
+      img.src = encodeURI(src);
+      img.style.display = 'block';
+
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+
+      // Obsługa błędu ładowania i ukrycie pustego obrazu jeśli błąd
+      img.onload = function(){
+        err.style.display = 'none';
+        // upewnij się, że obraz jest widoczny
+        img.style.display = 'block';
+      };
+      img.onerror = function(){
+        // jeśli błąd, ukryj element img i pokaż komunikat
+        img.style.display = 'none';
+        err.style.display = 'block';
+      };
+    });
+
+    // Funkcja zamykająca modal i czyści wszystko
+    function closePreview(){
+      const modal = document.getElementById('preview-modal');
+      const img = document.getElementById('preview-img');
+      const err = document.getElementById('preview-error');
+
+      // Najpierw ukryj modal (usuwa ramkę z ekranu)
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden','true');
+
+      // Potem wyczyść źródło i ukryj elementy, żeby nie pozostała pusta przestrzeń
+      // oraz usuń handler-y onload/onerror
+      img.onload = null;
+      img.onerror = null;
+      img.src = '';
+      img.style.display = 'none';
+      err.style.display = 'none';
     }
-  });
-})();
+
+    // Zamknięcie przyciskiem X
+    const closeBtn = document.getElementById('preview-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closePreview);
+    }
+
+    // Zamknięcie kliknięciem w tło
+    document.addEventListener('click', function(e){
+      if (e.target && e.target.getAttribute && e.target.getAttribute('data-close') === 'true') {
+        closePreview();
+      }
+    });
+
+    // ESC zamyka modal
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('preview-modal');
+        if (modal && modal.style.display === 'flex') closePreview();
+      }
+    });
+  })();
 </script>
+<!-- === KONIEC BLOKU === -->
+
 
 
 
