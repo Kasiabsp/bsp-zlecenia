@@ -15,3 +15,67 @@ model-viewer { display:block; width:100%; height:480px; border-radius:10px; over
 @media (max-width:520px){
   model-viewer { height:300px; }
 }
+/* --- Miniaturka i karta Pomiar dachu --- */
+.model-card {
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  text-align: left;
+}
+
+/* miniaturka o dokładnych wymiarach */
+.thumb {
+  width: 241.33px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+  background: #f0f0f0;
+  cursor: default;
+}
+
+/* przycisk Podgląd (opcjonalne dopasowanie) */
+.btn.model-preview {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #0b66ff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* --- Modal podglądu --- */
+.preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none; /* domyślnie ukryty, JS ustawia display:flex */
+  align-items: center;
+  justify-content: center;
+}
+.preview-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+.preview-content {
+  position: relative;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  z-index: 1;
+}
+.preview-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
