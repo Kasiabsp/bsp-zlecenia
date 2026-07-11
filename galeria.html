@@ -1,301 +1,213 @@
-<!doctype html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8" />
-  <title>Galeria zleceń — BSP Zlecenia</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Pełny kod galerii (wklej w miejsce, gdzie ma być galeria) -->
+<section class="card" id="gallery-unified">
+  <h2>Modele 3D i Pomiary</h2>
+  <p class="muted">Modele fotogrametryczne i zdjęcia pomiarowe — ułożone naprzemiennie.</p>
 
-  <style>
-    :root {
-      --bg: #f5f7fa;
-      --card: #ffffff;
-      --border: #d9dce2;
-      --muted: #6b7280;
-      --accent: #0f62fe;
-      --accent-dark: #084cdf;
-      --radius: 12px;
-      --shadow: 0 12px 30px rgba(2, 6, 23, 0.06);
-      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: var(--font);
-      color: #111827;
-      line-height: 1.5;
-      overflow-x: hidden;
-
-      /* Tło strony (plik z katalogu assets) */
-      background-image: url("assets/Zrzut ekranu (17).png");
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-attachment: fixed;
-    }
-
-    /* Lekki overlay pod treścią, żeby poprawić czytelność na tle obrazka */
-    main::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(255,255,255,0.18);
-      pointer-events: none;
-      z-index: 0;
-      backdrop-filter: blur(0.5px);
-    }
-
-    header {
-      background: rgba(255,255,255,0.95);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 16px;
-      position: relative;
-      z-index: 10;
-      backdrop-filter: blur(4px);
-    }
-
-    .header-inner {
-      width: min(100%, 1000px);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      background: var(--accent);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 15px;
-      flex: 0 0 auto;
-    }
-
-    .brand-title {
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    nav a,
-    .btn {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 9px 13px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    nav a:hover,
-    .btn:hover {
-      background: var(--accent-dark);
-    }
-
-    main {
-      width: min(100%, 1000px);
-      margin: 28px auto 40px;
-      padding: 0 16px;
-      position: relative;
-      z-index: 5;
-    }
-
-    /* Karty z półprzezroczystym tłem, aby tekst był czytelny na obrazku */
-    .hero,
-    .gallery-card {
-      background: rgba(255,255,255,0.92);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: clamp(16px, 4vw, 24px);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(4px);
-    }
-
-    .hero {
-      margin-bottom: 20px;
-    }
-
-    h1,
-    h2,
-    h3 {
-      margin: 0 0 8px;
-      line-height: 1.15;
-    }
-
-    h1 {
-      font-size: clamp(28px, 6vw, 44px);
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .gallery-item {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 18px rgba(2, 6, 23, 0.04);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      display: block;
-      background: #e5e7eb;
-    }
-
-    .gallery-content {
-      padding: 14px;
-    }
-
-    .gallery-content h3 {
-      font-size: 17px;
-      margin: 0 0 6px;
-    }
-
-    .gallery-content p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    footer {
-      margin-top: 24px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-      position: relative;
-      z-index: 5;
-    }
-
-    @media (max-width: 700px) {
-      .header-inner {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      nav {
-        justify-content: flex-start;
-      }
-
-      nav a {
-        width: 100%;
-      }
-
-      main {
-        margin-top: 20px;
-        padding: 0 12px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="header-inner">
-      <div class="brand">
-        <div class="logo">BSP</div>
-        <div>
-          <div class="brand-title">BSP Zlecenia</div>
-          <div class="muted" style="font-size:12px">Galeria zleceń</div>
-        </div>
-      </div>
-
-      <nav aria-label="Nawigacja">
-        <a href="index.html">Strona główna</a>
-        <a href="index.html#form">Zgłoś zlecenie</a>
-      </nav>
+  <div class="unified-grid" id="unified-grid">
+    <!-- 1: Model 3D -->
+    <div class="item model" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title="Budowa — 30.05.2026">
+      <h4>Budowa — 30.05.2026</h4>
+      <model-viewer class="preview-thumb" src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" camera-controls auto-rotate></model-viewer>
+      <button class="btn model-preview" type="button">Podgląd</button>
     </div>
-  </header>
 
-  <main>
-    <section class="hero">
-      <h1>Galeria zleceń</h1>
-      <p class="muted">
-        Przykładowe realizacje: zdjęcia, inspekcje, mapowanie i dokumentacja wykonana dronem.
-      </p>
-    </section>
+    <!-- 2: Pomiar (zdjęcie) -->
+    <div class="item photo" data-src="assets/pomiar dachu.png" data-title="Pomiar dachu">
+      <h4>Pomiar dachu</h4>
+      <img class="preview-thumb" src="assets/pomiar dachu.png" alt="Pomiar dachu" width="241" height="220" loading="lazy">
+      <button class="btn model-preview" type="button">Podgląd</button>
+    </div>
 
-    <section class="gallery-card">
-      <h2>Ostatnie realizacje</h2>
-      <p class="muted">
-        Tutaj możesz dodawać zdjęcia z wykonanych zleceń.
-      </p>
+    <!-- 3: Model 3D -->
+    <div class="item model" data-src="assets/model.glb" data-title="Obiekt hydrotechniczny">
+      <h4>Obiekt hydrotechniczny</h4>
+      <model-viewer class="preview-thumb" src="assets/model.glb" camera-controls auto-rotate></model-viewer>
+      <button class="btn model-preview" type="button">Podgląd</button>
+    </div>
 
-      <div class="gallery-grid">
-        <article class="gallery-item">
-          <img src="assets/gallery1.jpg" alt="Przykładowe zdjęcie ze zlecenia dronowego" />
-          <div class="gallery-content">
-            <h3>Inspekcja terenu</h3>
-            <p class="muted">Dokumentacja fotograficzna wykonana z powietrza.</p>
-          </div>
-        </article>
+    <!-- Dodaj kolejne elementy w żądanej kolejności (np. model, photo, model) -->
+  </div>
+</section>
 
-        <article class="gallery-item">
-          <img src="assets/hero.jpg.jpg" alt="Zdjęcie z realizacji usługi dronowej" />
-          <div class="gallery-content">
-            <h3>Zdjęcia z lotu ptaka</h3>
-            <p class="muted">Ujęcia nieruchomości i okolicy z perspektywy drona.</p>
-          </div>
-        </article>
+<!-- Wspólny modal -->
+<div id="preview-modal" class="preview-modal" aria-hidden="true">
+  <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
+  <div id="preview-inner" class="preview-inner" role="dialog" aria-modal="true"></div>
+</div>
 
-        <article class="gallery-item">
-          <img src="assets/mapa GLI.webp" alt="Przykład dokumentacji wykonanej dronem" />
-          <div class="gallery-content">
-            <h3>Dokumentacja pól</h3>
-            <p class="muted">Materiały pomocne przy ocenie stanu i planowaniu prac.</p>
-          </div>
-        </article>
-      </div>
-    </section>
+<!-- Style -->
+<style>
+  :root {
+    --card-width: 280px;
+    --thumb-w: 241px;
+    --thumb-h: 220px;
+    --accent: #0b66ff;
+  }
 
-    <footer>
-      © <span id="year"></span> BSP Zlecenia — Galeria zleceń
-    </footer>
-  </main>
+  .unified-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+  }
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
+  .item {
+    width: var(--card-width);
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(16,24,40,0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #0b1726;
+  }
+
+  .preview-thumb {
+    width: var(--thumb-w);
+    height: var(--thumb-h);
+    object-fit: cover;
+    border-radius: 4px;
+    background: #f6f7f9;
+  }
+
+  model-viewer.preview-thumb {
+    display: block;
+    width: var(--thumb-w);
+    height: var(--thumb-h);
+    border-radius: 4px;
+    background: #f6f7f9;
+  }
+
+  .btn.model-preview {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* Modal */
+  .preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8);
+  }
+
+  .preview-inner {
+    position: relative;
+    max-width: 95%;
+    max-height: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-inner img,
+  .preview-inner model-viewer {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 6px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  .preview-close {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    font-size: 36px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10001;
+  }
+
+  /* Responsywność */
+  @media (max-width: 900px) {
+    .unified-grid { justify-content: center; }
+    .item { width: 220px; }
+    :root { --thumb-w: 200px; --thumb-h: 182px; }
+  }
+</style>
+
+<!-- Skrypt -->
+<script>
+  (function(){
+    const modal = document.getElementById('preview-modal');
+    const inner = document.getElementById('preview-inner');
+    const closeBtn = document.getElementById('preview-close');
+
+    function isGLB(src) {
+      try { return src.split('?')[0].toLowerCase().endsWith('.glb'); }
+      catch (e) { return false; }
+    }
+
+    // Delegacja kliknięć na przyciski Podgląd
+    document.addEventListener('click', function(e){
+      const btn = e.target.closest('.model-preview');
+      if (!btn) return;
+
+      const item = btn.closest('.item');
+      if (!item) return;
+
+      const src = item.getAttribute('data-src');
+      const title = item.getAttribute('data-title') || '';
+
+      // Wyczyść poprzednią zawartość
+      inner.innerHTML = '';
+
+      if (!src) return;
+
+      if (isGLB(src)) {
+        // Tworzymy model-viewer w modalu (ładowany dopiero teraz)
+        const mv = document.createElement('model-viewer');
+        mv.setAttribute('src', src);
+        mv.setAttribute('camera-controls', '');
+        mv.setAttribute('auto-rotate', '');
+        mv.setAttribute('style', 'width:100%; height:100%;');
+        inner.appendChild(mv);
+      } else {
+        // Tworzymy obraz
+        const img = document.createElement('img');
+        img.src = encodeURI(src);
+        img.alt = title;
+        img.onload = function(){ /* opcjonalnie: obsługa sukcesu */ };
+        img.onerror = function(){ img.alt = 'Nie udało się załadować obrazu.'; };
+        inner.appendChild(img);
+      }
+
+      // Pokaż modal
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+      closeBtn.focus();
+    });
+
+    // Zamknięcie
+    function closeModal(){
+      inner.innerHTML = '';
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeModal();
+    });
+  })();
+</script>
