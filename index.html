@@ -594,6 +594,13 @@
       display: block !important;
     }
 
+    /* dodatkowa defensywna reguła: ukryj elementy zawierające słowa "restart" lub "kamera" (jeśli mają atrybut data-label) */
+    .preview-content [data-label*="restart" i],
+    .preview-content [data-label*="kamera" i],
+    .preview-content [data-label*="camera" i] {
+      display: none !important;
+    }
+
     @media (max-width:520px) {
       .thumb { width: 200px; height: 182px; }
       .gallery-single-container { max-width: 220px; }
