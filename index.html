@@ -502,47 +502,50 @@
       <p class="muted">Dokładne pomiary, dokumentacja techniczna i modele 3D dla budownictwa i geodezji.</p>
     </section>
 
-   <section class="card" id="models-3d">
-  <h2>Modele 3D oraz pomiary</h2>
-  <p class="muted">Przykładowe modele fotogrametryczne i pomiary wykonane podczas inspekcji.</p>
+   <!-- Unified gallery: naprzemienne elementy (1,2,1) -->
+<section class="card" id="gallery-unified">
+  <h2>Modele 3D i Pomiary</h2>
+  <p class="muted">Modele fotogrametryczne i zdjęcia pomiarowe — ułożone naprzemiennie.</p>
 
-  <div class="models-grid">
-    <!-- Model 3D -->
-    <div class="model-card">
+  <div class="unified-grid" id="unified-grid">
+    <!-- Przykład kolejności: model 3D, pomiar (zdjęcie), model 3D -->
+    <div class="item model" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title="Budowa — 30.05.2026">
       <h4>Budowa — 30.05.2026</h4>
-      <model-viewer src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" camera-controls auto-rotate></model-viewer>
-      <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb">Podgląd</button>
+      <model-viewer src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" camera-controls auto-rotate class="preview-thumb"></model-viewer>
+      <button class="btn model-preview" type="button">Podgląd</button>
     </div>
 
-    <!-- Pomiar dachu -->
-    <div class="model-card">
+    <div class="item photo" data-src="assets/pomiar dachu.png" data-title="Pomiar dachu">
       <h4>Pomiar dachu</h4>
-      <img class="thumb" src="assets/pomiar dachu.png" alt="Pomiar dachu" width="241" height="220" loading="lazy" />
-      <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png">Podgląd</button>
+      <img class="preview-thumb" src="assets/pomiar dachu.png" alt="Pomiar dachu" width="241" height="220" loading="lazy">
+      <button class="btn model-preview" type="button">Podgląd</button>
     </div>
 
-    <!-- Obiekt hydrotechniczny -->
-    <div class="model-card">
+    <div class="item model" data-src="assets/model.glb" data-title="Obiekt hydrotechniczny">
       <h4>Obiekt hydrotechniczny</h4>
-      <model-viewer src="assets/model.glb" camera-controls auto-rotate></model-viewer>
-      <button class="btn model-preview" type="button" data-src="assets/model.glb">Podgląd</button>
+      <model-viewer src="assets/model.glb" camera-controls auto-rotate class="preview-thumb"></model-viewer>
+      <button class="btn model-preview" type="button">Podgląd</button>
     </div>
+
+    <!-- Dodawaj kolejne elementy w żądanej kolejności -->
   </div>
 </section>
 
-<!-- MODAL -->
-<div id="preview-modal" class="preview-modal">
+<!-- Wspólny modal (obsługuje obraz i model-viewer) -->
+<div id="preview-modal" class="preview-modal" aria-hidden="true">
   <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
-  <img id="preview-img" src="" alt="">
+  <div id="preview-inner" class="preview-inner" role="dialog" aria-modal="true"></div>
 </div>
 
 <style>
-  .models-grid {
+  /* Siatka i karty */
+  .unified-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
   }
-  .model-card {
+  .item {
+    width: 280px;
     padding: 12px;
     background: #fff;
     border-radius: 8px;
@@ -551,11 +554,17 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .model-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #0b1726; }
-  .thumb {
+  .item h4 { margin: 0 0 8px 0; font-size: 16px; color: #0b1726; }
+  .preview-thumb {
     width: 241px;
     height: 220px;
     object-fit: cover;
+    border-radius: 4px;
+    background: #f6f7f9;
+  }
+  model-viewer.preview-thumb {
+    width: 241px;
+    height: 220px;
     border-radius: 4px;
     background: #f6f7f9;
   }
@@ -569,6 +578,8 @@
     cursor: pointer;
     font-size: 14px;
   }
+
+  /* Modal: ciemne tło, środek z zawartością */
   .preview-modal {
     position: fixed;
     inset: 0;
@@ -578,53 +589,114 @@
     justify-content: center;
     background: rgba(0,0,0,0.8);
   }
-  .preview-modal img {
+  .preview-inner {
+    position: relative;
     max-width: 95%;
     max-height: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .preview-inner img,
+  .preview-inner model-viewer {
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 6px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.4);
   }
   .preview-close {
     position: absolute;
-    top: 20px;
-    right: 30px;
+    top: 18px;
+    right: 24px;
     font-size: 36px;
     color: #fff;
     background: none;
     border: none;
     cursor: pointer;
+    z-index: 10001;
+  }
+
+  /* Responsywność */
+  @media (max-width: 900px) {
+    .unified-grid { justify-content: center; }
+    .item { width: 220px; }
+    .preview-thumb { width: 200px; height: 182px; }
   }
 </style>
 
 <script>
   (function(){
+    const modal = document.getElementById('preview-modal');
+    const inner = document.getElementById('preview-inner');
+    const closeBtn = document.getElementById('preview-close');
+
+    // Helper: sprawdź rozszerzenie pliku
+    function isGLB(src) {
+      try {
+        return src.split('?')[0].toLowerCase().endsWith('.glb');
+      } catch (e) { return false; }
+    }
+
+    // Otwieranie: delegacja kliknięć na przyciski .model-preview
     document.addEventListener('click', function(e){
       const btn = e.target.closest('.model-preview');
       if (!btn) return;
-      const src = btn.getAttribute('data-src');
-      const modal = document.getElementById('preview-modal');
-      const img = document.getElementById('preview-img');
-      img.src = encodeURI(src);
+
+      const item = btn.closest('.item');
+      if (!item) return;
+
+      const src = item.getAttribute('data-src');
+      const title = item.getAttribute('data-title') || '';
+
+      // Wyczyść poprzednią zawartość
+      inner.innerHTML = '';
+
+      if (isGLB(src)) {
+        // Tworzymy model-viewer w modalu (jeśli chcesz, możesz dodać controls)
+        const mv = document.createElement('model-viewer');
+        mv.setAttribute('src', src);
+        mv.setAttribute('camera-controls', '');
+        mv.setAttribute('auto-rotate', '');
+        mv.className = 'modal-model-viewer';
+        // Stylujemy rozmiar
+        mv.style.width = '100%';
+        mv.style.height = '100%';
+        inner.appendChild(mv);
+      } else {
+        // Tworzymy obraz
+        const img = document.createElement('img');
+        img.src = encodeURI(src);
+        img.alt = title;
+        img.onload = function(){ /* opcjonalnie: obsługa sukcesu */ };
+        img.onerror = function(){ img.alt = 'Nie udało się załadować obrazu.'; };
+        inner.appendChild(img);
+      }
+
+      // Pokaż modal
       modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+      // focus na przycisk zamknięcia dla dostępności
+      closeBtn.focus();
     });
 
-    const closeBtn = document.getElementById('preview-close');
-    closeBtn.addEventListener('click', function(){
-      const modal = document.getElementById('preview-modal');
-      const img = document.getElementById('preview-img');
-      modal.style.display = 'none';
-      img.src = '';
+    // Zamknięcie
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){
+      if (e.target === modal) closeModal();
     });
-
-    document.getElementById('preview-modal').addEventListener('click', function(e){
-      if (e.target === this) closeBtn.click();
-    });
-
     document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') closeBtn.click();
+      if (e.key === 'Escape') closeModal();
     });
+
+    function closeModal(){
+      // jeśli w modalu jest model-viewer, zatrzymaj go (usuwamy element)
+      inner.innerHTML = '';
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden','true');
+    }
   })();
 </script>
+
 
 
     <section class="card" id="how-we-work">
