@@ -513,10 +513,9 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
-    <!-- === ZASTĄP TĄ SEKCJĘ W MIEJSCU GALERII === -->
+   <!-- === ZASTĄP TĄ SEKCJĘ W MIEJSCU GALERII === -->
 <div class="gallery-single-container">
   <style>
-    /* Styl lokalny dla tej sekcji — wklejony inline, żeby nie nadpisywać globalnych plików */
     .gallery-single-container { max-width: 320px; margin: 0; }
     .model-card {
       padding: 12px;
@@ -529,18 +528,15 @@
     }
     .model-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #0b1726; }
 
-    /* miniaturka: dokładne wymiary 241 x 220 */
     .thumb {
       width: 241px;
       height: 220px;
       object-fit: cover;
-      object-position: center;
       border-radius: 4px;
       display: block;
       background: #f6f7f9;
     }
 
-    /* przycisk Podgląd */
     .btn.model-preview {
       margin-top: 10px;
       padding: 8px 12px;
@@ -552,7 +548,7 @@
       font-size: 14px;
     }
 
-    /* modal (globalnie tylko dla tej sekcji) */
+    /* uproszczony modal — tylko obraz + X */
     .preview-modal {
       position: fixed;
       inset: 0;
@@ -560,127 +556,67 @@
       display: none;
       align-items: center;
       justify-content: center;
+      background: rgba(0,0,0,0.8);
     }
-    .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
-    .preview-content {
-      position: relative;
-      background: #fff;
-      padding: 16px;
-      border-radius: 8px;
-      max-width: 92%;
-      max-height: 92%;
-      overflow: auto;
-      z-index: 1;
-      box-shadow: 0 8px 30px rgba(2,6,23,0.2);
+    .preview-modal img {
+      max-width: 95%;
+      max-height: 95%;
+      border-radius: 6px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
     }
     .preview-close {
       position: absolute;
-      right: 8px;
-      top: 8px;
-      background: transparent;
+      top: 20px;
+      right: 30px;
+      font-size: 36px;
+      color: #fff;
+      background: none;
       border: none;
-      font-size: 24px;
       cursor: pointer;
-    }
-
-    @media (max-width:520px) {
-      .thumb { width: 200px; height: 182px; }
-      .gallery-single-container { max-width: 220px; }
     }
   </style>
 
-  <article class="model-card" aria-labelledby="pomiar-title">
-    <h4 id="pomiar-title">Pomiar dachu</h4>
-
-    <!-- Miniaturka: atrybuty width/height dla stabilnego layoutu -->
-    <img
-      class="thumb"
-      src="assets/pomiar dachu.png"
-      alt="Pomiar dachu"
-      width="241"
-      height="220"
-      loading="lazy"
-      role="img"
-    />
-
-    <!-- Przycisk Podgląd: data-src wskazuje oryginał, data-title tytuł w modalu -->
-    <button class="btn model-preview" type="button"
-            data-src="assets/pomiar dachu.png"
-            data-title="Pomiar dachu">Podgląd</button>
+  <article class="model-card">
+    <h4>Pomiar dachu</h4>
+    <img class="thumb" src="assets/pomiar dachu.png" alt="Pomiar dachu" width="241" height="220" loading="lazy" />
+    <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png">Podgląd</button>
   </article>
 </div>
 
-<!-- MODAL PODGLĄDU: wklejony raz (może być też globalnie w stopce strony) -->
-<div id="preview-modal" class="preview-modal" aria-hidden="true">
-  <div class="preview-backdrop"></div>
-  <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
-    <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
-    <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
-    <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:block;">
-    <div id="preview-error" style="display:none; color:#b91c1c; margin-top:8px;">Nie udało się załadować obrazu.</div>
-  </div>
+<!-- MODAL -->
+<div id="preview-modal" class="preview-modal">
+  <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
+  <img id="preview-img" src="" alt="">
 </div>
 
 <script>
   (function(){
-    function attr(el, name){ return el ? el.getAttribute(name) : null; }
-
     document.addEventListener('click', function(e){
       const btn = e.target.closest('.model-preview');
       if (!btn) return;
-
-      const src = attr(btn, 'data-src');
-      const title = attr(btn, 'data-title') || '';
-
-      if (!src) {
-        console.error('Brak data-src na przycisku Podgląd');
-        return;
-      }
-
+      const src = btn.getAttribute('data-src');
       const modal = document.getElementById('preview-modal');
       const img = document.getElementById('preview-img');
-      const h = document.getElementById('preview-title');
-      const err = document.getElementById('preview-error');
-
-      // reset
-      h.textContent = title;
-      err.style.display = 'none';
-      img.alt = title;
-      img.src = '';
-
-      // pokaż modal natychmiast (użytkownik widzi loader jeśli obraz duży)
+      img.src = encodeURI(src);
       modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden','false');
-
-      // załaduj oryginał (encodeURI obsługuje spacje)
-      const encoded = encodeURI(src);
-      img.onload = function(){ err.style.display = 'none'; };
-      img.onerror = function(){ err.style.display = 'block'; img.src = ''; };
-      img.src = encoded;
     });
 
-    // zamknięcie
     const closeBtn = document.getElementById('preview-close');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function(){
-        const modal = document.getElementById('preview-modal');
-        const img = document.getElementById('preview-img');
-        const err = document.getElementById('preview-error');
-        modal.style.display = 'none';
-        modal.setAttribute('aria-hidden','true');
-        img.src = '';
-        err.style.display = 'none';
-      });
-    }
-    const backdrop = document.querySelector('.preview-backdrop');
-    if (backdrop && closeBtn) backdrop.addEventListener('click', () => closeBtn.click());
+    closeBtn.addEventListener('click', function(){
+      const modal = document.getElementById('preview-modal');
+      const img = document.getElementById('preview-img');
+      modal.style.display = 'none';
+      img.src = '';
+    });
 
-    // ESC zamyka modal
+    // klik poza obrazem też zamyka
+    document.getElementById('preview-modal').addEventListener('click', function(e){
+      if (e.target === this) closeBtn.click();
+    });
+
+    // ESC zamyka
     document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') {
-        const modal = document.getElementById('preview-modal');
-        if (modal && modal.style.display === 'flex') closeBtn.click();
-      }
+      if (e.key === 'Escape') closeBtn.click();
     });
   })();
 </script>
