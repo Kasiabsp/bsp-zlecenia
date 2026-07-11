@@ -1064,6 +1064,15 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
       // Initialize map
       initMap();
     });
-  </script>
+ </script>
+  <!-- MODAL PODGLĄDU -->
+<div id="preview-modal" class="preview-modal" style="display:none;">
+  <div class="preview-backdrop"></div>
+  <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+    <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
+    <h3 id="preview-title"></h3>
+    <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:block;">
+  </div>
+</div>
 </body>
 </html>
