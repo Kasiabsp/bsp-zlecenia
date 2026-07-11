@@ -513,16 +513,17 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
-<!-- PODMIEŃ POPRZEDNI MODAL I SKRYPT TYM BLOKIEM -->
+<!-- ZASTĄP CAŁY POPRZEDNI BLOK TYM (wklej raz pod kartą Pomiar dachu) -->
 <style>
   .preview-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; }
   .preview-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
   .preview-content { position: relative; background: #fff; padding: 16px; border-radius: 8px; max-width: 92%; max-height: 92%; overflow: auto; z-index: 1; box-shadow: 0 8px 30px rgba(2,6,23,0.2); }
   .preview-close { position: absolute; right: 8px; top: 8px; background: transparent; border: none; font-size: 24px; cursor: pointer; }
 
-  /* obraz domyślnie ukryty wizualnie (visibility), ale element nie zmienia układu modalu */
+  /* obraz ukryty dopóki nie załaduje się poprawnie */
   #preview-img { max-width:100%; height:auto; display:block; visibility:hidden; }
 
+  /* prosty loader (opcjonalny) */
   #preview-placeholder { text-align:center; color:#6b7280; margin:8px 0; display:none; }
   #preview-error { color:#b91c1c; margin-top:8px; display:none; }
 </style>
@@ -550,8 +551,7 @@
   const err = document.getElementById('preview-error');
   const closeBtn = document.getElementById('preview-close');
 
-  // Otwieranie: ustawiamy src i pokazujemy modal natychmiast (ramka widoczna),
-  // obraz stanie się widoczny w onload; placeholder pokazuje "Ładowanie..."
+  // Otwieranie: preload w tle, modal pokazujemy dopiero gdy obraz OK
   document.addEventListener('click', function(e){
     const btn = e.target.closest('.model-preview');
     if (!btn) return;
@@ -561,43 +561,43 @@
 
     if (!src) { console.error('Brak data-src na przycisku Podgląd'); return; }
 
-    // reset widoku
+    // reset
     titleEl.textContent = title;
     err.style.display = 'none';
     placeholder.style.display = 'block';
     img.style.visibility = 'hidden';
-    // usuń poprzednie handler-y
-    img.onload = null;
-    img.onerror = null;
+    img.src = '';
 
-    // pokaż modal natychmiast (użytkownik widzi ramkę i "Ładowanie obrazu…")
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden','false');
-
-    // ustaw handler-y i rozpocznij ładowanie
-    img.onload = function(){
+    // preload w tle (nie pokazujemy ramki dopóki obraz nie załadowany)
+    const pre = new Image();
+    pre.onload = function(){
+      // ustaw obraz i pokaż modal z gotowym obrazem
+      img.src = pre.src;
       placeholder.style.display = 'none';
-      err.style.display = 'none';
       img.style.visibility = 'visible';
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+      // focus na zamknięcie
+      if (closeBtn) closeBtn.focus();
     };
-    img.onerror = function(){
+    pre.onerror = function(){
       placeholder.style.display = 'none';
-      img.style.visibility = 'hidden';
       err.style.display = 'block';
+      // pokaż modal z komunikatem błędu (opcjonalnie)
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
     };
 
-    // rozpocznij pobieranie (encodeURI obsługuje spacje)
-    img.src = encodeURI(src);
+    pre.src = encodeURI(src);
   });
 
-  // Zamknięcie: najpierw ukryj modal (ramka znika natychmiast),
-  // potem wyczyść src i handler-y, żeby nie pozostała pusta przestrzeń.
+  // Zamknięcie: najpierw ukryj modal, potem wyczyść obraz i handler-y
   function closePreview(){
     if (!modal) return;
     modal.style.display = 'none';
     modal.setAttribute('aria-hidden','true');
 
-    // usuń handler-y i wyczyść źródło
+    // wyczyść preloader/obraz i handler-y
     img.onload = null;
     img.onerror = null;
     img.src = '';
@@ -623,9 +623,6 @@
   });
 })();
 </script>
-
-
-
 
 
 
