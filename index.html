@@ -513,37 +513,23 @@
           <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
         </div>
         
-    <!doctype html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Galeria — Pomiar dachu</title>
+   <!-- === ZASTĄP TĄ SEKCJĘ W MIEJSCU GALERII === -->
+<div class="gallery-single-container">
   <style>
-    :root { --card-bg:#fff; --accent:#0b66ff; --muted:#6b7280; }
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:20px; background:#f5f7fb; color:#111; }
-    .container { max-width:1100px; margin:0 auto; }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      align-items: start;
-    }
-    .gallery-item,
+    /* Styl lokalny dla tej sekcji — wklejony inline, żeby nie nadpisywać globalnych plików */
+    .gallery-single-container { max-width: 320px; margin: 0; }
     .model-card {
       padding: 12px;
-      background: var(--card-bg);
+      background: #fff;
       border-radius: 8px;
       box-shadow: 0 1px 6px rgba(16,24,40,0.06);
       display: flex;
       flex-direction: column;
       align-items: flex-start;
     }
-    .gallery-item h4 { margin:0 0 8px 0; font-size:16px; }
+    .model-card h4 { margin: 0 0 8px 0; font-size: 16px; color: #0b1726; }
 
-    /* miniaturka: dokładne wymiary i crop center */
-    .gallery-thumb,
+    /* miniaturka: dokładne wymiary 241 x 220 */
     .thumb {
       width: 241px;
       height: 220px;
@@ -552,26 +538,26 @@
       border-radius: 4px;
       display: block;
       background: #f6f7f9;
-      pointer-events: none; /* miniaturka nie reaguje na kliknięcie */
     }
 
+    /* przycisk Podgląd */
     .btn.model-preview {
       margin-top: 10px;
       padding: 8px 12px;
       border-radius: 6px;
-      background: var(--accent);
+      background: #0b66ff;
       color: #fff;
       border: none;
       cursor: pointer;
       font-size: 14px;
     }
 
-    /* MODAL */
+    /* modal (globalnie tylko dla tej sekcji) */
     .preview-modal {
       position: fixed;
       inset: 0;
-      z-index: 1000;
-      display: none; /* JS ustawia display:flex */
+      z-index: 10000;
+      display: none;
       align-items: center;
       justify-content: center;
     }
@@ -596,135 +582,109 @@
       font-size: 24px;
       cursor: pointer;
     }
-    .preview-error {
-      color: #b91c1c;
-      font-size: 14px;
-      margin-top: 8px;
-    }
 
     @media (max-width:520px) {
-      .gallery-thumb, .thumb { width: 200px; height: 182px; }
+      .thumb { width: 200px; height: 182px; }
+      .gallery-single-container { max-width: 220px; }
     }
   </style>
-</head>
-<body>
-  <div class="container">
-    <h2>Galeria</h2>
-    <p style="color:var(--muted); margin-top:4px; margin-bottom:12px;">Kliknij Podgląd, aby zobaczyć oryginalne zdjęcie.</p>
 
-    <div class="gallery-grid">
-      <!-- Inne karty -->
-      <article class="gallery-item model-card">
-        <h4>Budowa — przykładowe</h4>
-        <img class="thumb" src="assets/budowa.png" alt="Budowa" width="241" height="220" loading="lazy" />
-        <button class="btn model-preview" type="button" data-src="assets/budowa.png" data-title="Budowa">Podgląd</button>
-      </article>
+  <article class="model-card" aria-labelledby="pomiar-title">
+    <h4 id="pomiar-title">Pomiar dachu</h4>
 
-      <!-- KARTA POMIAR DACHU -->
-      <article class="gallery-item model-card">
-        <h4>Pomiar dachu</h4>
-        <img
-          class="gallery-thumb thumb"
-          src="assets/pomiar dachu.png"
-          alt="Pomiar Fotowoltaiki"
-          width="241"
-          height="220"
-          loading="lazy"
-          role="img"
-        />
-        <button class="btn model-preview" type="button" data-src="assets/pomiar dachu.png" data-title="Pomiar dachu">Podgląd</button>
-      </article>
+    <!-- Miniaturka: atrybuty width/height dla stabilnego layoutu -->
+    <img
+      class="thumb"
+      src="assets/pomiar dachu.png"
+      alt="Pomiar dachu"
+      width="241"
+      height="220"
+      loading="lazy"
+      role="img"
+    />
 
-      <!-- Kolejna karta -->
-      <article class="gallery-item model-card">
-        <h4>Obiekt hydrotechniczny</h4>
-        <img class="thumb" src="assets/hydrotechniczny.png" alt="Hydrotechnika" width="241" height="220" loading="lazy" />
-        <button class="btn model-preview" type="button" data-src="assets/hydrotechniczny.png" data-title="Hydrotechnika">Podgląd</button>
-      </article>
-    </div>
+    <!-- Przycisk Podgląd: data-src wskazuje oryginał, data-title tytuł w modalu -->
+    <button class="btn model-preview" type="button"
+            data-src="assets/pomiar dachu.png"
+            data-title="Pomiar dachu">Podgląd</button>
+  </article>
+</div>
+
+<!-- MODAL PODGLĄDU: wklejony raz (może być też globalnie w stopce strony) -->
+<div id="preview-modal" class="preview-modal" aria-hidden="true">
+  <div class="preview-backdrop"></div>
+  <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+    <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
+    <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
+    <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:block;">
+    <div id="preview-error" style="display:none; color:#b91c1c; margin-top:8px;">Nie udało się załadować obrazu.</div>
   </div>
+</div>
 
-  <!-- MODAL PODGLĄDU -->
-  <div id="preview-modal" class="preview-modal" aria-hidden="true">
-    <div class="preview-backdrop"></div>
-    <div class="preview-content" role="dialog" aria-modal="true" aria-labelledby="preview-title">
-      <button id="preview-close" class="preview-close" aria-label="Zamknij">×</button>
-      <h3 id="preview-title" style="margin-top:0; margin-bottom:12px;"></h3>
-      <img id="preview-img" src="" alt="" style="max-width:100%; height:auto; display:block;">
-      <div id="preview-error" class="preview-error" style="display:none;">Nie udało się załadować obrazu.</div>
-    </div>
-  </div>
+<script>
+  (function(){
+    function attr(el, name){ return el ? el.getAttribute(name) : null; }
 
-  <script>
-    (function(){
-      function attr(el, name){ return el ? el.getAttribute(name) : null; }
+    document.addEventListener('click', function(e){
+      const btn = e.target.closest('.model-preview');
+      if (!btn) return;
 
-      // Otwieranie modalu i ładowanie oryginału
-      document.addEventListener('click', function(e){
-        const btn = e.target.closest('.model-preview');
-        if (!btn) return;
+      const src = attr(btn, 'data-src');
+      const title = attr(btn, 'data-title') || '';
 
-        const src = attr(btn, 'data-src');
-        const title = attr(btn, 'data-title') || '';
+      if (!src) {
+        console.error('Brak data-src na przycisku Podgląd');
+        return;
+      }
 
-        if (!src) {
-          console.error('Brak data-src na przycisku Podgląd');
-          return;
-        }
+      const modal = document.getElementById('preview-modal');
+      const img = document.getElementById('preview-img');
+      const h = document.getElementById('preview-title');
+      const err = document.getElementById('preview-error');
 
+      // reset
+      h.textContent = title;
+      err.style.display = 'none';
+      img.alt = title;
+      img.src = '';
+
+      // pokaż modal natychmiast (użytkownik widzi loader jeśli obraz duży)
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+
+      // załaduj oryginał (encodeURI obsługuje spacje)
+      const encoded = encodeURI(src);
+      img.onload = function(){ err.style.display = 'none'; };
+      img.onerror = function(){ err.style.display = 'block'; img.src = ''; };
+      img.src = encoded;
+    });
+
+    // zamknięcie
+    const closeBtn = document.getElementById('preview-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function(){
         const modal = document.getElementById('preview-modal');
         const img = document.getElementById('preview-img');
-        const h = document.getElementById('preview-title');
         const err = document.getElementById('preview-error');
-
-        // Reset
-        h.textContent = title;
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden','true');
+        img.src = '';
         err.style.display = 'none';
-        img.alt = title;
-        img.src = ''; // wyczyść poprzedni
-
-        // Pokaż modal natychmiast (użytkownik widzi loader jeśli obraz duży)
-        modal.style.display = 'flex';
-        modal.setAttribute('aria-hidden','false');
-
-        // Załaduj obraz i obsłuż błąd ładowania
-        const encoded = encodeURI(src);
-        img.onload = function(){ err.style.display = 'none'; };
-        img.onerror = function(){
-          err.style.display = 'block';
-          img.src = ''; // usuń zepsuty src
-        };
-        // Ustawienie src rozpoczyna pobieranie
-        img.src = encoded;
       });
+    }
+    const backdrop = document.querySelector('.preview-backdrop');
+    if (backdrop && closeBtn) backdrop.addEventListener('click', () => closeBtn.click());
 
-      // Zamknięcie modalu
-      const closeBtn = document.getElementById('preview-close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', function(){
-          const modal = document.getElementById('preview-modal');
-          const img = document.getElementById('preview-img');
-          const err = document.getElementById('preview-error');
-          modal.style.display = 'none';
-          modal.setAttribute('aria-hidden','true');
-          img.src = '';
-          err.style.display = 'none';
-        });
+    // ESC zamyka modal
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('preview-modal');
+        if (modal && modal.style.display === 'flex') closeBtn.click();
       }
-      const backdrop = document.querySelector('.preview-backdrop');
-      if (backdrop && closeBtn) backdrop.addEventListener('click', () => closeBtn.click());
-
-      // ESC zamyka modal
-      document.addEventListener('keydown', function(e){
-        if (e.key === 'Escape') {
-          const modal = document.getElementById('preview-modal');
-          if (modal && modal.style.display === 'flex') closeBtn.click();
-        }
-      });
-    })();
-  </script>
-</body>
-</html>
+    });
+  })();
+</script>
+<!-- === KONIEC BLOKU === -->
 
         <div class="model-card">
           <h4>Obiekt hydrotechniczny</h4>
