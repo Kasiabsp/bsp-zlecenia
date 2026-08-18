@@ -585,14 +585,19 @@
           <input id="calc-distance" type="number" readonly value="0.00" />
         </div>
 
-        <div class="calc-row">
-          <label for="calc-area">Powierzchnia (ha)</label>
-          <input id="calc-area" type="number" min="0" step="0.1" value="0.1" />
+        <div class="calc-row" id="calc-area-row" hidden>
+          <label for="calc-area">Powierzchnia (m²)</label>
+          <input id="calc-area" type="number" min="1" step="1" value="1" />
         </div>
 
-        <div class="calc-row">
+        <div class="calc-row" id="calc-models-row" hidden>
           <label for="calc-models">Liczba modeli</label>
-          <input id="calc-models" type="number" min="1" value="1" />
+          <input id="calc-models" type="number" min="1" step="1" value="1" />
+        </div>
+
+        <div class="calc-row" id="calc-shots-row" hidden>
+          <label for="calc-shots">Liczba ujęć</label>
+          <input id="calc-shots" type="number" min="1" step="1" value="1" />
         </div>
 
         <div class="calc-row">
@@ -608,10 +613,10 @@
         <div class="calc-row">
           <label><b>Zagrożenia i inne</b></label>
           <div class="checks">
-            <label><input id="calc-lines" type="checkbox" /> Linie (50 zł)</label>
+            <label><input id="calc-lines" type="checkbox" /> Linie elektryczne (50 zł)</label>
             <label><input id="calc-trees" type="checkbox" /> Drzewa (50 zł)</label>
-            <label><input id="calc-raw" type="checkbox" /> RAW (100 zł)</label>
-            <label><input id="calc-gli" type="checkbox" /> Mapa GLI (100 zł)</label>
+            <label id="calc-raw-row"><input id="calc-raw" type="checkbox" /> RAW (100 zł)</label>
+            <label id="calc-gli-row"><input id="calc-gli" type="checkbox" /> Mapa GLI (100 zł)</label>
             <label><input id="calc-events" type="checkbox" /> Impreza/Wydarzenie (200 zł)</label>
           </div>
         </div>
@@ -672,8 +677,9 @@
         <input type="hidden" id="location_lat" name="location_lat" />
         <input type="hidden" id="location_lng" name="location_lng" />
         <input type="hidden" id="service_type" name="service_type" />
-        <input type="hidden" id="area_ha" name="area_ha" />
-        <input type="hidden" id="flights_estimated" name="flights_estimated" />
+        <input type="hidden" id="area_m2" name="area_m2" />
+        <input type="hidden" id="models_count" name="models_count" />
+        <input type="hidden" id="shots_count" name="shots_count" />
         <input type="hidden" id="extras_list" name="extras_list" />
       </form>
     </section>
@@ -710,13 +716,17 @@
     document.addEventListener('DOMContentLoaded', () => {
       const latRef = 52.46694444444444;
       const lngRef = 17.17;
-      const perHaPrices = { mapping: 100, photos: 100, video: 100, model3d: 100 };
-      const unitCosts = { mapping: 120, photos: 100, video: 140, model3d: 180 };
+      const modelAreaPricePerM2 = 0.1;
+      const unitCosts = { mapping: 120, video: 140, model3d: 180 };
 
       const yearEl = document.getElementById('year');
       const calcDistance = document.getElementById('calc-distance');
       const calcArea = document.getElementById('calc-area');
+      const calcAreaRow = document.getElementById('calc-area-row');
       const calcModels = document.getElementById('calc-models');
+      const calcModelsRow = document.getElementById('calc-models-row');
+      const calcShots = document.getElementById('calc-shots');
+      const calcShotsRow = document.getElementById('calc-shots-row');
       const serviceType = document.getElementById('service-type');
       const calcResult = document.getElementById('calc-result');
       const locateBtn = document.getElementById('locate-me');
@@ -865,47 +875,98 @@
         );
       }
 
+      function photoPrice(shots) {
+        if (shots <= 10) return shots * 10;
+        return 100 + (shots - 10) * 5;
+      }
+
+      function setRowVisibility(row, visible) {
+        if (!row) return;
+        row.hidden = !visible;
+      }
+
+      function updateCalculatorFields() {
+        const service = serviceType.value;
+        const isModel3d = service === 'model3d';
+        const isPhotos = service === 'photos';
+        const isMapping = service === 'mapping';
+
+        setRowVisibility(calcAreaRow, isModel3d);
+        setRowVisibility(calcModelsRow, isModel3d);
+        setRowVisibility(calcShotsRow, isPhotos);
+        setRowVisibility(document.getElementById('calc-raw-row'), isPhotos);
+        setRowVisibility(document.getElementById('calc-gli-row'), isMapping);
+
+        if (!isModel3d) {
+          calcArea.value = 1;
+          calcModels.value = 1;
+        }
+        if (!isPhotos) {
+          calcShots.value = 1;
+          const raw = document.getElementById('calc-raw');
+          if (raw) raw.checked = false;
+        }
+        if (!isMapping) {
+          const gli = document.getElementById('calc-gli');
+          if (gli) gli.checked = false;
+        }
+      }
+
       function runCalc() {
-        const area = parseFloat(calcArea.value) || 0;
+        updateCalculatorFields();
+
+        const area = parseFloat(calcArea.value) || 1;
         const models = parseInt(calcModels.value, 10) || 1;
+        const shots = parseInt(calcShots.value, 10) || 1;
         const service = serviceType.value;
         const distance = parseFloat(calcDistance.value) || 0;
-        const areaUnits = area * 10;
         const travel = travelFee(distance);
         let extras = 0;
+        let servicePrice = unitCosts[service] || 0;
         const extrasList = [];
+        const details = [];
 
-        if (document.getElementById('calc-lines').checked) { extras += 50; extrasList.push('linie'); }
+        if (document.getElementById('calc-lines').checked) { extras += 50; extrasList.push('linie elektryczne'); }
         if (document.getElementById('calc-trees').checked) { extras += 50; extrasList.push('drzewa'); }
-        if (document.getElementById('calc-raw').checked) { extras += 100; extrasList.push('RAW'); }
-        if (document.getElementById('calc-gli').checked) { extras += 100; extrasList.push('Mapa GLI'); }
+        if (service === 'photos' && document.getElementById('calc-raw').checked) { extras += 100; extrasList.push('RAW'); }
+        if (service === 'mapping' && document.getElementById('calc-gli').checked) { extras += 100; extrasList.push('Mapa GLI'); }
         if (document.getElementById('calc-events').checked) { extras += 200; extrasList.push('Impreza/Wydarzenie'); }
 
-        const price = Math.round(
-          perHaPrices[service] * areaUnits +
-          unitCosts[service] * models +
-          travel + extras
-        );
+        if (service === 'photos') {
+          servicePrice = photoPrice(shots);
+          details.push(`Liczba ujęć: ${shots}`);
+        }
+
+        if (service === 'model3d') {
+          servicePrice = Math.round(area * modelAreaPricePerM2 + unitCosts.model3d * models);
+          details.push(`Powierzchnia: ${area} m²`);
+          details.push(`Liczba modeli: ${models}`);
+        }
+
+        const price = Math.round(servicePrice + travel + extras);
 
         calcResult.style.display = 'block';
-        calcResult.textContent =
-`Szacunkowa cena: ${price} zł
-Powierzchnia: ${area} ha (${areaUnits.toFixed(1)} × cena za 0,1 ha)
-Modele: ${models}
-Dystans: ${distance} km
-Dojazd: ${travel} zł
-Dodatki: ${extrasList.join(', ') || 'brak'}`;
+        calcResult.textContent = [
+          `Szacunkowa cena: ${price} zł`,
+          ...details,
+          `Dystans: ${distance} km`,
+          `Dojazd: ${travel} zł`,
+          `Dodatki: ${extrasList.join(', ') || 'brak'}`
+        ].join('\n');
 
         setIf('estimated_price', price);
         setIf('service_type', service);
-        setIf('area_ha', area);
-        setIf('flights_estimated', models);
+        setIf('area_m2', service === 'model3d' ? area : '');
+        setIf('models_count', service === 'model3d' ? models : '');
+        setIf('shots_count', service === 'photos' ? shots : '');
         setIf('extras_list', extrasList.join(','));
       }
 
       function resetCalc() {
-        calcArea.value = 0.1;
+        calcArea.value = 1;
         calcModels.value = 1;
+        calcShots.value = 1;
+        serviceType.value = 'mapping';
         calcDistance.value = '0.00';
         ['calc-lines','calc-trees','calc-raw','calc-gli','calc-events'].forEach(id => {
           const el = document.getElementById(id);
@@ -913,7 +974,8 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
         });
         calcResult.style.display = 'none';
         calcResult.textContent = '';
-        ['estimated_price', 'service_type', 'area_ha', 'flights_estimated', 'extras_list'].forEach((id) => setIf(id, ''));
+        ['estimated_price', 'service_type', 'area_m2', 'models_count', 'shots_count', 'extras_list'].forEach((id) => setIf(id, ''));
+        updateCalculatorFields();
         if (accuracyCircle) {
           accuracyCircle.remove();
           accuracyCircle = null;
@@ -963,6 +1025,7 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
       // Event bindings
       document.getElementById('calc-run')?.addEventListener('click', runCalc);
       document.getElementById('calc-reset')?.addEventListener('click', resetCalc);
+      serviceType?.addEventListener('change', updateCalculatorFields);
       locateBtn?.addEventListener('click', showUserLocation);
 
       document.querySelectorAll('.model-preview').forEach(btn => {
@@ -1015,10 +1078,15 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
           location_lat: document.getElementById('location_lat').value,
           location_lng: document.getElementById('location_lng').value,
           service_type: document.getElementById('service_type').value,
-          area_ha: document.getElementById('area_ha').value,
-          flights_estimated: document.getElementById('flights_estimated').value,
           extras_list: document.getElementById('extras_list').value
         };
+
+        const area = document.getElementById('area_m2').value;
+        const models = document.getElementById('models_count').value;
+        const shots = document.getElementById('shots_count').value;
+        if (area) payload.area_m2 = area;
+        if (models) payload.models_count = models;
+        if (shots) payload.shots_count = shots;
 
         try {
           const response = await fetch('/api/send', {
@@ -1054,6 +1122,7 @@ Dodatki: ${extrasList.join(', ') || 'brak'}`;
       });
 
       // Initialize map
+      updateCalculatorFields();
       initMap();
     });
  </script>
