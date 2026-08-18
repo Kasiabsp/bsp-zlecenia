@@ -581,6 +581,17 @@
 
       <div class="calc-box">
         <div class="calc-row">
+          <label for="service-type">Najpierw wybierz usługę</label>
+          <select id="service-type">
+            <option value="">-- Wybierz usługę --</option>
+            <option value="mapping">Mapowanie</option>
+            <option value="photos">Zdjęcia</option>
+            <option value="video">Filmy</option>
+            <option value="model3d">Modele 3D</option>
+          </select>
+        </div>
+
+        <div class="calc-row" id="calc-distance-row" hidden>
           <label for="calc-distance">Odległość (km)</label>
           <input id="calc-distance" type="number" readonly value="0.00" />
         </div>
@@ -600,17 +611,7 @@
           <input id="calc-shots" type="number" min="1" step="1" value="1" />
         </div>
 
-        <div class="calc-row">
-          <label for="service-type">Usługa</label>
-          <select id="service-type">
-            <option value="mapping">Mapowanie</option>
-            <option value="photos">Zdjęcia</option>
-            <option value="video">Filmy</option>
-            <option value="model3d">Modele 3D</option>
-          </select>
-        </div>
-
-        <div class="calc-row">
+        <div class="calc-row" id="calc-extras-row" hidden>
           <label><b>Zagrożenia i inne</b></label>
           <div class="checks">
             <label><input id="calc-lines" type="checkbox" /> Linie elektryczne (50 zł)</label>
@@ -621,7 +622,7 @@
           </div>
         </div>
 
-        <div class="calc-buttons">
+        <div class="calc-buttons" id="calc-actions" hidden>
           <button class="btn" id="calc-run" type="button">Oblicz</button>
           <button class="btn secondary" id="calc-reset" type="button">Reset</button>
         </div>
@@ -721,6 +722,9 @@
 
       const yearEl = document.getElementById('year');
       const calcDistance = document.getElementById('calc-distance');
+      const calcDistanceRow = document.getElementById('calc-distance-row');
+      const calcActions = document.getElementById('calc-actions');
+      const calcExtrasRow = document.getElementById('calc-extras-row');
       const calcArea = document.getElementById('calc-area');
       const calcAreaRow = document.getElementById('calc-area-row');
       const calcModels = document.getElementById('calc-models');
@@ -887,16 +891,24 @@
 
       function updateCalculatorFields() {
         const service = serviceType.value;
+        const hasService = service !== '';
         const isModel3d = service === 'model3d';
         const isPhotos = service === 'photos';
         const isMapping = service === 'mapping';
 
+        setRowVisibility(calcDistanceRow, hasService);
+        setRowVisibility(calcExtrasRow, hasService);
+        setRowVisibility(calcActions, hasService);
         setRowVisibility(calcAreaRow, isModel3d);
         setRowVisibility(calcModelsRow, isModel3d);
         setRowVisibility(calcShotsRow, isPhotos);
         setRowVisibility(document.getElementById('calc-raw-row'), isPhotos);
         setRowVisibility(document.getElementById('calc-gli-row'), isMapping);
 
+        if (!hasService) {
+          calcResult.style.display = 'none';
+          calcResult.textContent = '';
+        }
         if (!isModel3d) {
           calcArea.value = 1;
           calcModels.value = 1;
@@ -914,6 +926,12 @@
 
       function runCalc() {
         updateCalculatorFields();
+
+        if (!serviceType.value) {
+          calcResult.style.display = 'block';
+          calcResult.textContent = 'Najpierw wybierz usługę.';
+          return;
+        }
 
         const area = parseFloat(calcArea.value) || 1;
         const models = parseInt(calcModels.value, 10) || 1;
@@ -966,7 +984,7 @@
         calcArea.value = 1;
         calcModels.value = 1;
         calcShots.value = 1;
-        serviceType.value = 'mapping';
+        serviceType.value = '';
         calcDistance.value = '0.00';
         ['calc-lines','calc-trees','calc-raw','calc-gli','calc-events'].forEach(id => {
           const el = document.getElementById(id);
