@@ -5,9 +5,6 @@
   <title>BSP Zlecenia — Inspekcje dronem</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Model Viewer -->
-  <script type="module" src="scripts/model-viewer.js"></script>
-
   <style>
     :root {
       --bg: #f5f7fa;
@@ -23,9 +20,7 @@
       --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html {
       scroll-behavior: smooth;
@@ -52,7 +47,7 @@
       left: 0;
       right: 0;
       min-height: 64px;
-      background: rgba(255,255,255,0.95);
+      background: rgba(255, 255, 255, 0.95);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -89,9 +84,7 @@
       font-size: 15px;
     }
 
-    nav {
-      min-width: 0;
-    }
+    nav { min-width: 0; }
 
     nav ul {
       list-style: none;
@@ -110,9 +103,7 @@
       font-size: 14px;
     }
 
-    nav a:hover {
-      color: var(--accent);
-    }
+    nav a:hover { color: var(--accent); }
 
     .container {
       width: min(100%, 900px);
@@ -143,7 +134,7 @@
       color: var(--muted);
       font-size: 14px;
     }
-    
+
     .btn,
     .cta {
       background: var(--accent);
@@ -177,11 +168,8 @@
       color: #111827;
     }
 
-    .btn.secondary:hover {
-      background: #d1d5db;
-    }
+    .btn.secondary:hover { background: #d1d5db; }
 
-    .models-grid,
     .steps {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
@@ -189,7 +177,6 @@
       margin-top: 10px;
     }
 
-    .model-card,
     .step {
       background: #fff;
       border: 1px solid var(--border);
@@ -197,7 +184,6 @@
       padding: 12px;
     }
 
-    .model-card h4,
     .step strong {
       margin: 0 0 6px;
       font-size: 15px;
@@ -208,40 +194,17 @@
       font-size: 13px;
     }
 
-    .model-card model-viewer {
-      width: 100%;
-      height: clamp(180px, 42vw, 220px);
-      background: #f3f4f6;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .calc-box,
     .form-row {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
-    .calc-box {
-      gap: 12px;
-    }
-
-    .calc-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .calc-row label,
     .form-row label {
       font-size: 14px;
       font-weight: 600;
     }
 
-    .calc-row input,
-    .calc-row select,
     .form-row input,
     .form-row textarea {
       width: 100%;
@@ -254,21 +217,12 @@
       font: inherit;
     }
 
-    .checks {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 14px;
-    }
-
-    .checks label,
     .checkbox-row {
       display: flex;
       align-items: flex-start;
       gap: 8px;
     }
 
-    .checks input,
     .checkbox-row input {
       width: 16px;
       height: 16px;
@@ -283,58 +237,257 @@
       margin-top: 6px;
     }
 
-    .calc-output {
-      background: #f3f4f6;
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 13px;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      margin: 0;
+    /* Kalkulator wyceny */
+    .quote-calculator {
+      display: grid;
+      gap: 22px;
     }
 
-    /* Kalkulator wyceny — niezależny od mapy i formularza zgłoszeniowego. */
-    .quote-calculator { display: grid; gap: 22px; }
-    .quote-part { padding-top: 22px; border-top: 1px solid var(--border); }
-    .quote-part:first-child { padding-top: 0; border-top: 0; }
-    .quote-part h3 { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; font-size: 17px; }
-    .quote-step { display: grid; width: 25px; height: 25px; place-items: center; border-radius: 50%; background: #eaf2ff; color: var(--accent); font-size: 12px; }
-    .quote-calculator label { display: block; margin-bottom: 7px; font-size: 14px; font-weight: 650; }
+    .quote-part {
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .quote-part:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .quote-part h3 {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 14px;
+      font-size: 17px;
+    }
+
+    .quote-step {
+      display: grid;
+      width: 25px;
+      height: 25px;
+      place-items: center;
+      border-radius: 50%;
+      background: #eaf2ff;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .quote-calculator label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
     .quote-calculator select,
-    .quote-calculator input[type="number"] { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: #fff; font: inherit; }
+    .quote-calculator input[type="number"] {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      font: inherit;
+    }
+
     .quote-calculator select:focus,
-    .quote-calculator input[type="number"]:focus { outline: 3px solid rgba(15, 98, 254, .16); border-color: var(--accent); }
-    .quote-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    .quote-choice { position: relative; display: block; margin: 0 !important; cursor: pointer; }
-    .quote-choice input { position: absolute; opacity: 0; }
-    .quote-choice span { display: block; min-height: 82px; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #fff; transition: .18s ease; }
+    .quote-calculator input[type="number"]:focus {
+      outline: 3px solid rgba(15, 98, 254, .16);
+      border-color: var(--accent);
+    }
+
+    .quote-choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .quote-choice {
+      position: relative;
+      display: block;
+      margin: 0 !important;
+      cursor: pointer;
+    }
+
+    .quote-choice input {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .quote-choice span {
+      display: block;
+      min-height: 82px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      transition: .18s ease;
+    }
+
     .quote-choice strong,
-    .quote-choice small { display: block; }
-    .quote-choice small { margin-top: 3px; color: var(--muted); font-weight: 400; }
-    .quote-choice input:checked + span { border-color: var(--accent); background: #edf4ff; box-shadow: inset 0 0 0 1px var(--accent); }
-    .quote-choice input:focus-visible + span { outline: 3px solid rgba(15, 98, 254, .22); outline-offset: 2px; }
+    .quote-choice small {
+      display: block;
+    }
+
+    .quote-choice small {
+      margin-top: 3px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .quote-choice input:checked + span {
+      border-color: var(--accent);
+      background: #edf4ff;
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    .quote-choice input:focus-visible + span {
+      outline: 3px solid rgba(15, 98, 254, .22);
+      outline-offset: 2px;
+    }
+
     .quote-mode { margin-top: 14px; }
-    .quote-stepper { display: flex; width: min(100%, 300px); min-height: 50px; overflow: hidden; border: 1px solid var(--border); border-radius: 8px; }
-    .quote-stepper button { width: 50px; border: 0; background: #f3f7fd; color: var(--accent); font-size: 23px; cursor: pointer; }
+
+    .quote-stepper {
+      display: flex;
+      width: min(100%, 300px);
+      min-height: 50px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .quote-stepper button {
+      width: 50px;
+      border: 0;
+      background: #f3f7fd;
+      color: var(--accent);
+      font-size: 23px;
+      cursor: pointer;
+    }
+
     .quote-stepper button:hover { background: #e7f0ff; }
-    .quote-stepper input { min-height: 0 !important; border: 0 !important; border-radius: 0 !important; text-align: center; font-weight: 700; -moz-appearance: textfield; }
+
+    .quote-stepper input {
+      min-height: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      text-align: center;
+      font-weight: 700;
+      -moz-appearance: textfield;
+    }
+
     .quote-stepper input::-webkit-outer-spin-button,
-    .quote-stepper input::-webkit-inner-spin-button { margin: 0; -webkit-appearance: none; }
-    .quote-help { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
-    .quote-session { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px; border: 1px solid #bfd8ff; border-radius: 10px; background: #f2f7ff; }
-    .quote-session small { display: block; color: #4d6f9f; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-    .quote-session strong { color: var(--accent); font-size: 22px; white-space: nowrap; }
-    .quote-map-type { padding: 12px; border: 1px solid #cfe0fa; border-radius: 8px; background: #f7fbff; color: #315b91; font-size: 14px; }
-    .quote-extras { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-    .quote-extra { display: flex !important; align-items: center; gap: 8px; min-height: 48px; margin: 0 !important; padding: 10px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px !important; }
-    .quote-extra input { width: 17px; height: 17px; margin: 0; accent-color: var(--accent); }
-    .quote-error { min-height: 18px; margin: 7px 0 0; color: var(--danger); font-size: 13px; font-weight: 600; }
+    .quote-stepper input::-webkit-inner-spin-button {
+      margin: 0;
+      -webkit-appearance: none;
+    }
+
+    .quote-help {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .quote-session {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid #bfd8ff;
+      border-radius: 10px;
+      background: #f2f7ff;
+    }
+
+    .quote-session small {
+      display: block;
+      color: #4d6f9f;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .quote-session strong {
+      color: var(--accent);
+      font-size: 22px;
+      white-space: nowrap;
+    }
+
+    .quote-map-type {
+      padding: 12px;
+      border: 1px solid #cfe0fa;
+      border-radius: 8px;
+      background: #f7fbff;
+      color: #315b91;
+      font-size: 14px;
+    }
+
+    .quote-extras {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .quote-extra {
+      display: flex !important;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+      margin: 0 !important;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px !important;
+    }
+
+    .quote-extra input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+
+    .quote-error {
+      min-height: 18px;
+      margin: 7px 0 0;
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
     .quote-invalid { border-color: var(--danger) !important; }
-    .quote-result { padding: 25px; border: 1px solid #bcd7ff; border-radius: 12px; background: linear-gradient(135deg, #f7fbff, #eaf3ff); text-align: center; }
-    .quote-result small { display: block; color: #476b9e; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-    .quote-result strong { display: block; margin: 5px 0 8px; color: #0b55b9; font-size: clamp(38px, 8vw, 58px); line-height: 1; }
-    .quote-result p { margin: 0; color: #527095; font-size: 13px; }
+
+    .quote-result {
+      padding: 25px;
+      border: 1px solid #bcd7ff;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f7fbff, #eaf3ff);
+      text-align: center;
+    }
+
+    .quote-result small {
+      display: block;
+      color: #476b9e;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .quote-result strong {
+      display: block;
+      margin: 5px 0 8px;
+      color: #0b55b9;
+      font-size: clamp(38px, 8vw, 58px);
+      line-height: 1;
+    }
+
+    .quote-result p {
+      margin: 0;
+      color: #527095;
+      font-size: 13px;
+    }
 
     textarea {
       min-height: 90px;
@@ -348,65 +501,6 @@
       color: var(--muted);
     }
 
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(4px);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .modal-content {
-      width: min(900px, 100%);
-      height: min(80vh, 760px);
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .modal-header {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border);
-      background: #f9fafb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-    }
-
-    .modal-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .modal-buttons button {
-      background: #e5e7eb;
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .modal-buttons button:hover {
-      background: #d1d5db;
-    }
-
-    #viewer3D {
-      width: 100%;
-      height: 100%;
-      background: #f3f4f6;
-    }
-
     @media (max-width: 760px) {
       header {
         position: static;
@@ -416,9 +510,7 @@
         padding: 12px max(14px, env(safe-area-inset-right)) 14px max(14px, env(safe-area-inset-left));
       }
 
-      nav ul {
-        justify-content: flex-start;
-      }
+      nav ul { justify-content: flex-start; }
 
       nav a {
         display: inline-flex;
@@ -430,13 +522,10 @@
         background: #f9fafb;
       }
 
-      .container {
-        margin-top: 20px;
-      }
+      .container { margin-top: 20px; }
 
       .calc-buttons,
-      .form-buttons,
-      .modal-buttons {
+      .form-buttons {
         flex-direction: column;
         align-items: stretch;
       }
@@ -447,23 +536,8 @@
       }
 
       .btn,
-      .cta,
-      .model-preview,
-      .modal-buttons button {
+      .cta {
         width: 100%;
-      }
-
-      .modal {
-        padding: 10px;
-      }
-
-      .modal-content {
-        height: min(88vh, 720px);
-      }
-
-      .modal-header {
-        align-items: stretch;
-        flex-direction: column;
       }
     }
 
@@ -474,24 +548,17 @@
         font-size: 13px;
       }
 
-      .brand-title {
-        font-size: 14px;
-      }
+      .brand-title { font-size: 14px; }
 
-      nav ul {
-        gap: 8px;
-      }
+      nav ul { gap: 8px; }
 
-      nav a {
-        font-size: 13px;
-      }
+      nav a { font-size: 13px; }
 
-      .card {
-        border-radius: 8px;
-      }
+      .card { border-radius: 8px; }
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="brand">
@@ -518,33 +585,13 @@
 
   <main class="container">
     <section class="card">
-      <h1>Inspekcje dronem • Mapowanie • Modele 3D</h1>
-      <p class="muted">Dokładne pomiary, dokumentacja techniczna i modele 3D dla budownictwa i geodezji.</p>
+      <h1>Inspekcje dronem • Mapowanie</h1>
+      <p class="muted">Dokładne pomiary i dokumentacja techniczna dla budownictwa i geodezji.</p>
     </section>
 
     <section class="card" id="models-3d">
-      <h2>Modele 3D</h2>
-      <p class="muted">Przykładowe modele fotogrametryczne wykonane podczas inspekcji.</p>
-
-      <div class="models-grid">
-        <div class="model-card">
-          <h4>Budowa — 30.05.2026</h4>
-          <model-viewer src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" camera-controls auto-rotate></model-viewer>
-          <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
-        </div>
-
-        <div class="model-card">
-          <h4>Urbex — 07.03.2026</h4>
-          <model-viewer src="assets/7.03.2026.glb" camera-controls auto-rotate></model-viewer>
-          <button class="btn model-preview" type="button" data-src="assets/7.03.2026.glb" data-title="Urbex — 07.03.2026">Podgląd</button>
-        </div>
-
-        <div class="model-card">
-          <h4>Obiekt hydrotechniczny</h4>
-          <model-viewer src="assets/model.glb" camera-controls auto-rotate></model-viewer>
-          <button class="btn model-preview" type="button" data-src="assets/model.glb" data-title="Obiekt hydrotechniczny">Podgląd</button>
-        </div>
-      </div>
+      <h2>Dostępne wkrótce</h2>
+      <p class="muted">Nowe realizacje i materiały pojawią się wkrótce.</p>
     </section>
 
     <section class="card" id="how-we-work">
@@ -589,7 +636,9 @@
       <div id="quoteCalculator" class="quote-calculator">
         <div class="quote-part">
           <h3><span class="quote-step">1</span> Usługa</h3>
+
           <label for="service-type">Wybierz usługę</label>
+
           <select id="service-type" aria-describedby="quote-service-error">
             <option value="">Wybierz usługę</option>
             <option value="photos">Zdjęcia</option>
@@ -597,66 +646,105 @@
             <option value="map">Mapa</option>
             <option value="measurement">Pomiar</option>
           </select>
+
           <p id="quote-service-error" class="quote-error" aria-live="polite"></p>
         </div>
 
         <div id="quote-photos" class="quote-part" hidden>
           <h3><span class="quote-step">2</span> Parametry usługi</h3>
+
           <p class="field-label">Wybierz sposób realizacji</p>
+
           <div class="quote-choices" role="radiogroup" aria-label="Sposób wyceny zdjęć">
-            <label class="quote-choice"><input type="radio" name="photo-mode" value="count" checked><span><strong>Liczba zdjęć</strong><small>Wycena za każde zdjęcie</small></span></label>
-            <label class="quote-choice"><input type="radio" name="photo-mode" value="session"><span><strong>Sesja 30 min</strong><small>Stała cena za sesję</small></span></label>
+            <label class="quote-choice">
+              <input type="radio" name="photo-mode" value="count" checked>
+              <span>
+                <strong>Liczba zdjęć</strong>
+                <small>Wycena za każde zdjęcie</small>
+              </span>
+            </label>
+
+            <label class="quote-choice">
+              <input type="radio" name="photo-mode" value="session">
+              <span>
+                <strong>Sesja 30 min</strong>
+                <small>Stała cena za sesję</small>
+              </span>
+            </label>
           </div>
+
           <div id="quote-photo-count-wrap" class="quote-mode">
             <label for="calc-photos">Liczba zdjęć</label>
+
             <div class="quote-stepper" data-stepper="calc-photos">
               <button type="button" data-action="decrease" aria-label="Zmniejsz liczbę zdjęć">−</button>
               <input id="calc-photos" type="number" min="1" step="1" value="1">
               <button type="button" data-action="increase" aria-label="Zwiększ liczbę zdjęć">+</button>
             </div>
+
             <p class="quote-help">Pierwsze 10 zdjęć: 20 zł/szt. Każde kolejne: 10 zł/szt.</p>
           </div>
+
           <div id="quote-photo-session-wrap" class="quote-mode" hidden>
-            <div class="quote-session"><div><small>Sesja zdjęciowa</small><b>30 minut</b></div><strong>300 zł</strong></div>
+            <div class="quote-session">
+              <div>
+                <small>Sesja zdjęciowa</small>
+                <b>30 minut</b>
+              </div>
+              <strong>300 zł</strong>
+            </div>
           </div>
+
           <p id="quote-photos-error" class="quote-error" aria-live="polite"></p>
         </div>
 
         <div id="quote-film" class="quote-part" hidden>
           <h3><span class="quote-step">2</span> Parametry usługi</h3>
+
           <label for="calc-film">Czas trwania filmu</label>
+
           <div class="quote-stepper" data-stepper="calc-film">
             <button type="button" data-action="decrease" aria-label="Zmniejsz czas trwania filmu">−</button>
             <input id="calc-film" type="number" min="1" step="1" value="1">
             <button type="button" data-action="increase" aria-label="Zwiększ czas trwania filmu">+</button>
           </div>
+
           <p class="quote-help">100 zł za 100 minut nagrania (1 zł za minutę).</p>
           <p id="quote-film-error" class="quote-error" aria-live="polite"></p>
         </div>
 
         <div id="quote-map" class="quote-part" hidden>
           <h3><span class="quote-step">2</span> Parametry usługi</h3>
+
           <label for="calc-area">Powierzchnia w m²</label>
           <input id="calc-area" type="number" min="1" step="1" placeholder="np. 500">
+
           <p class="quote-help">1 zł za 1 m².</p>
           <p id="quote-map-error" class="quote-error" aria-live="polite"></p>
-          <div class="quote-map-type"><b>Rodzaj mapy:</b> Ortofotomapa</div>
+
+          <div class="quote-map-type">
+            <b>Rodzaj mapy:</b> Ortofotomapa
+          </div>
         </div>
 
         <div id="quote-measurement" class="quote-part" hidden>
           <h3><span class="quote-step">2</span> Parametry usługi</h3>
+
           <label for="calc-measurements">Liczba pomiarów</label>
+
           <div class="quote-stepper" data-stepper="calc-measurements">
             <button type="button" data-action="decrease" aria-label="Zmniejsz liczbę pomiarów">−</button>
             <input id="calc-measurements" type="number" min="1" step="1" value="1">
             <button type="button" data-action="increase" aria-label="Zwiększ liczbę pomiarów">+</button>
           </div>
+
           <p class="quote-help">500 zł za 1 pomiar.</p>
           <p id="quote-measurement-error" class="quote-error" aria-live="polite"></p>
         </div>
 
         <div id="quote-extras-part" class="quote-part" hidden>
           <h3><span class="quote-step">3</span> Zagrożenia i inne</h3>
+
           <div class="quote-extras">
             <label class="quote-extra"><input id="calc-lines" type="checkbox"> Linie elektryczne (+50 zł)</label>
             <label class="quote-extra"><input id="calc-trees" type="checkbox"> Drzewa (+50 zł)</label>
@@ -664,7 +752,10 @@
             <label class="quote-extra"><input id="calc-gli" type="checkbox"> Mapa GLI (+100 zł)</label>
             <label class="quote-extra"><input id="calc-events" type="checkbox"> Impreza/Wydarzenie (+200 zł)</label>
           </div>
-          <div class="calc-buttons"><button class="btn" id="calc-run" type="button">Oblicz wycenę</button></div>
+
+          <div class="calc-buttons">
+            <button class="btn" id="calc-run" type="button">Oblicz wycenę</button>
+          </div>
         </div>
 
         <div id="calc-result" class="quote-result" hidden aria-live="polite" tabindex="-1">
@@ -681,7 +772,7 @@
       <form id="bspForm" novalidate>
         <div class="form-row">
           <label for="contact">E-mail lub telefon *</label>
-          <input id="contact" name="contact" required />
+          <input id="contact" name="contact" required>
         </div>
 
         <div class="form-row">
@@ -691,23 +782,25 @@
 
         <div class="form-row">
           <label for="location_text">Lokalizacja zlecenia (adres)</label>
-          <input id="location_text" name="location_text" placeholder="np. Pobiedziska, ul. Różana 12" />
+          <input id="location_text" name="location_text" placeholder="np. Pobiedziska, ul. Różana 12">
         </div>
 
         <div class="form-row">
           <label for="date">Preferowany termin</label>
-          <input id="date" name="date" type="date" />
+          <input id="date" name="date" type="date">
         </div>
 
         <div class="form-row">
           <label for="budget">Budżet (PLN)</label>
-          <input id="budget" name="budget" inputmode="numeric" value="0" />
+          <input id="budget" name="budget" inputmode="numeric" value="0">
         </div>
 
         <div class="form-row checkbox-row">
-          <input type="checkbox" id="accept_rules" name="accept_rules" />
+          <input type="checkbox" id="accept_rules" name="accept_rules">
+
           <label for="accept_rules" style="margin:0; font-weight:500;">
-            Akceptuję <a href="regulamin.html" target="_blank" rel="noopener">regulamin</a>
+            Akceptuję
+            <a href="regulamin.html" target="_blank" rel="noopener">regulamin</a>
           </label>
         </div>
 
@@ -718,13 +811,13 @@
 
         <div id="status" class="muted" style="margin-top:8px" role="status" aria-live="polite"></div>
 
-        <input type="hidden" id="estimated_price" name="estimated_price" />
-        <input type="hidden" id="location_lat" name="location_lat" />
-        <input type="hidden" id="location_lng" name="location_lng" />
-        <input type="hidden" id="service_type" name="service_type" />
-        <input type="hidden" id="area_ha" name="area_ha" />
-        <input type="hidden" id="flights_estimated" name="flights_estimated" />
-        <input type="hidden" id="extras_list" name="extras_list" />
+        <input type="hidden" id="estimated_price" name="estimated_price">
+        <input type="hidden" id="location_lat" name="location_lat">
+        <input type="hidden" id="location_lng" name="location_lng">
+        <input type="hidden" id="service_type" name="service_type">
+        <input type="hidden" id="area_ha" name="area_ha">
+        <input type="hidden" id="flights_estimated" name="flights_estimated">
+        <input type="hidden" id="extras_list" name="extras_list">
       </form>
     </section>
 
@@ -732,29 +825,6 @@
       © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
     </footer>
   </main>
-
-  <div id="modelModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span id="viewerTitle">Podgląd modelu</span>
-
-        <div class="modal-buttons">
-          <button type="button" id="resetCameraBtn">Reset kamery</button>
-          <button type="button" id="fullscreenBtn">Pełny ekran</button>
-          <button type="button" id="closeModelBtn">Zamknij</button>
-        </div>
-      </div>
-
-      <model-viewer
-        id="viewer3D"
-        camera-controls
-        auto-rotate
-        exposure="1.1"
-        shadow-intensity="1"
-        loading="eager">
-      </model-viewer>
-    </div>
-  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -771,17 +841,14 @@
       const statusBox = document.getElementById('status');
       const submitBtn = document.getElementById('submitBtn');
       const clearBtn = document.getElementById('clearBtn');
-      const modal = document.getElementById('modelModal');
-      const viewer = document.getElementById('viewer3D');
-      const viewerTitle = document.getElementById('viewerTitle');
 
       if (yearEl) {
         yearEl.textContent = new Date().getFullYear();
       }
 
       function setIf(id, value) {
-        const el = document.getElementById(id);
-        if (el) el.value = value;
+        const element = document.getElementById(id);
+        if (element) element.value = value;
       }
 
       function showStatus(message, isError = false) {
@@ -795,8 +862,13 @@
       }
 
       function clearCalcErrors() {
-        document.querySelectorAll('.quote-error').forEach((element) => element.textContent = '');
-        document.querySelectorAll('.quote-invalid').forEach((element) => element.classList.remove('quote-invalid'));
+        document.querySelectorAll('.quote-error').forEach((element) => {
+          element.textContent = '';
+        });
+
+        document.querySelectorAll('.quote-invalid').forEach((element) => {
+          element.classList.remove('quote-invalid');
+        });
       }
 
       function calcError(field, errorId, message) {
@@ -807,22 +879,33 @@
 
       function updatePhotoMode() {
         const mode = document.querySelector('input[name="photo-mode"]:checked').value;
+
         document.getElementById('quote-photo-count-wrap').hidden = mode !== 'count';
         document.getElementById('quote-photo-session-wrap').hidden = mode !== 'session';
+
         hideCalcResult();
       }
 
       function updateCalculator() {
-        document.querySelectorAll('[id^="quote-"][id$="photos"], #quote-film, #quote-map, #quote-measurement').forEach((panel) => panel.hidden = true);
+        document.querySelectorAll(
+          '[id^="quote-"][id$="photos"], #quote-film, #quote-map, #quote-measurement'
+        ).forEach((panel) => {
+          panel.hidden = true;
+        });
+
         const panels = {
           photos: document.getElementById('quote-photos'),
           film: document.getElementById('quote-film'),
           map: document.getElementById('quote-map'),
           measurement: document.getElementById('quote-measurement')
         };
+
         const selectedPanel = panels[serviceType.value];
+
         if (selectedPanel) selectedPanel.hidden = false;
+
         quoteExtrasPart.hidden = !selectedPanel;
+
         clearCalcErrors();
         hideCalcResult();
       }
@@ -830,9 +913,15 @@
       function runCalc() {
         clearCalcErrors();
         hideCalcResult();
+
         const service = serviceType.value;
+
         if (!service) {
-          calcError(serviceType, 'quote-service-error', 'Wybierz usługę, aby obliczyć wycenę.');
+          calcError(
+            serviceType,
+            'quote-service-error',
+            'Wybierz usługę, aby obliczyć wycenę.'
+          );
           return;
         }
 
@@ -842,16 +931,19 @@
 
         if (service === 'photos') {
           const mode = document.querySelector('input[name="photo-mode"]:checked').value;
+
           if (mode === 'session') {
             servicePrice = 300;
             submittedUnit = 'sesja zdjęciowa';
             submittedQuantity = '30 min';
           } else {
             const count = Number.parseInt(calcPhotos.value, 10);
+
             if (!Number.isInteger(count) || count < 1) {
               calcError(calcPhotos, 'quote-photos-error', 'Podaj co najmniej 1 zdjęcie.');
               return;
             }
+
             servicePrice = Math.min(count, 10) * 20 + Math.max(count - 10, 0) * 10;
             submittedUnit = 'zdjęcia';
             submittedQuantity = count;
@@ -860,10 +952,12 @@
 
         if (service === 'film') {
           const minutes = Number.parseInt(calcFilm.value, 10);
+
           if (!Number.isInteger(minutes) || minutes < 1) {
             calcError(calcFilm, 'quote-film-error', 'Podaj co najmniej 1 minutę filmu.');
             return;
           }
+
           servicePrice = minutes;
           submittedUnit = 'minuty filmu';
           submittedQuantity = minutes;
@@ -871,10 +965,12 @@
 
         if (service === 'map') {
           const area = Number.parseFloat(calcArea.value);
+
           if (!Number.isFinite(area) || area <= 0) {
             calcError(calcArea, 'quote-map-error', 'Podaj powierzchnię większą od 0 m².');
             return;
           }
+
           servicePrice = area;
           submittedUnit = 'm²';
           submittedQuantity = area;
@@ -882,10 +978,16 @@
 
         if (service === 'measurement') {
           const measurements = Number.parseInt(calcMeasurements.value, 10);
+
           if (!Number.isInteger(measurements) || measurements < 1) {
-            calcError(calcMeasurements, 'quote-measurement-error', 'Podaj co najmniej 1 pomiar.');
+            calcError(
+              calcMeasurements,
+              'quote-measurement-error',
+              'Podaj co najmniej 1 pomiar.'
+            );
             return;
           }
+
           servicePrice = measurements * 500;
           submittedUnit = 'pomiary';
           submittedQuantity = measurements;
@@ -893,6 +995,7 @@
 
         let extras = 0;
         const extrasList = [];
+
         const extraConfig = [
           ['calc-lines', 50, 'Linie elektryczne'],
           ['calc-trees', 50, 'Drzewa'],
@@ -900,15 +1003,28 @@
           ['calc-gli', 100, 'Mapa GLI'],
           ['calc-events', 200, 'Impreza/Wydarzenie']
         ];
+
         extraConfig.forEach(([id, price, name]) => {
-          if (document.getElementById(id).checked) { extras += price; extrasList.push(name); }
+          if (document.getElementById(id).checked) {
+            extras += price;
+            extrasList.push(name);
+          }
         });
 
         const price = servicePrice + extras;
-        calcResultAmount.textContent = `${new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 2 }).format(price)} zł`;
+
+        calcResultAmount.textContent =
+          `${new Intl.NumberFormat('pl-PL', {
+            maximumFractionDigits: 2
+          }).format(price)} zł`;
+
         calcResult.hidden = false;
         calcResult.focus({ preventScroll: true });
-        calcResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        calcResult.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
 
         setIf('estimated_price', price);
         setIf('service_type', service);
@@ -923,93 +1039,54 @@
         calcFilm.value = 1;
         calcMeasurements.value = 1;
         calcArea.value = '';
+
         document.querySelector('input[name="photo-mode"][value="count"]').checked = true;
+
         ['calc-lines', 'calc-trees', 'calc-raw', 'calc-gli', 'calc-events'].forEach((id) => {
           document.getElementById(id).checked = false;
         });
-        ['estimated_price', 'service_type', 'area_ha', 'flights_estimated', 'extras_list'].forEach((id) => setIf(id, ''));
+
+        ['estimated_price', 'service_type', 'area_ha', 'flights_estimated', 'extras_list']
+          .forEach((id) => setIf(id, ''));
+
         updatePhotoMode();
         updateCalculator();
       }
 
-      // Modal and viewer helpers
-      function openModelModal(src, title) {
-        if (!viewer || !modal) return;
-        viewer.setAttribute('src', src);
-        viewerTitle.textContent = title || 'Podgląd modelu';
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeModelModal() {
-        if (!viewer || !modal) return;
-        viewer.removeAttribute('src');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-
-      function resetCamera() {
-        if (!viewer) return;
-        // Try resetting by reloading src (simple and compatible)
-        const src = viewer.getAttribute('src');
-        viewer.removeAttribute('src');
-        setTimeout(() => {
-          if (src) viewer.setAttribute('src', src);
-        }, 60);
-      }
-
-      function toggleFullscreen() {
-        if (!viewer) return;
-        if (!document.fullscreenElement) {
-          if (viewer.requestFullscreen) viewer.requestFullscreen();
-          else if (viewer.webkitEnterFullscreen) viewer.webkitEnterFullscreen();
-        } else {
-          document.exitFullscreen();
-        }
-      }
-
-      // Event bindings
       document.getElementById('calc-run')?.addEventListener('click', runCalc);
+
       serviceType?.addEventListener('change', updateCalculator);
-      document.querySelectorAll('input[name="photo-mode"]').forEach((input) => input.addEventListener('change', updatePhotoMode));
+
+      document.querySelectorAll('input[name="photo-mode"]').forEach((input) => {
+        input.addEventListener('change', updatePhotoMode);
+      });
+
       document.querySelectorAll('.quote-stepper').forEach((stepper) => {
         const input = document.getElementById(stepper.dataset.stepper);
+
         stepper.addEventListener('click', (event) => {
           const button = event.target.closest('button[data-action]');
+
           if (!button) return;
+
           const value = Number.parseInt(input.value, 10) || 1;
-          input.value = button.dataset.action === 'increase' ? value + 1 : Math.max(1, value - 1);
+
+          input.value = button.dataset.action === 'increase'
+            ? value + 1
+            : Math.max(1, value - 1);
+
           hideCalcResult();
         });
       });
+
       document.querySelectorAll('#quoteCalculator input, #quoteCalculator select').forEach((input) => {
         input.addEventListener('input', hideCalcResult);
         input.addEventListener('change', hideCalcResult);
       });
 
-      document.querySelectorAll('.model-preview').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const src = btn.getAttribute('data-src');
-          const title = btn.getAttribute('data-title');
-          openModelModal(src, title);
-        });
-      });
+      form?.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-      document.getElementById('closeModelBtn')?.addEventListener('click', closeModelModal);
-      document.getElementById('fullscreenBtn')?.addEventListener('click', toggleFullscreen);
-      document.getElementById('resetCameraBtn')?.addEventListener('click', resetCamera);
-
-      // Close modal on backdrop click or ESC
-      modal?.addEventListener('click', (ev) => {
-        if (ev.target === modal) closeModelModal();
-      });
-      document.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Escape' && modal && modal.style.display === 'flex') closeModelModal();
-      });
-
-      // Form handling (client-side + optional backend)
-      form?.addEventListener('submit', async (ev) => {
-        ev.preventDefault();
         const contact = document.getElementById('contact').value.trim();
         const description = document.getElementById('description').value.trim();
         const accept = document.getElementById('accept_rules').checked;
@@ -1018,6 +1095,7 @@
           showStatus('Uzupełnij wymagane pola.', true);
           return;
         }
+
         if (!accept) {
           showStatus('Musisz zaakceptować regulamin.', true);
           return;
@@ -1025,6 +1103,7 @@
 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Wysyłanie...';
+
         showStatus('Wysyłanie...');
 
         const payload = {
@@ -1061,7 +1140,7 @@
           } else {
             showStatus('Błąd wysyłki.', true);
           }
-        } catch (error) {
+        } catch {
           showStatus('Błąd połączenia.', true);
         }
 
@@ -1075,7 +1154,6 @@
         showStatus('');
       });
 
-      // Initialize map
       updatePhotoMode();
       updateCalculator();
     });
