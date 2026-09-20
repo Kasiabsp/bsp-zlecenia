@@ -1,13 +1,12 @@
 <!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BSP Zlecenia — Inspekcje dronem</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     :root {
-      --bg: #f5f7fa;
       --card: #ffffff;
       --border: #d9dce2;
       --muted: #6b7280;
@@ -16,11 +15,13 @@
       --danger: #b91c1c;
       --success: #047857;
       --radius: 10px;
-      --shadow: 0 12px 30px rgba(2, 6, 23, 0.06);
+      --shadow: 0 12px 30px rgba(2, 6, 23, .06);
       --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html {
       scroll-behavior: smooth;
@@ -33,28 +34,24 @@
       background-image: url("assets/Zrzut ekranu (17).png");
       background-size: cover;
       background-repeat: no-repeat;
-      background-position: center center;
+      background-position: center;
       background-attachment: fixed;
       color: #111827;
-      overflow-x: hidden;
       line-height: 1.5;
-      -webkit-text-size-adjust: 100%;
     }
 
     header {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      inset: 0 0 auto;
       min-height: 64px;
-      background: rgba(255, 255, 255, 0.95);
-      border-bottom: 1px solid var(--border);
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
-      z-index: 1000;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, .95);
+      border-bottom: 1px solid var(--border);
       backdrop-filter: blur(4px);
     }
 
@@ -63,47 +60,83 @@
       align-items: center;
       gap: 10px;
       flex: 0 0 auto;
-      min-width: 0;
     }
 
     .logo {
+      display: grid;
       width: 42px;
       height: 42px;
+      place-items: center;
       border-radius: 8px;
       background: var(--accent);
       color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
       font-size: 15px;
+      font-weight: 700;
     }
 
     .brand-title {
-      font-weight: 700;
       font-size: 15px;
+      font-weight: 700;
     }
 
-    nav { min-width: 0; }
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
     nav ul {
-      list-style: none;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px 14px;
       margin: 0;
       padding: 0;
+      list-style: none;
     }
 
     nav a {
-      text-decoration: none;
       color: #111827;
-      font-weight: 600;
       font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
     }
 
-    nav a:hover { color: var(--accent); }
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .btn,
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 13px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .2s ease;
+    }
+
+    .btn:hover,
+    .cta:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn.secondary:hover {
+      background: #d1d5db;
+    }
 
     .container {
       width: min(100%, 900px);
@@ -112,15 +145,17 @@
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
       padding: clamp(14px, 3vw, 18px);
       margin-bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
       box-shadow: var(--shadow);
     }
 
-    h1, h2, h3, h4 {
+    h1,
+    h2,
+    h3 {
       margin: 0 0 8px;
       font-weight: 700;
     }
@@ -130,46 +165,6 @@
       line-height: 1.1;
     }
 
-    .muted {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .btn,
-    .cta {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background-color 0.2s ease, opacity 0.2s ease;
-    }
-
-    .btn:hover,
-    .cta:hover {
-      background: var(--accent-dark);
-    }
-
-    .btn:disabled {
-      cursor: not-allowed;
-      opacity: 0.65;
-    }
-
-    .btn.secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    .btn.secondary:hover { background: #d1d5db; }
-
     .steps {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
@@ -178,14 +173,15 @@
     }
 
     .step {
-      background: #fff;
+      padding: 12px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 12px;
+      background: #fff;
     }
 
     .step strong {
-      margin: 0 0 6px;
+      display: block;
+      margin-bottom: 6px;
       font-size: 15px;
     }
 
@@ -194,50 +190,7 @@
       font-size: 13px;
     }
 
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-row label {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .form-row input,
-    .form-row textarea {
-      width: 100%;
-      min-width: 0;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 16px;
-      background: #fff;
-      font: inherit;
-    }
-
-    .checkbox-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .checkbox-row input {
-      width: 16px;
-      height: 16px;
-      flex: 0 0 auto;
-    }
-
-    .calc-buttons,
-    .form-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    /* Kalkulator wyceny */
+    /* Kalkulator */
     .quote-calculator {
       display: grid;
       gap: 22px;
@@ -272,7 +225,8 @@
       font-size: 12px;
     }
 
-    .quote-calculator label {
+    .quote-calculator label,
+    .form-row label {
       display: block;
       margin-bottom: 7px;
       font-size: 14px;
@@ -280,20 +234,25 @@
     }
 
     .quote-calculator select,
-    .quote-calculator input[type="number"] {
+    .quote-calculator input[type="number"],
+    .form-row input,
+    .form-row textarea {
       width: 100%;
       min-height: 48px;
       padding: 10px 12px;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: #fff;
+      color: #111827;
       font: inherit;
     }
 
     .quote-calculator select:focus,
-    .quote-calculator input[type="number"]:focus {
-      outline: 3px solid rgba(15, 98, 254, .16);
+    .quote-calculator input[type="number"]:focus,
+    .form-row input:focus,
+    .form-row textarea:focus {
       border-color: var(--accent);
+      outline: 3px solid rgba(15, 98, 254, .16);
     }
 
     .quote-choices {
@@ -305,7 +264,6 @@
     .quote-choice {
       position: relative;
       display: block;
-      margin: 0 !important;
       cursor: pointer;
     }
 
@@ -341,12 +299,9 @@
       box-shadow: inset 0 0 0 1px var(--accent);
     }
 
-    .quote-choice input:focus-visible + span {
-      outline: 3px solid rgba(15, 98, 254, .22);
-      outline-offset: 2px;
+    .quote-mode {
+      margin-top: 14px;
     }
-
-    .quote-mode { margin-top: 14px; }
 
     .quote-stepper {
       display: flex;
@@ -366,7 +321,9 @@
       cursor: pointer;
     }
 
-    .quote-stepper button:hover { background: #e7f0ff; }
+    .quote-stepper button:hover {
+      background: #e7f0ff;
+    }
 
     .quote-stepper input {
       min-height: 0 !important;
@@ -415,6 +372,7 @@
     }
 
     .quote-map-type {
+      margin-top: 14px;
       padding: 12px;
       border: 1px solid #cfe0fa;
       border-radius: 8px;
@@ -457,7 +415,9 @@
       font-weight: 600;
     }
 
-    .quote-invalid { border-color: var(--danger) !important; }
+    .quote-invalid {
+      border-color: var(--danger) !important;
+    }
 
     .quote-result {
       padding: 25px;
@@ -489,28 +449,61 @@
       font-size: 13px;
     }
 
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
     textarea {
       min-height: 90px;
       resize: vertical;
     }
 
+    .checkbox-row {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    .checkbox-row input {
+      width: 17px;
+      height: 17px;
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+
+    .checkbox-row label {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .calc-buttons,
+    .form-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
     footer {
-      text-align: center;
       margin-top: 20px;
-      font-size: 13px;
       color: var(--muted);
+      font-size: 13px;
+      text-align: center;
     }
 
     @media (max-width: 760px) {
       header {
         position: static;
-        align-items: stretch;
         flex-direction: column;
-        gap: 12px;
-        padding: 12px max(14px, env(safe-area-inset-right)) 14px max(14px, env(safe-area-inset-left));
+        align-items: stretch;
+        padding: 12px 14px;
       }
 
-      nav ul { justify-content: flex-start; }
+      nav ul {
+        justify-content: flex-start;
+      }
 
       nav a {
         display: inline-flex;
@@ -522,12 +515,8 @@
         background: #f9fafb;
       }
 
-      .container { margin-top: 20px; }
-
-      .calc-buttons,
-      .form-buttons {
-        flex-direction: column;
-        align-items: stretch;
+      .container {
+        margin-top: 20px;
       }
 
       .quote-choices,
@@ -535,26 +524,15 @@
         grid-template-columns: 1fr;
       }
 
+      .calc-buttons,
+      .form-buttons {
+        flex-direction: column;
+      }
+
       .btn,
       .cta {
         width: 100%;
       }
-    }
-
-    @media (max-width: 420px) {
-      .logo {
-        width: 38px;
-        height: 38px;
-        font-size: 13px;
-      }
-
-      .brand-title { font-size: 14px; }
-
-      nav ul { gap: 8px; }
-
-      nav a { font-size: 13px; }
-
-      .card { border-radius: 8px; }
     }
   </style>
 </head>
@@ -586,10 +564,10 @@
   <main class="container">
     <section class="card">
       <h1>Inspekcje dronem • Mapowanie</h1>
-      <p class="muted">Dokładne pomiary i dokumentacja techniczna dla budownictwa i geodezji.</p>
+      <p class="muted">Dokładne pomiary i dokumentacja techniczna.</p>
     </section>
 
-    <section class="card" id="models-3d">
+    <section class="card">
       <h2>Dostępne wkrótce</h2>
       <p class="muted">Nowe realizacje i materiały pojawią się wkrótce.</p>
     </section>
@@ -615,12 +593,12 @@
 
         <div class="step">
           <strong>4. Realizacja lotów</strong>
-          <p class="muted">Wykonujemy zdjęcia, pomiary i modele.</p>
+          <p class="muted">Wykonujemy zdjęcia, pomiary i materiały.</p>
         </div>
 
         <div class="step">
           <strong>5. Obróbka materiałów</strong>
-          <p class="muted">Przygotowujemy ortofotomapy i modele 3D.</p>
+          <p class="muted">Przygotowujemy gotowe materiały dla klienta.</p>
         </div>
 
         <div class="step">
@@ -653,7 +631,7 @@
         <div id="quote-photos" class="quote-part" hidden>
           <h3><span class="quote-step">2</span> Parametry usługi</h3>
 
-          <p class="field-label">Wybierz sposób realizacji</p>
+          <p>Wybierz sposób realizacji</p>
 
           <div class="quote-choices" role="radiogroup" aria-label="Sposób wyceny zdjęć">
             <label class="quote-choice">
@@ -691,6 +669,7 @@
                 <small>Sesja zdjęciowa</small>
                 <b>30 minut</b>
               </div>
+
               <strong>300 zł</strong>
             </div>
           </div>
@@ -705,11 +684,11 @@
 
           <div class="quote-stepper" data-stepper="calc-film">
             <button type="button" data-action="decrease" aria-label="Zmniejsz czas trwania filmu">−</button>
-            <input id="calc-film" type="number" min="1" step="1" value="100">
+            <input id="calc-film" type="number" min="1" step="1" value="1">
             <button type="button" data-action="increase" aria-label="Zwiększ czas trwania filmu">+</button>
           </div>
 
-          <p class="quote-help">100 zł za 1 minut nagrania (1 zł za minutę).</p>
+          <p class="quote-help">100 zł za 10 minut nagrania (10 zł za minutę).</p>
           <p id="quote-film-error" class="quote-error" aria-live="polite"></p>
         </div>
 
@@ -746,11 +725,30 @@
           <h3><span class="quote-step">3</span> Zagrożenia i inne</h3>
 
           <div class="quote-extras">
-            <label class="quote-extra"><input id="calc-lines" type="checkbox"> Linie elektryczne (+50 zł)</label>
-            <label class="quote-extra"><input id="calc-trees" type="checkbox"> Drzewa (+50 zł)</label>
-            <label class="quote-extra"><input id="calc-raw" type="checkbox"> RAW (+100 zł)</label>
-            <label class="quote-extra"><input id="calc-gli" type="checkbox"> Mapa GLI (+100 zł)</label>
-            <label class="quote-extra"><input id="calc-events" type="checkbox"> Impreza/Wydarzenie (+200 zł)</label>
+            <label class="quote-extra">
+              <input id="calc-lines" type="checkbox">
+              Linie elektryczne (+50 zł)
+            </label>
+
+            <label class="quote-extra">
+              <input id="calc-trees" type="checkbox">
+              Drzewa (+50 zł)
+            </label>
+
+            <label class="quote-extra">
+              <input id="calc-raw" type="checkbox">
+              RAW (+100 zł)
+            </label>
+
+            <label class="quote-extra">
+              <input id="calc-gli" type="checkbox">
+              Mapa GLI (+100 zł)
+            </label>
+
+            <label class="quote-extra">
+              <input id="calc-events" type="checkbox">
+              Impreza/Wydarzenie (+200 zł)
+            </label>
           </div>
 
           <div class="calc-buttons">
@@ -798,7 +796,7 @@
         <div class="form-row checkbox-row">
           <input type="checkbox" id="accept_rules" name="accept_rules">
 
-          <label for="accept_rules" style="margin:0; font-weight:500;">
+          <label for="accept_rules">
             Akceptuję
             <a href="regulamin.html" target="_blank" rel="noopener">regulamin</a>
           </label>
@@ -812,8 +810,6 @@
         <div id="status" class="muted" style="margin-top:8px" role="status" aria-live="polite"></div>
 
         <input type="hidden" id="estimated_price" name="estimated_price">
-        <input type="hidden" id="location_lat" name="location_lat">
-        <input type="hidden" id="location_lng" name="location_lng">
         <input type="hidden" id="service_type" name="service_type">
         <input type="hidden" id="area_ha" name="area_ha">
         <input type="hidden" id="flights_estimated" name="flights_estimated">
@@ -837,6 +833,7 @@
       const calcResult = document.getElementById('calc-result');
       const calcResultAmount = document.getElementById('calc-result-amount');
       const quoteExtrasPart = document.getElementById('quote-extras-part');
+
       const form = document.getElementById('bspForm');
       const statusBox = document.getElementById('status');
       const submitBtn = document.getElementById('submitBtn');
@@ -853,6 +850,7 @@
 
       function showStatus(message, isError = false) {
         if (!statusBox) return;
+
         statusBox.textContent = message;
         statusBox.style.color = isError ? 'var(--danger)' : 'var(--success)';
       }
@@ -888,7 +886,7 @@
 
       function updateCalculator() {
         document.querySelectorAll(
-          '[id^="quote-"][id$="photos"], #quote-film, #quote-map, #quote-measurement'
+          '#quote-photos, #quote-film, #quote-map, #quote-measurement'
         ).forEach((panel) => {
           panel.hidden = true;
         });
@@ -902,7 +900,9 @@
 
         const selectedPanel = panels[serviceType.value];
 
-        if (selectedPanel) selectedPanel.hidden = false;
+        if (selectedPanel) {
+          selectedPanel.hidden = false;
+        }
 
         quoteExtrasPart.hidden = !selectedPanel;
 
@@ -926,26 +926,28 @@
         }
 
         let servicePrice = 0;
-        let submittedUnit = '';
         let submittedQuantity = '';
+        let submittedArea = '';
 
         if (service === 'photos') {
           const mode = document.querySelector('input[name="photo-mode"]:checked').value;
 
           if (mode === 'session') {
             servicePrice = 300;
-            submittedUnit = 'sesja zdjęciowa';
-            submittedQuantity = '30 min';
+            submittedQuantity = 'Sesja zdjęciowa — 30 min';
           } else {
             const count = Number.parseInt(calcPhotos.value, 10);
 
             if (!Number.isInteger(count) || count < 1) {
-              calcError(calcPhotos, 'quote-photos-error', 'Podaj co najmniej 1 zdjęcie.');
+              calcError(
+                calcPhotos,
+                'quote-photos-error',
+                'Podaj co najmniej 1 zdjęcie.'
+              );
               return;
             }
 
             servicePrice = Math.min(count, 10) * 20 + Math.max(count - 10, 0) * 10;
-            submittedUnit = 'zdjęcia';
             submittedQuantity = count;
           }
         }
@@ -954,12 +956,16 @@
           const minutes = Number.parseInt(calcFilm.value, 10);
 
           if (!Number.isInteger(minutes) || minutes < 1) {
-            calcError(calcFilm, 'quote-film-error', 'Podaj co najmniej 1 minutę filmu.');
+            calcError(
+              calcFilm,
+              'quote-film-error',
+              'Podaj co najmniej 1 minutę filmu.'
+            );
             return;
           }
 
-          servicePrice = minutes;
-          submittedUnit = 'minuty filmu';
+          /* 10 minut = 100 zł */
+          servicePrice = minutes * 10;
           submittedQuantity = minutes;
         }
 
@@ -967,12 +973,16 @@
           const area = Number.parseFloat(calcArea.value);
 
           if (!Number.isFinite(area) || area <= 0) {
-            calcError(calcArea, 'quote-map-error', 'Podaj powierzchnię większą od 0 m².');
+            calcError(
+              calcArea,
+              'quote-map-error',
+              'Podaj powierzchnię większą od 0 m².'
+            );
             return;
           }
 
           servicePrice = area;
-          submittedUnit = 'm²';
+          submittedArea = area;
           submittedQuantity = area;
         }
 
@@ -989,14 +999,13 @@
           }
 
           servicePrice = measurements * 500;
-          submittedUnit = 'pomiary';
           submittedQuantity = measurements;
         }
 
         let extras = 0;
         const extrasList = [];
 
-        const extraConfig = [
+        const extrasConfig = [
           ['calc-lines', 50, 'Linie elektryczne'],
           ['calc-trees', 50, 'Drzewa'],
           ['calc-raw', 100, 'RAW'],
@@ -1004,31 +1013,30 @@
           ['calc-events', 200, 'Impreza/Wydarzenie']
         ];
 
-        extraConfig.forEach(([id, price, name]) => {
+        extrasConfig.forEach(([id, price, name]) => {
           if (document.getElementById(id).checked) {
             extras += price;
             extrasList.push(name);
           }
         });
 
-        const price = servicePrice + extras;
+        const total = servicePrice + extras;
 
         calcResultAmount.textContent =
           `${new Intl.NumberFormat('pl-PL', {
             maximumFractionDigits: 2
-          }).format(price)} zł`;
+          }).format(total)} zł`;
 
         calcResult.hidden = false;
-        calcResult.focus({ preventScroll: true });
 
         calcResult.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest'
         });
 
-        setIf('estimated_price', price);
+        setIf('estimated_price', total);
         setIf('service_type', service);
-        setIf('area_ha', submittedUnit === 'm²' ? submittedQuantity : '');
+        setIf('area_ha', submittedArea);
         setIf('flights_estimated', submittedQuantity);
         setIf('extras_list', extrasList.join(','));
       }
@@ -1040,22 +1048,35 @@
         calcMeasurements.value = 1;
         calcArea.value = '';
 
-        document.querySelector('input[name="photo-mode"][value="count"]').checked = true;
+        document.querySelector(
+          'input[name="photo-mode"][value="count"]'
+        ).checked = true;
 
-        ['calc-lines', 'calc-trees', 'calc-raw', 'calc-gli', 'calc-events'].forEach((id) => {
+        [
+          'calc-lines',
+          'calc-trees',
+          'calc-raw',
+          'calc-gli',
+          'calc-events'
+        ].forEach((id) => {
           document.getElementById(id).checked = false;
         });
 
-        ['estimated_price', 'service_type', 'area_ha', 'flights_estimated', 'extras_list']
-          .forEach((id) => setIf(id, ''));
+        [
+          'estimated_price',
+          'service_type',
+          'area_ha',
+          'flights_estimated',
+          'extras_list'
+        ].forEach((id) => setIf(id, ''));
 
         updatePhotoMode();
         updateCalculator();
       }
 
-      document.getElementById('calc-run')?.addEventListener('click', runCalc);
+      document.getElementById('calc-run').addEventListener('click', runCalc);
 
-      serviceType?.addEventListener('change', updateCalculator);
+      serviceType.addEventListener('change', updateCalculator);
 
       document.querySelectorAll('input[name="photo-mode"]').forEach((input) => {
         input.addEventListener('change', updatePhotoMode);
@@ -1069,41 +1090,41 @@
 
           if (!button) return;
 
-          const value = Number.parseInt(input.value, 10) || 1;
+          const currentValue = Number.parseInt(input.value, 10) || 1;
 
           input.value = button.dataset.action === 'increase'
-            ? value + 1
-            : Math.max(1, value - 1);
+            ? currentValue + 1
+            : Math.max(1, currentValue - 1);
 
           hideCalcResult();
         });
       });
 
-      document.querySelectorAll('#quoteCalculator input, #quoteCalculator select').forEach((input) => {
-        input.addEventListener('input', hideCalcResult);
-        input.addEventListener('change', hideCalcResult);
-      });
+      document.querySelectorAll('#quoteCalculator input, #quoteCalculator select')
+        .forEach((input) => {
+          input.addEventListener('input', hideCalcResult);
+          input.addEventListener('change', hideCalcResult);
+        });
 
-      form?.addEventListener('submit', async (event) => {
+      form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const contact = document.getElementById('contact').value.trim();
         const description = document.getElementById('description').value.trim();
-        const accept = document.getElementById('accept_rules').checked;
+        const acceptRules = document.getElementById('accept_rules').checked;
 
         if (!contact || !description) {
           showStatus('Uzupełnij wymagane pola.', true);
           return;
         }
 
-        if (!accept) {
+        if (!acceptRules) {
           showStatus('Musisz zaakceptować regulamin.', true);
           return;
         }
 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Wysyłanie...';
-
         showStatus('Wysyłanie...');
 
         const payload = {
@@ -1113,8 +1134,6 @@
           date: document.getElementById('date').value || '',
           budget: document.getElementById('budget').value.trim() || '',
           estimated_price: document.getElementById('estimated_price').value,
-          location_lat: document.getElementById('location_lat').value,
-          location_lng: document.getElementById('location_lng').value,
           service_type: document.getElementById('service_type').value,
           area_ha: document.getElementById('area_ha').value,
           flights_estimated: document.getElementById('flights_estimated').value,
@@ -1131,9 +1150,9 @@
             body: JSON.stringify(payload)
           });
 
-          const json = await response.json().catch(() => null);
+          const data = await response.json().catch(() => null);
 
-          if (response.ok && json?.status === 'ok') {
+          if (response.ok && data?.status === 'ok') {
             showStatus('Wysłano poprawnie.');
             form.reset();
             resetCalc();
@@ -1148,7 +1167,7 @@
         submitBtn.textContent = 'Wyślij';
       });
 
-      clearBtn?.addEventListener('click', () => {
+      clearBtn.addEventListener('click', () => {
         form.reset();
         resetCalc();
         showStatus('');
