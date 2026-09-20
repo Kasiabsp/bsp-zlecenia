@@ -1,1001 +1,1084 @@
 <!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Kalkulator wyceny usług BSP Zlecenia.">
-  <title>Kalkulator wyceny | BSP Zlecenia</title>
+  <meta charset="utf-8" />
+  <title>BSP Zlecenia — Inspekcje dronem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Model Viewer -->
+  <script type="module" src="scripts/model-viewer.js"></script>
+
   <style>
     :root {
-      --blue: #1769e0;
-      --blue-dark: #1158c2;
-      --blue-soft: #edf5ff;
-      --ink: #162033;
-      --muted: #667085;
-      --line: #dbe3ef;
-      --surface: #ffffff;
-      --page: #f5f8fc;
-      --danger: #c52d2d;
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --border: #d9dce2;
+      --muted: #6b7280;
+      --accent: #0f62fe;
+      --accent-dark: #084cdf;
+      --danger: #b91c1c;
+      --success: #047857;
+      --radius: 10px;
+      --shadow: 0 12px 30px rgba(2, 6, 23, 0.06);
+      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
 
     body {
       margin: 0;
-      min-width: 320px;
-      background: var(--page);
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--font);
+      background-image: url("assets/Zrzut ekranu (17).png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      color: #111827;
+      overflow-x: hidden;
       line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
     }
 
-    button, input, select { font: inherit; }
-    button { -webkit-tap-highlight-color: transparent; }
-
-    .quote-section { padding: clamp(32px, 6vw, 72px) 20px; }
-    .quote-shell { width: min(100%, 780px); margin: 0 auto; }
-
-    .eyebrow {
-      display: inline-flex;
-      margin: 0 0 10px;
-      color: var(--blue);
-      font-size: .75rem;
-      font-weight: 800;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 2.7rem);
-      letter-spacing: -.04em;
-      line-height: 1.08;
-    }
-
-    .lead {
-      margin: 13px 0 30px;
-      max-width: 590px;
-      color: var(--muted);
-      font-size: clamp(1rem, 2vw, 1.08rem);
-    }
-
-    .calculator {
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      box-shadow: 0 18px 45px rgba(27, 54, 93, .08);
-    }
-
-    .calculator-form { padding: clamp(20px, 4vw, 36px); }
-
-    .form-section + .form-section {
-      margin-top: 28px;
-      padding-top: 27px;
-      border-top: 1px solid var(--line);
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 16px;
-      font-size: 1.05rem;
-    }
-
-    .section-number {
-      display: grid;
-      width: 26px;
-      height: 26px;
-      place-items: center;
-      flex: 0 0 auto;
-      border-radius: 50%;
-      background: var(--blue-soft);
-      color: var(--blue);
-      font-size: .78rem;
-      font-weight: 800;
-    }
-
-    .field-label {
-      display: block;
-      margin-bottom: 8px;
-      color: #28364d;
-      font-size: .93rem;
-      font-weight: 700;
-    }
-
-    .field-help {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: .86rem;
-    }
-
-    .select-wrap { position: relative; }
-
-    .select-wrap::after {
-      position: absolute;
-      top: 50%;
-      right: 18px;
-      width: 8px;
-      height: 8px;
-      border-right: 2px solid #64748b;
-      border-bottom: 2px solid #64748b;
-      content: "";
-      pointer-events: none;
-      transform: translateY(-72%) rotate(45deg);
-    }
-
-    select,
-    .number-input {
-      width: 100%;
-      min-height: 52px;
-      border: 1px solid #cbd6e5;
-      border-radius: 12px;
-      outline: none;
-      background: #fff;
-      color: var(--ink);
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    select {
-      appearance: none;
-      padding: 0 46px 0 15px;
-      cursor: pointer;
-    }
-
-    select:focus,
-    .number-input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 4px rgba(23, 105, 224, .13);
-    }
-
-    .dynamic-panel { animation: reveal .24s ease-out both; }
-
-    @keyframes reveal {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    [hidden] { display: none !important; }
-
-    .choice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .choice-card {
-      position: relative;
-      display: block;
-      min-width: 0;
-      cursor: pointer;
-    }
-
-    .choice-card input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .choice-card__content {
-      display: block;
-      min-height: 96px;
-      padding: 15px;
-      border: 1px solid #cbd6e5;
-      border-radius: 14px;
-      background: #fff;
-      transition: border-color .2s, background-color .2s, box-shadow .2s, transform .2s;
-    }
-
-    .choice-card:hover .choice-card__content {
-      border-color: #99bdf0;
-      transform: translateY(-1px);
-    }
-
-    .choice-card input:focus-visible + .choice-card__content {
-      outline: 3px solid rgba(23, 105, 224, .25);
-      outline-offset: 2px;
-    }
-
-    .choice-card input:checked + .choice-card__content {
-      border-color: var(--blue);
-      background: var(--blue-soft);
-      box-shadow: inset 0 0 0 1px var(--blue);
-    }
-
-    .choice-card strong,
-    .choice-card small {
-      display: block;
-    }
-
-    .choice-card strong { font-size: .96rem; }
-
-    .choice-card small {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: .82rem;
-    }
-
-    .choice-card input:checked + .choice-card__content small { color: #3a6095; }
-
-    .mode-content { margin-top: 16px; }
-
-    .photo-rates {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: .84rem;
-    }
-
-    .photo-rates span { display: block; }
-
-    .session-card {
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      min-height: 64px;
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 15px;
-      padding: 17px;
-      border: 1px solid #b8d4fa;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #f4f9ff, #eaf4ff);
+      gap: 16px;
+      padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
+      z-index: 1000;
+      backdrop-filter: blur(4px);
     }
 
-    .session-card__name {
-      margin: 0;
-      color: #31568a;
-      font-size: .74rem;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    .session-card__time {
-      margin: 2px 0 0;
-      font-size: 1.05rem;
-      font-weight: 750;
-    }
-
-    .session-card__price {
-      color: var(--blue);
-      font-size: 1.3rem;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .stepper {
-      display: flex;
-      width: min(100%, 310px);
-      min-height: 54px;
-      overflow: hidden;
-      border: 1px solid #cbd6e5;
-      border-radius: 12px;
-      background: #fff;
-    }
-
-    .stepper button {
-      width: 56px;
-      flex: 0 0 56px;
-      border: 0;
-      background: #f7faff;
-      color: var(--blue);
-      font-size: 1.55rem;
-      line-height: 1;
-      cursor: pointer;
-      transition: background-color .2s, color .2s;
-    }
-
-    .stepper button:hover { background: var(--blue-soft); }
-
-    .stepper button:focus-visible {
-      position: relative;
-      z-index: 1;
-      outline: 3px solid rgba(23, 105, 224, .3);
-      outline-offset: -3px;
-    }
-
-    .stepper input {
-      width: 100%;
-      min-width: 0;
-      border: 0;
-      outline: 0;
-      background: transparent;
-      color: var(--ink);
-      text-align: center;
-      font-size: 1.07rem;
-      font-weight: 700;
-      -moz-appearance: textfield;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      margin: 0;
-      -webkit-appearance: none;
-    }
-
-    .input-unit {
-      position: relative;
-      width: min(100%, 400px);
-    }
-
-    .number-input {
-      padding: 0 58px 0 15px;
-      -moz-appearance: textfield;
-    }
-
-    .input-unit__label {
-      position: absolute;
-      top: 50%;
-      right: 16px;
-      color: #667085;
-      font-size: .9rem;
-      font-weight: 700;
-      pointer-events: none;
-      transform: translateY(-50%);
-    }
-
-    .map-type {
+    .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 13px 15px;
-      border: 1px solid #d5e3f5;
-      border-radius: 12px;
-      background: #f8fbff;
-      color: #31547c;
-      font-size: .93rem;
-    }
-
-    .map-type::before {
-      display: grid;
-      width: 24px;
-      height: 24px;
-      place-items: center;
-      border-radius: 7px;
-      background: #ddecff;
-      color: var(--blue);
-      content: "✓";
-      font-weight: 800;
-    }
-
-    .extras {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .check-option {
-      position: relative;
-      display: flex;
-      min-height: 56px;
-      align-items: center;
-      gap: 11px;
-      padding: 11px 13px;
-      border: 1px solid #d7e0eb;
-      border-radius: 12px;
-      background: #fff;
-      cursor: pointer;
-      transition: border-color .2s, background-color .2s;
-    }
-
-    .check-option:hover { border-color: #a9c6ec; }
-
-    .check-option input {
-      position: absolute;
-      opacity: 0;
-    }
-
-    .checkbox-ui {
-      display: grid;
-      width: 20px;
-      height: 20px;
-      place-items: center;
       flex: 0 0 auto;
-      border: 1.5px solid #a9b8cb;
-      border-radius: 6px;
-      color: transparent;
-      font-size: .8rem;
-      font-weight: 800;
-    }
-
-    .check-option input:checked ~ .checkbox-ui {
-      border-color: var(--blue);
-      background: var(--blue);
-      color: #fff;
-    }
-
-    .check-option input:focus-visible ~ .checkbox-ui {
-      outline: 3px solid rgba(23, 105, 224, .25);
-      outline-offset: 2px;
-    }
-
-    .check-option__text {
       min-width: 0;
-      font-size: .9rem;
-      font-weight: 650;
     }
 
-    .check-option__price {
-      display: block;
-      margin-top: 1px;
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    nav {
+      min-width: 0;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 14px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #111827;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .container {
+      width: min(100%, 900px);
+      margin: 90px auto 40px;
+      padding: 0 clamp(12px, 4vw, 16px);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(14px, 3vw, 18px);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(26px, 5vw, 42px);
+      line-height: 1.1;
+    }
+
+    .muted {
       color: var(--muted);
-      font-size: .77rem;
-      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .btn,
+    .cta {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
     }
 
-    .check-option input:checked ~ .check-option__text { color: #154e9f; }
+    .btn:hover,
+    .cta:hover {
+      background: var(--accent-dark);
+    }
 
-    .form-error {
-      min-height: 1.25em;
-      margin: 8px 0 0;
-      color: var(--danger);
-      font-size: .86rem;
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn.secondary:hover {
+      background: #d1d5db;
+    }
+
+    .models-grid,
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .model-card,
+    .step {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .model-card h4,
+    .step strong {
+      margin: 0 0 6px;
+      font-size: 15px;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .model-card model-viewer {
+      width: 100%;
+      height: clamp(180px, 42vw, 220px);
+      background: #f3f4f6;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .calc-box,
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .calc-box {
+      gap: 12px;
+    }
+
+    .calc-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .calc-row label,
+    .form-row label {
+      font-size: 14px;
       font-weight: 600;
     }
 
-    .is-invalid { border-color: var(--danger) !important; }
-
-    .button-row { margin-top: 29px; }
-
-    .calculate-button {
-      display: inline-flex;
+    .calc-row input,
+    .calc-row select,
+    .form-row input,
+    .form-row textarea {
       width: 100%;
-      min-height: 55px;
+      min-width: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 16px;
+      background: #fff;
+      font: inherit;
+    }
+
+    .checks {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .checks label,
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .checks input,
+    .checkbox-row input {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+
+    .calc-buttons,
+    .form-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .calc-output {
+      background: #f3f4f6;
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+    }
+
+    /* Kalkulator wyceny — niezależny od mapy i formularza zgłoszeniowego. */
+    .quote-calculator { display: grid; gap: 22px; }
+    .quote-part { padding-top: 22px; border-top: 1px solid var(--border); }
+    .quote-part:first-child { padding-top: 0; border-top: 0; }
+    .quote-part h3 { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; font-size: 17px; }
+    .quote-step { display: grid; width: 25px; height: 25px; place-items: center; border-radius: 50%; background: #eaf2ff; color: var(--accent); font-size: 12px; }
+    .quote-calculator label { display: block; margin-bottom: 7px; font-size: 14px; font-weight: 650; }
+    .quote-calculator select,
+    .quote-calculator input[type="number"] { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: #fff; font: inherit; }
+    .quote-calculator select:focus,
+    .quote-calculator input[type="number"]:focus { outline: 3px solid rgba(15, 98, 254, .16); border-color: var(--accent); }
+    .quote-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .quote-choice { position: relative; display: block; margin: 0 !important; cursor: pointer; }
+    .quote-choice input { position: absolute; opacity: 0; }
+    .quote-choice span { display: block; min-height: 82px; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #fff; transition: .18s ease; }
+    .quote-choice strong,
+    .quote-choice small { display: block; }
+    .quote-choice small { margin-top: 3px; color: var(--muted); font-weight: 400; }
+    .quote-choice input:checked + span { border-color: var(--accent); background: #edf4ff; box-shadow: inset 0 0 0 1px var(--accent); }
+    .quote-choice input:focus-visible + span { outline: 3px solid rgba(15, 98, 254, .22); outline-offset: 2px; }
+    .quote-mode { margin-top: 14px; }
+    .quote-stepper { display: flex; width: min(100%, 300px); min-height: 50px; overflow: hidden; border: 1px solid var(--border); border-radius: 8px; }
+    .quote-stepper button { width: 50px; border: 0; background: #f3f7fd; color: var(--accent); font-size: 23px; cursor: pointer; }
+    .quote-stepper button:hover { background: #e7f0ff; }
+    .quote-stepper input { min-height: 0 !important; border: 0 !important; border-radius: 0 !important; text-align: center; font-weight: 700; -moz-appearance: textfield; }
+    .quote-stepper input::-webkit-outer-spin-button,
+    .quote-stepper input::-webkit-inner-spin-button { margin: 0; -webkit-appearance: none; }
+    .quote-help { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .quote-session { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px; border: 1px solid #bfd8ff; border-radius: 10px; background: #f2f7ff; }
+    .quote-session small { display: block; color: #4d6f9f; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .quote-session strong { color: var(--accent); font-size: 22px; white-space: nowrap; }
+    .quote-map-type { padding: 12px; border: 1px solid #cfe0fa; border-radius: 8px; background: #f7fbff; color: #315b91; font-size: 14px; }
+    .quote-extras { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .quote-extra { display: flex !important; align-items: center; gap: 8px; min-height: 48px; margin: 0 !important; padding: 10px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px !important; }
+    .quote-extra input { width: 17px; height: 17px; margin: 0; accent-color: var(--accent); }
+    .quote-error { min-height: 18px; margin: 7px 0 0; color: var(--danger); font-size: 13px; font-weight: 600; }
+    .quote-invalid { border-color: var(--danger) !important; }
+    .quote-result { padding: 25px; border: 1px solid #bcd7ff; border-radius: 12px; background: linear-gradient(135deg, #f7fbff, #eaf3ff); text-align: center; }
+    .quote-result small { display: block; color: #476b9e; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .quote-result strong { display: block; margin: 5px 0 8px; color: #0b55b9; font-size: clamp(38px, 8vw, 58px); line-height: 1; }
+    .quote-result p { margin: 0; color: #527095; font-size: 13px; }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
       align-items: center;
       justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-content {
+      width: min(900px, 100%);
+      height: min(80vh, 760px);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: #f9fafb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 10px;
-      border: 0;
-      border-radius: 13px;
-      background: var(--blue);
-      color: #fff;
-      font-weight: 800;
+      font-weight: 600;
+    }
+
+    .modal-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .modal-buttons button {
+      background: #e5e7eb;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 6px;
       cursor: pointer;
-      box-shadow: 0 8px 18px rgba(23, 105, 224, .22);
-      transition: background-color .2s, transform .2s, box-shadow .2s;
+      font-size: 13px;
     }
 
-    .calculate-button:hover {
-      background: var(--blue-dark);
-      box-shadow: 0 10px 22px rgba(23, 105, 224, .28);
-      transform: translateY(-1px);
+    .modal-buttons button:hover {
+      background: #d1d5db;
     }
 
-    .calculate-button:focus-visible {
-      outline: 3px solid rgba(23, 105, 224, .3);
-      outline-offset: 3px;
+    #viewer3D {
+      width: 100%;
+      height: 100%;
+      background: #f3f4f6;
     }
 
-    .calculate-button::after {
-      content: "→";
-      font-size: 1.18rem;
-    }
-
-    .result {
-      margin: 0 clamp(20px, 4vw, 36px) clamp(20px, 4vw, 36px);
-      padding: clamp(22px, 5vw, 31px);
-      border: 1px solid #b9d7ff;
-      border-radius: 17px;
-      background: linear-gradient(135deg, #f6faff, #eaf4ff);
-      text-align: center;
-      animation: reveal .3s ease-out both;
-    }
-
-    .result__label {
-      margin: 0;
-      color: #35609c;
-      font-size: .75rem;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-
-    .result__amount {
-      margin: 5px 0 9px;
-      color: #104d9e;
-      font-size: clamp(2.7rem, 9vw, 4.2rem);
-      font-weight: 850;
-      letter-spacing: -.055em;
-      line-height: 1;
-    }
-
-    .result__note {
-      max-width: 390px;
-      margin: 0 auto;
-      color: #527094;
-      font-size: .9rem;
-    }
-
-    @media (max-width: 560px) {
-      .quote-section {
-        padding-right: 14px;
-        padding-left: 14px;
+    @media (max-width: 760px) {
+      header {
+        position: static;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px max(14px, env(safe-area-inset-right)) 14px max(14px, env(safe-area-inset-left));
       }
 
-      .calculator-form { padding: 20px; }
+      nav ul {
+        justify-content: flex-start;
+      }
 
-      .choice-grid,
-      .extras {
+      nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #f9fafb;
+      }
+
+      .container {
+        margin-top: 20px;
+      }
+
+      .calc-buttons,
+      .form-buttons,
+      .modal-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .quote-choices,
+      .quote-extras {
         grid-template-columns: 1fr;
       }
 
-      .choice-card__content { min-height: 78px; }
-
-      .session-card {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 4px;
+      .btn,
+      .cta,
+      .model-preview,
+      .modal-buttons button {
+        width: 100%;
       }
 
-      .form-section + .form-section {
-        margin-top: 23px;
-        padding-top: 22px;
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-content {
+        height: min(88vh, 720px);
+      }
+
+      .modal-header {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .logo {
+        width: 38px;
+        height: 38px;
+        font-size: 13px;
+      }
+
+      .brand-title {
+        font-size: 14px;
+      }
+
+      nav ul {
+        gap: 8px;
+      }
+
+      nav a {
+        font-size: 13px;
+      }
+
+      .card {
+        border-radius: 8px;
       }
     }
   </style>
 </head>
-
 <body>
-  <main class="quote-section">
-    <div class="quote-shell">
-      <p class="eyebrow">BSP Zlecenia</p>
-      <h1>Wycena usługi</h1>
-      <p class="lead">
-        Wybierz usługę i uzupełnij tylko potrzebne dane.
-        Cenę obliczymy po kliknięciu przycisku.
-      </p>
-
-      <section class="calculator" aria-labelledby="calculator-title">
-        <form id="quoteCalculator" class="calculator-form" novalidate>
-          <h2 id="calculator-title" hidden>Kalkulator wyceny</h2>
-
-          <div class="form-section">
-            <h3 class="section-heading">
-              <span class="section-number">1</span>
-              Usługa
-            </h3>
-
-            <label class="field-label" for="service">Wybierz usługę</label>
-
-            <div class="select-wrap">
-              <select id="service" name="service" aria-describedby="serviceError">
-                <option value="">Wybierz usługę</option>
-                <option value="photos">Zdjęcia</option>
-                <option value="film">Filmy</option>
-                <option value="map">Mapa</option>
-                <option value="measurement">Pomiar</option>
-              </select>
-            </div>
-
-            <p id="serviceError" class="form-error" aria-live="polite"></p>
-          </div>
-
-          <div id="photoPanel" class="form-section dynamic-panel" hidden>
-            <h3 class="section-heading">
-              <span class="section-number">2</span>
-              Parametry usługi
-            </h3>
-
-            <p class="field-label">Wybierz sposób realizacji</p>
-
-            <div class="choice-grid" role="radiogroup" aria-label="Sposób wyceny zdjęć">
-              <label class="choice-card">
-                <input type="radio" name="photoMode" value="count" checked>
-                <span class="choice-card__content">
-                  <strong>Liczba zdjęć</strong>
-                  <small>Wycena za każde zdjęcie</small>
-                </span>
-              </label>
-
-              <label class="choice-card">
-                <input type="radio" name="photoMode" value="session">
-                <span class="choice-card__content">
-                  <strong>Sesja 30 min</strong>
-                  <small>Stała cena za sesję</small>
-                </span>
-              </label>
-            </div>
-
-            <div id="photoCountContent" class="mode-content">
-              <label class="field-label" for="photoCount">Liczba zdjęć</label>
-
-              <div class="stepper" data-stepper="photoCount">
-                <button type="button" data-action="decrease" aria-label="Zmniejsz liczbę zdjęć">−</button>
-
-                <input
-                  id="photoCount"
-                  name="photoCount"
-                  type="number"
-                  inputmode="numeric"
-                  min="1"
-                  step="1"
-                  value="1"
-                  aria-describedby="photoCountHelp photoError"
-                >
-
-                <button type="button" data-action="increase" aria-label="Zwiększ liczbę zdjęć">+</button>
-              </div>
-
-              <p id="photoCountHelp" class="photo-rates">
-                <span>Pierwsze 10 zdjęć: 20 zł/szt.</span>
-                <span>Każde kolejne: 10 zł/szt.</span>
-              </p>
-            </div>
-
-            <div id="photoSessionContent" class="mode-content" hidden>
-              <div class="session-card">
-                <div>
-                  <p class="session-card__name">Sesja zdjęciowa</p>
-                  <p class="session-card__time">30 minut</p>
-                </div>
-
-                <strong class="session-card__price">300 zł</strong>
-              </div>
-            </div>
-
-            <p id="photoError" class="form-error" aria-live="polite"></p>
-          </div>
-
-          <div id="filmPanel" class="form-section dynamic-panel" hidden>
-            <h3 class="section-heading">
-              <span class="section-number">2</span>
-              Parametry usługi
-            </h3>
-
-            <label class="field-label" for="filmDuration">Czas trwania filmu</label>
-
-            <div class="stepper" data-stepper="filmDuration">
-              <button type="button" data-action="decrease" aria-label="Zmniejsz czas trwania filmu">−</button>
-
-              <input
-                id="filmDuration"
-                name="filmDuration"
-                type="number"
-                inputmode="numeric"
-                min="1"
-                step="1"
-                value="1"
-                aria-describedby="filmHelp filmError"
-              >
-
-              <button type="button" data-action="increase" aria-label="Zwiększ czas trwania filmu">+</button>
-            </div>
-
-            <p id="filmHelp" class="field-help">100 zł za 100 minut nagrania (1 zł za minutę).</p>
-            <p id="filmError" class="form-error" aria-live="polite"></p>
-          </div>
-
-          <div id="mapPanel" class="form-section dynamic-panel" hidden>
-            <h3 class="section-heading">
-              <span class="section-number">2</span>
-              Parametry usługi
-            </h3>
-
-            <label class="field-label" for="area">Powierzchnia</label>
-
-            <div class="input-unit">
-              <input
-                id="area"
-                class="number-input"
-                name="area"
-                type="number"
-                inputmode="decimal"
-                min="1"
-                step="1"
-                placeholder="np. 500"
-                aria-describedby="areaHelp areaError"
-              >
-              <span class="input-unit__label">m²</span>
-            </div>
-
-            <p id="areaHelp" class="field-help">1 zł za 1 m².</p>
-            <p id="areaError" class="form-error" aria-live="polite"></p>
-
-            <div style="margin-top: 18px">
-              <span class="field-label">Rodzaj mapy</span>
-              <div class="map-type">Ortofotomapa</div>
-            </div>
-          </div>
-
-          <div id="measurementPanel" class="form-section dynamic-panel" hidden>
-            <h3 class="section-heading">
-              <span class="section-number">2</span>
-              Parametry usługi
-            </h3>
-
-            <label class="field-label" for="measurementCount">Liczba pomiarów</label>
-
-            <div class="stepper" data-stepper="measurementCount">
-              <button type="button" data-action="decrease" aria-label="Zmniejsz liczbę pomiarów">−</button>
-
-              <input
-                id="measurementCount"
-                name="measurementCount"
-                type="number"
-                inputmode="numeric"
-                min="1"
-                step="1"
-                value="1"
-                aria-describedby="measurementHelp measurementError"
-              >
-
-              <button type="button" data-action="increase" aria-label="Zwiększ liczbę pomiarów">+</button>
-            </div>
-
-            <p id="measurementHelp" class="field-help">500 zł za 1 pomiar.</p>
-            <p id="measurementError" class="form-error" aria-live="polite"></p>
-          </div>
-
-          <div id="commonFields" hidden>
-            <div class="form-section dynamic-panel">
-              <h3 class="section-heading">
-                <span class="section-number">3</span>
-                Zagrożenia i inne
-              </h3>
-
-              <div class="extras">
-                <label class="check-option">
-                  <input type="checkbox" name="extra" value="50">
-                  <span class="checkbox-ui">✓</span>
-                  <span class="check-option__text">
-                    Linie elektryczne
-                    <span class="check-option__price">+50 zł</span>
-                  </span>
-                </label>
-
-                <label class="check-option">
-                  <input type="checkbox" name="extra" value="50">
-                  <span class="checkbox-ui">✓</span>
-                  <span class="check-option__text">
-                    Drzewa
-                    <span class="check-option__price">+50 zł</span>
-                  </span>
-                </label>
-
-                <label class="check-option">
-                  <input type="checkbox" name="extra" value="100">
-                  <span class="checkbox-ui">✓</span>
-                  <span class="check-option__text">
-                    RAW
-                    <span class="check-option__price">+100 zł</span>
-                  </span>
-                </label>
-
-                <label class="check-option">
-                  <input type="checkbox" name="extra" value="100">
-                  <span class="checkbox-ui">✓</span>
-                  <span class="check-option__text">
-                    Mapa GLI
-                    <span class="check-option__price">+100 zł</span>
-                  </span>
-                </label>
-
-                <label class="check-option">
-                  <input type="checkbox" name="extra" value="200">
-                  <span class="checkbox-ui">✓</span>
-                  <span class="check-option__text">
-                    Impreza/Wydarzenie
-                    <span class="check-option__price">+200 zł</span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="button-row">
-                <button class="calculate-button" type="submit">Oblicz wycenę</button>
-              </div>
-            </div>
-          </div>
-        </form>
-
-        <div id="result" class="result" hidden aria-live="polite" tabindex="-1">
-          <p class="result__label">Szacowana cena</p>
-          <p id="resultAmount" class="result__amount">0 zł</p>
-          <p class="result__note">Cena zawiera wybraną usługę oraz wybrane dodatki.</p>
-        </div>
-      </section>
+  <header>
+    <div class="brand">
+      <div class="logo">BSP</div>
+      <div>
+        <div class="brand-title">BSP Zlecenia</div>
+        <div class="muted" style="font-size:12px">Inspekcje dronem</div>
+      </div>
     </div>
+
+    <nav aria-label="Główna nawigacja">
+      <ul>
+        <li><a href="#pricing">Wycena</a></li>
+        <li><a href="#form">Zgłoszenie</a></li>
+        <li><a href="galeria.html">Galeria zleceń</a></li>
+        <li><a href="about.html">O nas</a></li>
+        <li><a href="aboutinfo.html">Informacje</a></li>
+        <li><a href="regulamin.html">Regulamin</a></li>
+      </ul>
+    </nav>
+
+    <a class="cta" href="#form">Wyślij zlecenie</a>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Inspekcje dronem • Mapowanie • Modele 3D</h1>
+      <p class="muted">Dokładne pomiary, dokumentacja techniczna i modele 3D dla budownictwa i geodezji.</p>
+    </section>
+
+    <section class="card" id="models-3d">
+      <h2>Modele 3D</h2>
+      <p class="muted">Przykładowe modele fotogrametryczne wykonane podczas inspekcji.</p>
+
+      <div class="models-grid">
+        <div class="model-card">
+          <h4>Budowa — 30.05.2026</h4>
+          <model-viewer src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" camera-controls auto-rotate></model-viewer>
+          <button class="btn model-preview" type="button" data-src="assets/Mazurski-Zdrj-Tnie-5-30-2026-textured_model.glb" data-title=Budowa — 30.05.2026">Podgląd</button>
+        </div>
+
+        <div class="model-card">
+          <h4>Urbex — 07.03.2026</h4>
+          <model-viewer src="assets/7.03.2026.glb" camera-controls auto-rotate></model-viewer>
+          <button class="btn model-preview" type="button" data-src="assets/7.03.2026.glb" data-title="Urbex — 07.03.2026">Podgląd</button>
+        </div>
+
+        <div class="model-card">
+          <h4>Obiekt hydrotechniczny</h4>
+          <model-viewer src="assets/model.glb" camera-controls auto-rotate></model-viewer>
+          <button class="btn model-preview" type="button" data-src="assets/model.glb" data-title="Obiekt hydrotechniczny">Podgląd</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="how-we-work">
+      <h2>Jak działamy</h2>
+
+      <div class="steps">
+        <div class="step">
+          <strong>1. Zgłoszenie</strong>
+          <p class="muted">Wysyłasz formularz z opisem zlecenia.</p>
+        </div>
+
+        <div class="step">
+          <strong>2. Analiza terenu</strong>
+          <p class="muted">Sprawdzamy lokalizację, przeszkody i ryzyka.</p>
+        </div>
+
+        <div class="step">
+          <strong>3. Ustalenie szczegółów</strong>
+          <p class="muted">Kontaktujemy się, aby potwierdzić zakres.</p>
+        </div>
+
+        <div class="step">
+          <strong>4. Realizacja lotów</strong>
+          <p class="muted">Wykonujemy zdjęcia, pomiary i modele.</p>
+        </div>
+
+        <div class="step">
+          <strong>5. Obróbka materiałów</strong>
+          <p class="muted">Przygotowujemy ortofotomapy i modele 3D.</p>
+        </div>
+
+        <div class="step">
+          <strong>6. Dostarczenie plików</strong>
+          <p class="muted">Udostępniamy gotowe materiały online.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="pricing">
+      <h2>Wycena</h2>
+
+      <div id="quoteCalculator" class="quote-calculator">
+        <div class="quote-part">
+          <h3><span class="quote-step">1</span> Usługa</h3>
+          <label for="service-type">Wybierz usługę</label>
+          <select id="service-type" aria-describedby="quote-service-error">
+            <option value="">Wybierz usługę</option>
+            <option value="photos">Zdjęcia</option>
+            <option value="film">Filmy</option>
+            <option value="map">Mapa</option>
+            <option value="measurement">Pomiar</option>
+          </select>
+          <p id="quote-service-error" class="quote-error" aria-live="polite"></p>
+        </div>
+
+        <div id="quote-photos" class="quote-part" hidden>
+          <h3><span class="quote-step">2</span> Parametry usługi</h3>
+          <p class="field-label">Wybierz sposób realizacji</p>
+          <div class="quote-choices" role="radiogroup" aria-label="Sposób wyceny zdjęć">
+            <label class="quote-choice"><input type="radio" name="photo-mode" value="count" checked><span><strong>Liczba zdjęć</strong><small>Wycena za każde zdjęcie</small></span></label>
+            <label class="quote-choice"><input type="radio" name="photo-mode" value="session"><span><strong>Sesja 30 min</strong><small>Stała cena za sesję</small></span></label>
+          </div>
+          <div id="quote-photo-count-wrap" class="quote-mode">
+            <label for="calc-photos">Liczba zdjęć</label>
+            <div class="quote-stepper" data-stepper="calc-photos">
+              <button type="button" data-action="decrease" aria-label="Zmniejsz liczbę zdjęć">−</button>
+              <input id="calc-photos" type="number" min="1" step="1" value="1">
+              <button type="button" data-action="increase" aria-label="Zwiększ liczbę zdjęć">+</button>
+            </div>
+            <p class="quote-help">Pierwsze 10 zdjęć: 20 zł/szt. Każde kolejne: 10 zł/szt.</p>
+          </div>
+          <div id="quote-photo-session-wrap" class="quote-mode" hidden>
+            <div class="quote-session"><div><small>Sesja zdjęciowa</small><b>30 minut</b></div><strong>300 zł</strong></div>
+          </div>
+          <p id="quote-photos-error" class="quote-error" aria-live="polite"></p>
+        </div>
+
+        <div id="quote-film" class="quote-part" hidden>
+          <h3><span class="quote-step">2</span> Parametry usługi</h3>
+          <label for="calc-film">Czas trwania filmu</label>
+          <div class="quote-stepper" data-stepper="calc-film">
+            <button type="button" data-action="decrease" aria-label="Zmniejsz czas trwania filmu">−</button>
+            <input id="calc-film" type="number" min="1" step="1" value="1">
+            <button type="button" data-action="increase" aria-label="Zwiększ czas trwania filmu">+</button>
+          </div>
+          <p class="quote-help">100 zł za 100 minut nagrania (1 zł za minutę).</p>
+          <p id="quote-film-error" class="quote-error" aria-live="polite"></p>
+        </div>
+
+        <div id="quote-map" class="quote-part" hidden>
+          <h3><span class="quote-step">2</span> Parametry usługi</h3>
+          <label for="calc-area">Powierzchnia w m²</label>
+          <input id="calc-area" type="number" min="1" step="1" placeholder="np. 500">
+          <p class="quote-help">1 zł za 1 m².</p>
+          <p id="quote-map-error" class="quote-error" aria-live="polite"></p>
+          <div class="quote-map-type"><b>Rodzaj mapy:</b> Ortofotomapa</div>
+        </div>
+
+        <div id="quote-measurement" class="quote-part" hidden>
+          <h3><span class="quote-step">2</span> Parametry usługi</h3>
+          <label for="calc-measurements">Liczba pomiarów</label>
+          <div class="quote-stepper" data-stepper="calc-measurements">
+            <button type="button" data-action="decrease" aria-label="Zmniejsz liczbę pomiarów">−</button>
+            <input id="calc-measurements" type="number" min="1" step="1" value="1">
+            <button type="button" data-action="increase" aria-label="Zwiększ liczbę pomiarów">+</button>
+          </div>
+          <p class="quote-help">500 zł za 1 pomiar.</p>
+          <p id="quote-measurement-error" class="quote-error" aria-live="polite"></p>
+        </div>
+
+        <div id="quote-extras-part" class="quote-part" hidden>
+          <h3><span class="quote-step">3</span> Zagrożenia i inne</h3>
+          <div class="quote-extras">
+            <label class="quote-extra"><input id="calc-lines" type="checkbox"> Linie elektryczne (+50 zł)</label>
+            <label class="quote-extra"><input id="calc-trees" type="checkbox"> Drzewa (+50 zł)</label>
+            <label class="quote-extra"><input id="calc-raw" type="checkbox"> RAW (+100 zł)</label>
+            <label class="quote-extra"><input id="calc-gli" type="checkbox"> Mapa GLI (+100 zł)</label>
+            <label class="quote-extra"><input id="calc-events" type="checkbox"> Impreza/Wydarzenie (+200 zł)</label>
+          </div>
+          <div class="calc-buttons"><button class="btn" id="calc-run" type="button">Oblicz wycenę</button></div>
+        </div>
+
+        <div id="calc-result" class="quote-result" hidden aria-live="polite" tabindex="-1">
+          <small>Szacowana cena</small>
+          <strong id="calc-result-amount">0 zł</strong>
+          <p>Cena zawiera wybraną usługę oraz wybrane dodatki.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="form">
+      <h2>Zgłoś zlecenie</h2>
+
+      <form id="bspForm" novalidate>
+        <div class="form-row">
+          <label for="contact">E-mail lub telefon *</label>
+          <input id="contact" name="contact" required />
+        </div>
+
+        <div class="form-row">
+          <label for="description">Opis zlecenia *</label>
+          <textarea id="description" name="description" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <label for="location_text">Lokalizacja zlecenia (adres)</label>
+          <input id="location_text" name="location_text" placeholder="np. Pobiedziska, ul. Różana 12" />
+        </div>
+
+        <div class="form-row">
+          <label for="date">Preferowany termin</label>
+          <input id="date" name="date" type="date" />
+        </div>
+
+        <div class="form-row">
+          <label for="budget">Budżet (PLN)</label>
+          <input id="budget" name="budget" inputmode="numeric" value="0" />
+        </div>
+
+        <div class="form-row checkbox-row">
+          <input type="checkbox" id="accept_rules" name="accept_rules" />
+          <label for="accept_rules" style="margin:0; font-weight:500;">
+            Akceptuję <a href="regulamin.html" target="_blank" rel="noopener">regulamin</a>
+          </label>
+        </div>
+
+        <div class="form-buttons">
+          <button class="btn" type="submit" id="submitBtn">Wyślij</button>
+          <button class="btn secondary" type="button" id="clearBtn">Wyczyść</button>
+        </div>
+
+        <div id="status" class="muted" style="margin-top:8px" role="status" aria-live="polite"></div>
+
+        <input type="hidden" id="estimated_price" name="estimated_price" />
+        <input type="hidden" id="location_lat" name="location_lat" />
+        <input type="hidden" id="location_lng" name="location_lng" />
+        <input type="hidden" id="service_type" name="service_type" />
+        <input type="hidden" id="area_ha" name="area_ha" />
+        <input type="hidden" id="flights_estimated" name="flights_estimated" />
+        <input type="hidden" id="extras_list" name="extras_list" />
+      </form>
+    </section>
+
+    <footer>
+      © <span id="year"></span> BSP Zlecenia — Inspekcje dronem
+    </footer>
   </main>
 
+  <div id="modelModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="viewerTitle">Podgląd modelu</span>
+
+        <div class="modal-buttons">
+          <button type="button" id="resetCameraBtn">Reset kamery</button>
+          <button type="button" id="fullscreenBtn">Pełny ekran</button>
+          <button type="button" id="closeModelBtn">Zamknij</button>
+        </div>
+      </div>
+
+      <model-viewer
+        id="viewer3D"
+        camera-controls
+        auto-rotate
+        exposure="1.1"
+        shadow-intensity="1"
+        loading="eager">
+      </model-viewer>
+    </div>
+  </div>
+
   <script>
-    (() => {
-      const form = document.getElementById('quoteCalculator');
-      const service = document.getElementById('service');
-      const commonFields = document.getElementById('commonFields');
-      const result = document.getElementById('result');
-      const resultAmount = document.getElementById('resultAmount');
+    document.addEventListener('DOMContentLoaded', () => {
+      const yearEl = document.getElementById('year');
+      const calcArea = document.getElementById('calc-area');
+      const serviceType = document.getElementById('service-type');
+      const calcPhotos = document.getElementById('calc-photos');
+      const calcFilm = document.getElementById('calc-film');
+      const calcMeasurements = document.getElementById('calc-measurements');
+      const calcResult = document.getElementById('calc-result');
+      const calcResultAmount = document.getElementById('calc-result-amount');
+      const quoteExtrasPart = document.getElementById('quote-extras-part');
+      const form = document.getElementById('bspForm');
+      const statusBox = document.getElementById('status');
+      const submitBtn = document.getElementById('submitBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const modal = document.getElementById('modelModal');
+      const viewer = document.getElementById('viewer3D');
+      const viewerTitle = document.getElementById('viewerTitle');
 
-      const panels = {
-        photos: document.getElementById('photoPanel'),
-        film: document.getElementById('filmPanel'),
-        map: document.getElementById('mapPanel'),
-        measurement: document.getElementById('measurementPanel')
-      };
+      if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+      }
 
-      const photoCountContent = document.getElementById('photoCountContent');
-      const photoSessionContent = document.getElementById('photoSessionContent');
-      const photoModes = document.querySelectorAll('input[name="photoMode"]');
+      function setIf(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.value = value;
+      }
 
-      const errorFor = (name) => document.getElementById(`${name}Error`);
+      function showStatus(message, isError = false) {
+        if (!statusBox) return;
+        statusBox.textContent = message;
+        statusBox.style.color = isError ? 'var(--danger)' : 'var(--success)';
+      }
 
-      const clearErrors = () => {
-        document.querySelectorAll('.form-error').forEach((error) => {
-          error.textContent = '';
-        });
+      function hideCalcResult() {
+        calcResult.hidden = true;
+      }
 
-        document.querySelectorAll('.is-invalid').forEach((field) => {
-          field.classList.remove('is-invalid');
-        });
-      };
+      function clearCalcErrors() {
+        document.querySelectorAll('.quote-error').forEach((element) => element.textContent = '');
+        document.querySelectorAll('.quote-invalid').forEach((element) => element.classList.remove('quote-invalid'));
+      }
 
-      const showError = (field, message, errorName) => {
-        if (field) field.classList.add('is-invalid');
-        errorFor(errorName).textContent = message;
-      };
-
-      const numericValue = (id) => Number.parseFloat(document.getElementById(id).value);
-
-      const validPositiveInteger = (id, label, errorName) => {
-        const field = document.getElementById(id);
-        const value = numericValue(id);
-
-        if (!Number.isInteger(value) || value < 1) {
-          showError(field, `Podaj co najmniej ${label}.`, errorName);
-          return null;
-        }
-
-        return value;
-      };
-
-      const hideResult = () => {
-        result.hidden = true;
-      };
+      function calcError(field, errorId, message) {
+        field.classList.add('quote-invalid');
+        document.getElementById(errorId).textContent = message;
+        field.focus();
+      }
 
       function updatePhotoMode() {
-        const mode = document.querySelector('input[name="photoMode"]:checked').value;
-
-        photoCountContent.hidden = mode !== 'count';
-        photoSessionContent.hidden = mode !== 'session';
-
-        hideResult();
+        const mode = document.querySelector('input[name="photo-mode"]:checked').value;
+        document.getElementById('quote-photo-count-wrap').hidden = mode !== 'count';
+        document.getElementById('quote-photo-session-wrap').hidden = mode !== 'session';
+        hideCalcResult();
       }
 
-      function updateService() {
-        Object.values(panels).forEach((panel) => {
-          panel.hidden = true;
-        });
-
-        const currentPanel = panels[service.value];
-
-        if (currentPanel) {
-          currentPanel.hidden = false;
-        }
-
-        commonFields.hidden = !currentPanel;
-
-        clearErrors();
-        hideResult();
+      function updateCalculator() {
+        document.querySelectorAll('[id^="quote-"][id$="photos"], #quote-film, #quote-map, #quote-measurement').forEach((panel) => panel.hidden = true);
+        const panels = {
+          photos: document.getElementById('quote-photos'),
+          film: document.getElementById('quote-film'),
+          map: document.getElementById('quote-map'),
+          measurement: document.getElementById('quote-measurement')
+        };
+        const selectedPanel = panels[serviceType.value];
+        if (selectedPanel) selectedPanel.hidden = false;
+        quoteExtrasPart.hidden = !selectedPanel;
+        clearCalcErrors();
+        hideCalcResult();
       }
 
-      document.querySelectorAll('.stepper').forEach((stepper) => {
-        const field = document.getElementById(stepper.dataset.stepper);
-
-        stepper.addEventListener('click', (event) => {
-          const button = event.target.closest('button[data-action]');
-
-          if (!button) return;
-
-          const value = Number.parseInt(field.value, 10) || 1;
-
-          field.value = button.dataset.action === 'increase'
-            ? value + 1
-            : Math.max(1, value - 1);
-
-          hideResult();
-        });
-      });
-
-      document.querySelectorAll('input, select').forEach((field) => {
-        field.addEventListener('input', hideResult);
-        field.addEventListener('change', hideResult);
-      });
-
-      service.addEventListener('change', updateService);
-
-      photoModes.forEach((mode) => {
-        mode.addEventListener('change', updatePhotoMode);
-      });
-
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        clearErrors();
-        hideResult();
-
-        const selectedService = service.value;
-
-        if (!selectedService) {
-          showError(service, 'Wybierz usługę, aby obliczyć wycenę.', 'service');
-          service.focus();
+      function runCalc() {
+        clearCalcErrors();
+        hideCalcResult();
+        const service = serviceType.value;
+        if (!service) {
+          calcError(serviceType, 'quote-service-error', 'Wybierz usługę, aby obliczyć wycenę.');
           return;
         }
 
-        let basePrice = 0;
+        let servicePrice = 0;
+        let submittedUnit = '';
+        let submittedQuantity = '';
 
-        if (selectedService === 'photos') {
-          const mode = document.querySelector('input[name="photoMode"]:checked').value;
-
+        if (service === 'photos') {
+          const mode = document.querySelector('input[name="photo-mode"]:checked').value;
           if (mode === 'session') {
-            basePrice = 300;
+            servicePrice = 300;
+            submittedUnit = 'sesja zdjęciowa';
+            submittedQuantity = '30 min';
           } else {
-            const count = validPositiveInteger('photoCount', '1 zdjęcie', 'photo');
-
-            if (count === null) {
-              document.getElementById('photoCount').focus();
+            const count = Number.parseInt(calcPhotos.value, 10);
+            if (!Number.isInteger(count) || count < 1) {
+              calcError(calcPhotos, 'quote-photos-error', 'Podaj co najmniej 1 zdjęcie.');
               return;
             }
-
-            basePrice = Math.min(count, 10) * 20 + Math.max(count - 10, 0) * 10;
+            servicePrice = Math.min(count, 10) * 20 + Math.max(count - 10, 0) * 10;
+            submittedUnit = 'zdjęcia';
+            submittedQuantity = count;
           }
         }
 
-        if (selectedService === 'film') {
-          const minutes = validPositiveInteger('filmDuration', '1 minutę filmu', 'film');
-
-          if (minutes === null) {
-            document.getElementById('filmDuration').focus();
+        if (service === 'film') {
+          const minutes = Number.parseInt(calcFilm.value, 10);
+          if (!Number.isInteger(minutes) || minutes < 1) {
+            calcError(calcFilm, 'quote-film-error', 'Podaj co najmniej 1 minutę filmu.');
             return;
           }
-
-          basePrice = minutes;
+          servicePrice = minutes;
+          submittedUnit = 'minuty filmu';
+          submittedQuantity = minutes;
         }
 
-        if (selectedService === 'map') {
-          const area = numericValue('area');
-
+        if (service === 'map') {
+          const area = Number.parseFloat(calcArea.value);
           if (!Number.isFinite(area) || area <= 0) {
-            showError(
-              document.getElementById('area'),
-              'Podaj powierzchnię większą od 0 m².',
-              'area'
-            );
-
-            document.getElementById('area').focus();
+            calcError(calcArea, 'quote-map-error', 'Podaj powierzchnię większą od 0 m².');
             return;
           }
-
-          basePrice = area;
+          servicePrice = area;
+          submittedUnit = 'm²';
+          submittedQuantity = area;
         }
 
-        if (selectedService === 'measurement') {
-          const count = validPositiveInteger('measurementCount', '1 pomiar', 'measurement');
-
-          if (count === null) {
-            document.getElementById('measurementCount').focus();
+        if (service === 'measurement') {
+          const measurements = Number.parseInt(calcMeasurements.value, 10);
+          if (!Number.isInteger(measurements) || measurements < 1) {
+            calcError(calcMeasurements, 'quote-measurement-error', 'Podaj co najmniej 1 pomiar.');
             return;
           }
-
-          basePrice = count * 500;
+          servicePrice = measurements * 500;
+          submittedUnit = 'pomiary';
+          submittedQuantity = measurements;
         }
 
-        const extras = [...document.querySelectorAll('input[name="extra"]:checked')]
-          .reduce((sum, extra) => sum + Number(extra.value), 0);
+        let extras = 0;
+        const extrasList = [];
+        const extraConfig = [
+          ['calc-lines', 50, 'Linie elektryczne'],
+          ['calc-trees', 50, 'Drzewa'],
+          ['calc-raw', 100, 'RAW'],
+          ['calc-gli', 100, 'Mapa GLI'],
+          ['calc-events', 200, 'Impreza/Wydarzenie']
+        ];
+        extraConfig.forEach(([id, price, name]) => {
+          if (document.getElementById(id).checked) { extras += price; extrasList.push(name); }
+        });
 
-        const total = basePrice + extras;
+        const price = servicePrice + extras;
+        calcResultAmount.textContent = `${new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 2 }).format(price)} zł`;
+        calcResult.hidden = false;
+        calcResult.focus({ preventScroll: true });
+        calcResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-        resultAmount.textContent =
-          `${new Intl.NumberFormat('pl-PL', {
-            maximumFractionDigits: 2
-          }).format(total)} zł`;
+        setIf('estimated_price', price);
+        setIf('service_type', service);
+        setIf('area_ha', submittedUnit === 'm²' ? submittedQuantity : '');
+        setIf('flights_estimated', submittedQuantity);
+        setIf('extras_list', extrasList.join(','));
+      }
 
-        result.hidden = false;
-        result.focus({ preventScroll: true });
-        result.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest'
+      function resetCalc() {
+        serviceType.value = '';
+        calcPhotos.value = 1;
+        calcFilm.value = 1;
+        calcMeasurements.value = 1;
+        calcArea.value = '';
+        document.querySelector('input[name="photo-mode"][value="count"]').checked = true;
+        ['calc-lines', 'calc-trees', 'calc-raw', 'calc-gli', 'calc-events'].forEach((id) => {
+          document.getElementById(id).checked = false;
+        });
+        ['estimated_price', 'service_type', 'area_ha', 'flights_estimated', 'extras_list'].forEach((id) => setIf(id, ''));
+        updatePhotoMode();
+        updateCalculator();
+      }
+
+      // Modal and viewer helpers
+      function openModelModal(src, title) {
+        if (!viewer || !modal) return;
+        viewer.setAttribute('src', src);
+        viewerTitle.textContent = title || 'Podgląd modelu';
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModelModal() {
+        if (!viewer || !modal) return;
+        viewer.removeAttribute('src');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+
+      function resetCamera() {
+        if (!viewer) return;
+        // Try resetting by reloading src (simple and compatible)
+        const src = viewer.getAttribute('src');
+        viewer.removeAttribute('src');
+        setTimeout(() => {
+          if (src) viewer.setAttribute('src', src);
+        }, 60);
+      }
+
+      function toggleFullscreen() {
+        if (!viewer) return;
+        if (!document.fullscreenElement) {
+          if (viewer.requestFullscreen) viewer.requestFullscreen();
+          else if (viewer.webkitEnterFullscreen) viewer.webkitEnterFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      // Event bindings
+      document.getElementById('calc-run')?.addEventListener('click', runCalc);
+      serviceType?.addEventListener('change', updateCalculator);
+      document.querySelectorAll('input[name="photo-mode"]').forEach((input) => input.addEventListener('change', updatePhotoMode));
+      document.querySelectorAll('.quote-stepper').forEach((stepper) => {
+        const input = document.getElementById(stepper.dataset.stepper);
+        stepper.addEventListener('click', (event) => {
+          const button = event.target.closest('button[data-action]');
+          if (!button) return;
+          const value = Number.parseInt(input.value, 10) || 1;
+          input.value = button.dataset.action === 'increase' ? value + 1 : Math.max(1, value - 1);
+          hideCalcResult();
+        });
+      });
+      document.querySelectorAll('#quoteCalculator input, #quoteCalculator select').forEach((input) => {
+        input.addEventListener('input', hideCalcResult);
+        input.addEventListener('change', hideCalcResult);
+      });
+
+      document.querySelectorAll('.model-preview').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const src = btn.getAttribute('data-src');
+          const title = btn.getAttribute('data-title');
+          openModelModal(src, title);
         });
       });
 
+      document.getElementById('closeModelBtn')?.addEventListener('click', closeModelModal);
+      document.getElementById('fullscreenBtn')?.addEventListener('click', toggleFullscreen);
+      document.getElementById('resetCameraBtn')?.addEventListener('click', resetCamera);
+
+      // Close modal on backdrop click or ESC
+      modal?.addEventListener('click', (ev) => {
+        if (ev.target === modal) closeModelModal();
+      });
+      document.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape' && modal && modal.style.display === 'flex') closeModelModal();
+      });
+
+      // Form handling (client-side + optional backend)
+      form?.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const contact = document.getElementById('contact').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const accept = document.getElementById('accept_rules').checked;
+
+        if (!contact || !description) {
+          showStatus('Uzupełnij wymagane pola.', true);
+          return;
+        }
+        if (!accept) {
+          showStatus('Musisz zaakceptować regulamin.', true);
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wysyłanie...';
+        showStatus('Wysyłanie...');
+
+        const payload = {
+          contact,
+          description,
+          location: document.getElementById('location_text').value.trim(),
+          date: document.getElementById('date').value || '',
+          budget: document.getElementById('budget').value.trim() || '',
+          estimated_price: document.getElementById('estimated_price').value,
+          location_lat: document.getElementById('location_lat').value,
+          location_lng: document.getElementById('location_lng').value,
+          service_type: document.getElementById('service_type').value,
+          area_ha: document.getElementById('area_ha').value,
+          flights_estimated: document.getElementById('flights_estimated').value,
+          extras_list: document.getElementById('extras_list').value
+        };
+
+        try {
+          const response = await fetch('/api/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const json = await response.json().catch(() => null);
+
+          if (response.ok && json?.status === 'ok') {
+            showStatus('Wysłano poprawnie.');
+            form.reset();
+            resetCalc();
+          } else {
+            showStatus('Błąd wysyłki.', true);
+          }
+        } catch (error) {
+          showStatus('Błąd połączenia.', true);
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Wyślij';
+      });
+
+      clearBtn?.addEventListener('click', () => {
+        form.reset();
+        resetCalc();
+        showStatus('');
+      });
+
+      // Initialize map
       updatePhotoMode();
-      updateService();
-    })();
+      updateCalculator();
+    });
   </script>
 </body>
 </html>
