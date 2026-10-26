@@ -918,5 +918,32 @@
       updateCalculator();
     });
   </script>
+<!-- SEKCJA SQL: Wyświetlanie danych z bazy -->
+    <div style="margin: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; max-width: 400px;">
+        <h3 style="margin-top: 0;">Użytkownicy z bazy SQL:</h3>
+        <div id="dane-z-bazy">Ładowanie danych z bazy...</div>
+    </div>
+
+    <script>
+        // Pobieramy dane z naszej funkcji Cloudflare Pages (functions/api.js)
+        fetch('/api')
+            .then(response => response.json())
+            .then(data => {
+                const kontener = document.getElementById('dane-z-bazy');
+                if (data.error) {
+                    kontener.innerHTML = `<span style="color: red;">Błąd: ${data.error}</span>`;
+                } else if (data.length === 0) {
+                    kontener.innerText = "Baza danych jest pusta.";
+                } else {
+                    // Tworzymy listę użytkowników
+                    kontener.innerHTML = '<ul style="margin: 0; padding-left: 20px;">' + 
+                        data.map(uzytkownik => `<li>${uzytkownik.imie}</li>`).join('') + 
+                    '</ul>';
+                }
+            })
+            .catch(err => {
+                document.getElementById('dane-z-bazy').innerHTML = `<span style="color: red;">Błąd połączenia: ${err.message || err}</span>`;
+            });
+    </script>
 </body>
 </html>
